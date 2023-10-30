@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "704076539866",
+    "project_id": "tender-d0b04",
+    "storage_bucket": "tender-d0b04.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:704076539866:android:39af892012bd8c4afe82e3",
+        "android_client_info": {
+          "package_name": "com.chatapp.tender"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA89nWniV9sEhKdqnkvc0OnLja0svRC1CY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
