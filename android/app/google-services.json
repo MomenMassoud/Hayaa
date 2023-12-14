@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "704076539866",
-    "project_id": "tender-d0b04",
-    "storage_bucket": "tender-d0b04.appspot.com"
+    "project_number": "6809972591",
+    "project_id": "hayaa-161f5",
+    "storage_bucket": "hayaa-161f5.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:704076539866:android:39af892012bd8c4afe82e3",
+        "mobilesdk_app_id": "1:6809972591:android:1724cdd2e24774b4af029a",
         "android_client_info": {
-          "package_name": "com.chatapp.tender"
+          "package_name": "com.egycode.hayaa"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyA89nWniV9sEhKdqnkvc0OnLja0svRC1CY"
+          "current_key": "AIzaSyDaFCCiLHrWc8ey5_X6_xxRP4WmtHttClo"
         }
       ],
       "services": {

@@ -33,7 +33,7 @@
     <!-- Needed to communicate with already-paired Bluetooth devices. (Android 12 upwards)-->
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
    <application
-        android:label="BIBGO"
+        android:label="Hayaa"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
