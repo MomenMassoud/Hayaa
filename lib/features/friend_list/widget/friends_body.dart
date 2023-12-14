@@ -140,31 +140,10 @@ class _FriendsBody extends State<FriendsBody> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               ElevatedButton(
-                                  onPressed: () async {
-                                    await _firestore
-                                        .collection('cotacts')
-                                        .doc()
-                                        .set({
-                                      'owner': userModel.docID,
-                                      'mycontact': friendsModels[index].docID,
-                                      'lastmsg': '',
-                                      'type': 'msg',
-                                      'time':''
-                                    }).then((value) {
-                                      _firestore
-                                          .collection('cotacts')
-                                          .doc()
-                                          .set({
-                                        'owner': friendsModels[index].docID,
-                                        'mycontact':  userModel.docID,
-                                        'lastmsg': '',
-                                        'type': 'msg',
-                                        'time':''
-                                      });
-                                    });
+                                  onPressed: ()  {
                                     Navigator.pop(context);
                                     Navigator.of(context).push(
-                                        MaterialPageRoute(builder: (context) => ChatBody()));
+                                        MaterialPageRoute(builder: (context) => ChatBody(friendsModels[index])));
                                   },
                                   child: Text("دردشة")),
                               ElevatedButton(

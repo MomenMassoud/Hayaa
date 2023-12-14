@@ -133,17 +133,30 @@ class _ProfileViewBody extends State<ProfileViewBody>{
                          child: ListView(
                            children: [
                              Padding(
-                               padding: const EdgeInsets.only(top: 290.0,bottom: 30),
-                               child: ListTile(
-                                 title: Text(userModel.name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
-                                 leading: CircleAvatar(
-                                   backgroundImage:CachedNetworkImageProvider(userModel.photo),
-                                   radius: 30,
-                                 ),
-                                 subtitle: Text("ID: ${userModel.id}"),
-                                 trailing: IconButton(onPressed: (){
-                                   Navigator.pushNamed(context, ProfileEditView.id);
-                                 }, icon: Icon(Icons.arrow_forward_ios_rounded,color: Colors.white,)),
+                               padding: const EdgeInsets.only(top: 190.0,bottom: 30),
+                               child: Row(
+                                 children: [
+                                   CircleAvatar(
+                                     backgroundImage: CachedNetworkImageProvider(userModel.photo),
+                                     radius: 50,
+                                   ),
+                                   SizedBox(width: 20,),
+                                   Column(
+                                     children: [
+                                       Text(userModel.name,style: TextStyle(fontSize: 20,color: Colors.black,fontWeight: FontWeight.bold),),
+                                       Text("ID: ${userModel.id}",style: TextStyle(fontSize: 20,color: Colors.grey,fontWeight: FontWeight.bold))
+                                     ],
+                                   ),
+                                   SizedBox(width: 90,),
+                                   Row(
+                                     mainAxisAlignment: MainAxisAlignment.end,
+                                     children: [
+                                       IconButton(onPressed: (){
+                                         Navigator.pushNamed(context, SettingView.id);
+                                       }, icon: Icon(Icons.arrow_forward_ios_rounded))
+                                     ],
+                                   )
+                                 ],
                                ),
                              ),
                              Container(

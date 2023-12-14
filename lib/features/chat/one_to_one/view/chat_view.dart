@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hayaa_main/models/firends_model.dart';
 
 import '../../widget/one_to_one/chat_body.dart';
 
@@ -13,7 +14,7 @@ class ChatView extends StatefulWidget{
 class _ChatView extends State<ChatView>{
   @override
   Widget build(BuildContext context) {
-    return ChatBody();
+    return ChatBody(FriendsModel("email", "id", "docID", "photo", "name", "phonenumber", "gender"));
   }
 
 }

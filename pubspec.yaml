@@ -53,6 +53,8 @@ dependencies:
   firebase_core: ^2.8.0
   cloud_firestore: ^4.13.6
   google_sign_in: ^6.1.5
+  audioplayers: ^5.2.1
+  url_launcher: ^6.2.2
 flutter_icons:
   android: true
   ios: true
