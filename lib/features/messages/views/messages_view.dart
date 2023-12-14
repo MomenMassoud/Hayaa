@@ -9,6 +9,6 @@ class MessagesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MessagesViewBody();
+    return  MessagesViewBody();
   }
 }

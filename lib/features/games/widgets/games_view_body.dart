@@ -71,12 +71,15 @@ class _GamesViewBody extends State<GamesViewBody>with SingleTickerProviderStateM
         leading: IconButton(
             onPressed: () {}, icon: const Icon(Icons.emoji_events_outlined,color: Colors.white,)),
       ),
-      body: TabBarView(
-        controller: _tabController,
-          children: <Widget>[
-            Games(),
-            MoreGames()
-          ]
+      // body: TabBarView(
+      //   controller: _tabController,
+      //     children: <Widget>[
+      //       Games(),
+      //       MoreGames()
+      //     ]
+      // ),
+      body: Center(
+        child: Text("Common Soon!",style: TextStyle(fontSize: 23,fontWeight: FontWeight.bold,color: Colors.grey),),
       ),
     );
   }

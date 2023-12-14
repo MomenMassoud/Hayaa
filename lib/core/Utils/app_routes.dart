@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hayaa_main/features/friend_list/widget/friend_requset.dart';
+import 'package:hayaa_main/features/search/view/search_view.dart';
 import 'package:hayaa_main/features/setting/views/setting_view.dart';
 import '../../features/Badges/Badgespage.dart';
 import '../../features/VIP/view/vip_view.dart';
@@ -54,4 +56,6 @@ Map<String, Widget Function(BuildContext)> appRoutes = {
   FirstList.id:(context)=>const FirstList(),
   SignupView.id:(context)=>const SignupView(),
   SettingView.id:(context)=> SettingView(),
+  SearchView.id:(context)=>SearchView(),
+  FriendReuest.id:(context)=>FriendReuest(),
 };

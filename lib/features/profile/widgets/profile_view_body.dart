@@ -158,7 +158,7 @@ class _ProfileViewBody extends State<ProfileViewBody>{
                                            InkWell(
                                              onTap: (){
                                                Navigator.of(context).push(
-                                                   MaterialPageRoute(builder: (context) => FriendListBody()));
+                                                   MaterialPageRoute(builder: (context) => FriendListBody(userModel)));
                                              },
                                              child: Column(
                                                children: [
@@ -172,7 +172,7 @@ class _ProfileViewBody extends State<ProfileViewBody>{
                                            InkWell(
                                              onTap: (){
                                                Navigator.of(context).push(
-                                                   MaterialPageRoute(builder: (context) => FriendListBody()));
+                                                   MaterialPageRoute(builder: (context) => FriendListBody(userModel)));
                                              },
                                              child: Column(
                                                children: [
@@ -186,7 +186,7 @@ class _ProfileViewBody extends State<ProfileViewBody>{
                                            InkWell(
                                              onTap: (){
                                                Navigator.of(context).push(
-                                                   MaterialPageRoute(builder: (context) => FriendListBody()));
+                                                   MaterialPageRoute(builder: (context) => FriendListBody(userModel)));
                                              },
                                              child: Column(
                                                children: [
