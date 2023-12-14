@@ -42,7 +42,6 @@ Map<String, Widget Function(BuildContext)> appRoutes = {
   FriendListView.id:(context) =>const FriendListView(),
   HomeView.id: (context) => const HomeView(),
   MessagesView.id: (context) => const MessagesView(),
-  ProfileView.id: (context) => const ProfileView(),
   GamesView.id: (context) => const GamesView(),
   AllRoomsView.id: (context) => const AllRoomsView(),
   FamilyView.id: (context) => const FamilyView(),

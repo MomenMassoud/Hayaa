@@ -1,6 +1,5 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-
 import '../../../core/Utils/app_colors.dart';
 import '../../games/views/games_view.dart';
 import '../../messages/views/messages_view.dart';
@@ -17,17 +16,19 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   int currentIndex = 2;
+
   GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
-  @override
+    @override
   void initState() {
     super.initState();
   }
 
+
   List<Widget> views = [
-    const ProfileView(),
-    const MessagesView(),
-    const HomeViewBody(),
-    const GamesView(),
+     ProfileView(),
+     MessagesView(),
+     HomeViewBody(),
+     GamesView(),
   ];
   List<Icon> iconList = [
     Icon(Icons.menu, color: Colors.white, size: 60),
