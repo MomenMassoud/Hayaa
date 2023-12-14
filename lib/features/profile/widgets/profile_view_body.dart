@@ -133,7 +133,7 @@ class _ProfileViewBody extends State<ProfileViewBody>{
                          child: ListView(
                            children: [
                              Padding(
-                               padding: const EdgeInsets.only(top: 90.0,bottom: 30),
+                               padding: const EdgeInsets.only(top: 290.0,bottom: 30),
                                child: ListTile(
                                  title: Text(userModel.name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
                                  leading: CircleAvatar(
@@ -151,7 +151,7 @@ class _ProfileViewBody extends State<ProfileViewBody>{
                                  child: Column(
                                    children: [
                                      Padding(
-                                       padding: const EdgeInsets.all(8.0),
+                                       padding: const EdgeInsets.all(14.0),
                                        child: Row(
                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                                          children: [
@@ -210,9 +210,9 @@ class _ProfileViewBody extends State<ProfileViewBody>{
                                        ),
                                      ),
                                      Padding(
-                                       padding: const EdgeInsets.all(8.0),
+                                       padding: const EdgeInsets.only(right: 8.0,left: 8.0,top: 3.0),
                                        child: ListTile(
-                                         title: Text("اعادة الشحن").tr(args: ['اعادة الشحن']),
+                                         title: Text("اعادة الشحن",style: TextStyle(fontSize: 19),).tr(args: ['اعادة الشحن']),
                                          trailing: Icon(Icons.arrow_forward_ios_rounded,color: Colors.grey,size: 12,),
                                          leading: Icon(Icons.wallet,color: Colors.yellow,),
                                          onTap: (){
@@ -222,9 +222,9 @@ class _ProfileViewBody extends State<ProfileViewBody>{
                                      ),
                                      Divider(thickness: 0.2,),
                                      Padding(
-                                       padding: const EdgeInsets.all(8.0),
+                                       padding: const EdgeInsets.only(right: 8.0,left: 8.0),
                                        child: ListTile(
-                                         title: Text("دخل").tr(args: ['دخل']),
+                                         title: Text("ماسات",style: TextStyle(fontSize: 19),).tr(args: ['دخل']),
                                          trailing: Icon(Icons.arrow_forward_ios_rounded,color: Colors.grey,size: 12,),
                                          leading: Icon(Icons.diamond_outlined,color: Colors.blue,),
                                          onTap: (){
@@ -234,9 +234,9 @@ class _ProfileViewBody extends State<ProfileViewBody>{
                                      ),
                                      Divider(thickness: 0.2,),
                                      Padding(
-                                       padding: const EdgeInsets.all(8.0),
+                                       padding: const EdgeInsets.only(right: 8.0,left: 8.0),
                                        child: ListTile(
-                                         title: Text("مستوي المستخدم").tr(args: ['مستوي المستخدم']),
+                                         title: Text("مستوي المستخدم",style: TextStyle(fontSize: 19),).tr(args: ['مستوي المستخدم']),
                                          trailing: Icon(Icons.arrow_forward_ios_rounded,color: Colors.grey,size: 12,),
                                          leading: Icon(Icons.stars_sharp,color: Colors.purpleAccent,),
                                          onTap: (){
@@ -246,18 +246,18 @@ class _ProfileViewBody extends State<ProfileViewBody>{
                                      ),
                                      Divider(thickness: 0.2,),
                                      Padding(
-                                       padding: const EdgeInsets.all(8.0),
+                                       padding: const EdgeInsets.only(right: 8.0,left: 8.0),
                                        child: ListTile(
-                                         title: Text("الوكالات").tr(args: ['الوكالات']),
+                                         title: Text("الوكالات",style: TextStyle(fontSize: 19),).tr(args: ['الوكالات']),
                                          trailing: Icon(Icons.arrow_forward_ios_rounded,color: Colors.grey,size: 12,),
                                          leading: Icon(Icons.favorite,color: Colors.greenAccent,),
                                        ),
                                      ),
                                      Divider(thickness: 0.2,),
                                      Padding(
-                                       padding: const EdgeInsets.all(8.0),
+                                       padding: const EdgeInsets.only(right: 8.0,left: 8.0),
                                        child: ListTile(
-                                         title: Text("مركز VIP").tr(args: ['مركز VIP']),
+                                         title: Text("مركز VIP",style: TextStyle(fontSize: 19),).tr(args: ['مركز VIP']),
                                          trailing: Icon(Icons.arrow_forward_ios_rounded,color: Colors.grey,size: 12,),
                                          leading: Icon(Icons.spa_outlined,color: Colors.brown,),
                                          onTap: (){
@@ -267,9 +267,9 @@ class _ProfileViewBody extends State<ProfileViewBody>{
                                      ),
                                      Divider(thickness: 0.2,),
                                      Padding(
-                                       padding: const EdgeInsets.all(8.0),
+                                       padding: const EdgeInsets.only(right: 8.0,left: 8.0),
                                        child: ListTile(
-                                         title: Text("الشارات").tr(args: ['الشارات']),
+                                         title: Text("الشارات",style: TextStyle(fontSize: 19),).tr(args: ['الشارات']),
                                          trailing: Icon(Icons.arrow_forward_ios_rounded,color: Colors.grey,size: 12,),
                                          leading: Icon(Icons.badge,color: Colors.orange,),
                                          onTap: (){
@@ -279,9 +279,9 @@ class _ProfileViewBody extends State<ProfileViewBody>{
                                      ),
                                      Divider(thickness: 0.2,),
                                      Padding(
-                                       padding: const EdgeInsets.all(8.0),
+                                       padding: const EdgeInsets.only(right: 8.0,left: 8),
                                        child: ListTile(
-                                         title: Text("مركز تجاري").tr(args: ['مركز تجاري']),
+                                         title: Text("مركز تجاري",style: TextStyle(fontSize: 19),).tr(args: ['مركز تجاري']),
                                          trailing: Icon(Icons.arrow_forward_ios_rounded,color: Colors.grey,size: 12,),
                                          leading: Icon(Icons.storefront_sharp,color: Colors.greenAccent,),
                                          onTap: (){
@@ -291,18 +291,18 @@ class _ProfileViewBody extends State<ProfileViewBody>{
                                      ),
                                      Divider(thickness: 0.2,),
                                      Padding(
-                                       padding: const EdgeInsets.all(8.0),
+                                       padding: const EdgeInsets.only(right: 8.0,left: 8),
                                        child: ListTile(
-                                         title: Text("مظهري").tr(args: ['مظهري']),
+                                         title: Text("مظهري",style: TextStyle(fontSize: 19),).tr(args: ['مظهري']),
                                          trailing: Icon(Icons.arrow_forward_ios_rounded,color: Colors.grey,size: 12,),
                                          leading: Icon(Icons.backpack,color: Colors.greenAccent,),
                                        ),
                                      ),
                                      Divider(thickness: 0.2,),
                                      Padding(
-                                       padding: const EdgeInsets.all(8.0),
+                                       padding: const EdgeInsets.only(right: 8.0,left: 8),
                                        child: ListTile(
-                                         title: Text("العائلة").tr(args: ['العائلة']),
+                                         title: Text("العائلة",style: TextStyle(fontSize: 19),).tr(args: ['العائلة']),
                                          trailing: Icon(Icons.arrow_forward_ios_rounded,color: Colors.grey,size: 12,),
                                          leading: Icon(Icons.home_sharp,color: Colors.purple,),
                                          onTap: (){
@@ -312,18 +312,18 @@ class _ProfileViewBody extends State<ProfileViewBody>{
                                      ),
                                      Divider(thickness: 0.2,),
                                      Padding(
-                                       padding: const EdgeInsets.all(8.0),
+                                       padding: const EdgeInsets.only(right: 8.0,left: 8),
                                        child: ListTile(
-                                         title: Text("خدمة العملاء").tr(args: ['خدمة العملاء']),
+                                         title: Text("خدمة العملاء",style: TextStyle(fontSize: 19),).tr(args: ['خدمة العملاء']),
                                          trailing: Icon(Icons.arrow_forward_ios_rounded,color: Colors.grey,size: 12,),
                                          leading: Icon(Icons.support_agent,color: Colors.grey,),
                                        ),
                                      ),
                                      Divider(thickness: 0.2,),
                                      Padding(
-                                       padding: const EdgeInsets.all(8.0),
+                                       padding: const EdgeInsets.only(right: 8.0,left: 8),
                                        child: ListTile(
-                                         title: Text("الاعدادات").tr(args: ['الاعدادات']),
+                                         title: Text("الاعدادات",style: TextStyle(fontSize: 19),).tr(args: ['الاعدادات']),
                                          trailing: Icon(Icons.arrow_forward_ios_rounded,color: Colors.grey,size: 12,),
                                          leading: Icon(Icons.settings,color: Colors.grey,),
                                          onTap: (){
