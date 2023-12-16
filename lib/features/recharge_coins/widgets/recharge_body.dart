@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/Utils/app_images.dart';
@@ -14,11 +16,27 @@ class RechargeBody extends StatefulWidget{
 class _RechargeBody extends State<RechargeBody>with SingleTickerProviderStateMixin{
   late TabController _tabController;
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey();
+  final FirebaseAuth _auth=FirebaseAuth.instance;
+  final FirebaseFirestore _firestore=FirebaseFirestore.instance;
+  int coin=0;
+  int daimond=0;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _tabController = TabController(length: 1, vsync: this);
+    getCharge();
+  }
+  void getCharge()async{
+    await for(var snap in _firestore.collection('user').doc(_auth.currentUser!.uid).snapshots()){
+      coin=int.parse(snap.get('coin'));
+      daimond=int.parse(snap.get('daimond'));
+      setState(() {
+        coin;
+        daimond;
+      });
+    }
+
   }
   @override
   Widget build(BuildContext context) {
@@ -39,11 +57,11 @@ class _RechargeBody extends State<RechargeBody>with SingleTickerProviderStateMix
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
               CircleAvatar(
-                radius: 9,
+                radius: 13,
                 backgroundImage: AssetImage(AppImages.gold_coin),
               ),
               Text(
-                "60",
+                coin.toString(),
                 style: TextStyle(
                     fontSize: 12
                 ),
@@ -53,11 +71,11 @@ class _RechargeBody extends State<RechargeBody>with SingleTickerProviderStateMix
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
               CircleAvatar(
-                radius: 9,
-                backgroundImage: AssetImage(AppImages.silver_coin),
+                radius: 13,
+                backgroundImage: AssetImage(AppImages.daimond),
               ),
               Text(
-                "560",
+                daimond.toString(),
                 style: TextStyle(
                     fontSize: 12
                 ),

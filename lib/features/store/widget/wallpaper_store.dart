@@ -79,116 +79,110 @@ class _WallpaperStore extends State<WallpaperStore> {
       ),
     );
   }
-  Widget _buildCard(String price, String imgPath, String category,String days, BuildContext context,bool buy,String id,String pp) {
+  Widget _buildCard(String price, String imgPath, String category, String days, BuildContext context, bool buy, String id, String pp) {
     return Padding(
       padding: EdgeInsets.only(top: 5.0, bottom: 5.0, left: 5.0, right: 5.0),
       child: InkWell(
         onTap: () {
           // Add your onTap logic here
         },
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15.0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                spreadRadius: 3.0,
-                blurRadius: 5.0,
-              ),
-            ],
-            color: Colors.white,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Positioned(
-                child: Container(
+        child: SingleChildScrollView( // Wrap the Column with SingleChildScrollView
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  spreadRadius: 3.0,
+                  blurRadius: 5.0,
+                ),
+              ],
+              color: Colors.white,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
                   padding: EdgeInsets.all(5.0),
                   child: Text(
-                    days=="always"?days:"$days Day",
+                    days == "always" ? days : "$days Day",
                     style: TextStyle(
                       fontSize: 12.0,
                     ),
                   ),
                 ),
-              ),
-              Hero(
-                tag: imgPath,
-                child: Container(
-                  height: 75.0,
-                  width: 75.0,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: CachedNetworkImageProvider(imgPath),
-                      fit: BoxFit.contain,
+                Hero(
+                  tag: imgPath,
+                  child: Container(
+                    height: 75.0,
+                    width: 75.0,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: CachedNetworkImageProvider(imgPath),
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(height: 7.0),
-              Text(
-                price,
-                style: TextStyle(
-                  color: Color(0xFFCC8053),
-                  fontFamily: 'Varela',
-                  fontSize: 14.0,
+                SizedBox(height: 7.0),
+                Text(
+                  price,
+                  style: TextStyle(
+                    color: Color(0xFFCC8053),
+                    fontFamily: 'Varela',
+                    fontSize: 14.0,
+                  ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Container(
-                  color: Color(0xFFEBEBEB),
-                  height: 1.0,
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Container(
+                    color: Color(0xFFEBEBEB),
+                    height: 1.0,
+                  ),
                 ),
-              ),
-              // Add the button and days here
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  buy?Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      color: Colors.grey
-                    ),
-                    child: Text("You Buyed",style: TextStyle(
-                      fontSize: 16, // Set the font size of the text
-                    ),),
-                  ):ElevatedButton(
-                    onPressed: () async{
-                      bool always=false;
-                      if(days=="always"){
-                        always=true;
-                      }
-                      Allarm(id,imgPath,days,always,DateTime.now().toString(),pp);
-
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.green,
-                      onPrimary: Colors.white,
-                      elevation: 5,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                // Add the button and days here
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        bool always = false;
+                        if (days == "always") {
+                          always = true;
+                        }
+                        Allarm(id, imgPath, days, always,
+                            DateTime.now().toString(), pp);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.green,
+                        onPrimary: Colors.white,
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Text(
-                        'Buy Now',
-                        style: TextStyle(
-                          fontSize: 16, // Set the font size of the text
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Text(
+                          'Buy Now',
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  // You can replace '30 Days' with your desired text
-                ],
-              ),
-            ],
+                    // You can replace '30 Days' with your desired text
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+
+
   void Allarm(String id,String path,String dead,bool always,String time,String price) {
     showDialog(
         context: context,

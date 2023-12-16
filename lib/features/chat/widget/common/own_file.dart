@@ -26,133 +26,6 @@ class _OwnFileCard extends State<OwnFileCard>{
   void initState() {
     // TODO: implement initState
     super.initState();
-    // if(widget.type=="vedio"){
-    //   setController();
-    // }
-    //check();
-  }
-  // void check()async{
-  //   final appStorage= await getExternalStorageDirectory();
-  //   final test =File('${appStorage?.path}/${widget.time}');
-  //   final cc = await test.exists();
-  //   print("Test File${test.path}");
-  //   if(cc){
-  //     setState(() {
-  //       downloaded=true;
-  //     });
-  //   }
-  // }
-  // void ShareFile()async{
-  //   try{
-  //     check();
-  //     if(downloaded==true){
-  //       final appStorage= await getExternalStorageDirectory();
-  //       final test =File('${appStorage?.path}/${widget.time}');
-  //       List<XFile> filess = [];
-  //       filess.add(XFile(test.path));
-  //       await Share.shareXFiles(
-  //           filess
-  //       ).then((value) => print("Thank You"));
-  //     }
-  //     else{
-  //       final appStorage= await getExternalStorageDirectory();
-  //       final test =File('${appStorage?.path}/${widget.time}');
-  //       await _requestPermision(Permission.storage);
-  //       final file=await downloadFile(widget.url,widget.time);
-  //       if (file==null) return null;
-  //       print("path : ${file.path}");
-  //       List<XFile> filess = [];
-  //       filess.add(XFile(file.path));
-  //       await Share.shareXFiles(
-  //           filess
-  //       ).then((value) => print("Thank You"));
-  //     }
-  //   }
-  //   catch(e){
-  //     print(e);
-  //   }
-  // }
-  void deleteMSG()async{
-    try{
-      if(widget.group==true){
-        final docRef = _firebaseStorage.collection("MassegeGroup").doc(widget.id);
-        final updates = <String, dynamic>{
-          "Msg": "This MSG deleted!",
-          "type":"msg"
-        };
-        docRef.update(updates);
-        print("Delete MSG From Chat Group");
-      }
-      else{
-        final docRef = _firebaseStorage.collection("chat").doc(widget.id);
-        final updates = <String, dynamic>{
-          "msg": "This MSG deleted!",
-          "type":"msg"
-        };
-        docRef.update(updates);
-        print("Delete MSG From Chat One to One");
-      }
-    }
-    catch(e){
-      return showDialog(
-          context: context,
-          builder: (BuildContext context){
-            return AlertDialog(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                title: const Text('Error'),
-                content: Text(e.toString()),
-                icon:ElevatedButton(
-                  onPressed: (){
-                    Navigator.pop(context);
-                  },
-                  child: const Text("Ignore"),
-                )
-
-            );
-          }
-      );
-    }
-  }
-  void myAlert(){
-    showDialog(
-        context: context,
-        builder: (BuildContext context){
-          return AlertDialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            title: const Text('Please choose'),
-            content: SizedBox(
-              height: 130,
-              child: Column(
-                children: [
-                  ElevatedButton(
-                      onPressed: (){
-                        deleteMSG();
-                        Navigator.pop(context);
-                      },
-                      child: const Row(
-                        children: [
-                          Icon(Icons.delete),
-                          Text("Delete MSG"),
-                        ],
-                      )
-                  ),
-                  ElevatedButton(
-                      onPressed: (){
-
-                      },
-                      child: const Row(
-                        children: [
-                          Icon(Icons.share),
-                          Text("Share"),
-                        ],
-                      )
-                  )
-                ],
-              ),
-            ),
-          );
-        }
-    );
   }
   @override
   Widget build(BuildContext context) {
@@ -171,37 +44,28 @@ class _OwnFileCard extends State<OwnFileCard>{
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(9)
                 ),
-                child: InkWell(
-                  onLongPress: (){
-                    myAlert();
-                  },
-                  child: Column(
-                    children: [
-                      const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CircleAvatar(
-                              backgroundImage:AssetImage("Images/files.png"),
-                              radius: 30,
-                            ),
-                          ]
-                      ),
-                      Text(widget.time),
-                      downloaded?ElevatedButton(
-                        onPressed: ()async{
-                          // final appStorage= await getExternalStorageDirectory();
-                          // final test =File('${appStorage?.path}/${widget.time}');
-                          // OpenFile.open(test.path);
-                        },
-                        child: const Text("Open"),
-                      ):ElevatedButton(
-                        onPressed: ()async{
-                          //openFileUrl(widget.url,widget.time);
-                        },
-                        child: const Text("Download And Open"),
-                      )
-                    ],
-                  ),
+                child: Column(
+                  children: [
+                    const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircleAvatar(
+                            backgroundImage:AssetImage("Images/files.png"),
+                            radius: 30,
+                          ),
+                        ]
+                    ),
+                    Text(widget.time),
+                    downloaded?ElevatedButton(
+                      onPressed: ()async{
+                      },
+                      child: const Text("Open"),
+                    ):ElevatedButton(
+                      onPressed: ()async{
+                      },
+                      child: const Text("Download And Open"),
+                    )
+                  ],
                 ),
               ),
             ),
@@ -217,7 +81,6 @@ class _OwnFileCard extends State<OwnFileCard>{
           width: MediaQuery.of(context).size.width/1.8,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
-              color: Colors.green[300]
           ),
           child: Card(
               margin: const EdgeInsets.all(3),
@@ -232,9 +95,6 @@ class _OwnFileCard extends State<OwnFileCard>{
                       Align(
                         alignment: Alignment.center,
                         child: InkWell(
-                          onLongPress: (){
-                            myAlert();
-                          },
                           onTap: () {
                             //Navigator.push(context, MaterialPageRoute(builder: (builder)=>ViewVideo(widget.url,)));
                           },
@@ -251,9 +111,6 @@ class _OwnFileCard extends State<OwnFileCard>{
                       ),
                     ],
                   ):InkWell(
-                      onLongPress: (){
-                        myAlert();
-                      },
                       onTap: (){
                         //Navigator.push(context, MaterialPageRoute(builder: (builder)=>ViewMedia(widget.url,)));
                       },

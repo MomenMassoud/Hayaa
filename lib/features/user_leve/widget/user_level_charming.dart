@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 
 import '../../../core/Utils/app_images.dart';
 import '../../../models/user_model.dart';
@@ -107,20 +108,17 @@ class _UserLevelCharming extends State<UserLevelCharming>{
                       width: 200,
                       height: 200,
                       decoration: BoxDecoration(
-                        shape: BoxShape.circle, // Clip the container to a circle
-                        border: Border.all(
-                          color: Colors.brown, // Add a border color if desired
-                          width: 2.0, // Specify the border width
-                        ),
+                        shape: BoxShape.circle,
                       ),
-                      child: ClipOval(
-                        child: CachedNetworkImage(
-                          imageUrl:
-                          userModel.photo,
-                          width: 200,
-                          height: 200,
-                          fit: BoxFit.cover, // Adjust the fit based on your needs
-                        ),
+                      child: Stack(
+                        children: [
+                          SVGASimpleImage(
+                            resUrl: "https://firebasestorage.googleapis.com/v0/b/hayaa-161f5.appspot.com/o/gifts%2F30977485Eid%20al-Fitr3.svga?alt=media&token=a149e1da-da01-45dc-b434-a62c9789a9d8",
+                          ),
+                          Center(
+                            child: Text("Level ${userModel.level2}",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                          )
+                        ],
                       ),
                     ),
                   ],
@@ -178,7 +176,7 @@ class _UserLevelCharming extends State<UserLevelCharming>{
                         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text("كيف تتم الترقية",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600),)],),
                       ),
                       ListTile(
-                        title:Text("ارسال هدية") ,
+                        title:Text("استلام هدية") ,
                         subtitle: Text('4 Daimond = 1EXP'),
                         leading: CircleAvatar(
                           child: Icon(Icons.card_giftcard,color: Colors.white),
@@ -190,7 +188,7 @@ class _UserLevelCharming extends State<UserLevelCharming>{
                         child: Divider(thickness: 1,),
                       ),
                       ListTile(
-                        title:Text("شراء دخولية") ,
+                        title:Text("استلام دخولية") ,
                         subtitle: Text('4 Daimond = 1EXP'),
                         leading: CircleAvatar(
                           child: Icon(IconData(0xf012,fontFamily: 'MaterialIcons'),color: Colors.white),
@@ -202,7 +200,7 @@ class _UserLevelCharming extends State<UserLevelCharming>{
                         child: Divider(thickness: 1,),
                       ),
                       ListTile(
-                        title:Text("شراء اطار") ,
+                        title:Text("استلام اطار") ,
                         subtitle: Text('4 Daimond = 1EXP'),
                         leading: CircleAvatar(
                           child: Icon(IconData(0xf27b,fontFamily: 'MaterialIcons'),color: Colors.white),
@@ -214,7 +212,7 @@ class _UserLevelCharming extends State<UserLevelCharming>{
                         child: Divider(thickness: 1,),
                       ),
                       ListTile(
-                        title:Text("شراء استقراطية") ,
+                        title:Text("استلام استقراطية") ,
                         subtitle: Text('4 Daimond = 1EXP'),
                         leading: CircleAvatar(
                           backgroundImage: AssetImage(AppImages.crown),

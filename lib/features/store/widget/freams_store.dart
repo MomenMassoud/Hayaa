@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hayaa_main/features/store/widget/send_item_store.dart';
 import 'package:svgaplayer_flutter/player.dart';
 
 import '../../../models/store_model.dart';
@@ -60,14 +61,14 @@ class _FrameStore extends State<FrameStore>{
                     stream: _firestore.collection('user').doc(_auth.currentUser!.uid).collection('mylook').where('id',isEqualTo: store[index].docID).snapshots(),
                     builder: (context,snapshot){
                       if (!snapshot.hasData) {
-                        return _buildCard('\$ ${store[index].price}',store[index].photo,store[index].cat,store[index].time,context,false,store[index].docID,store[index].price,store[index].type);
+                        return _buildCard('\$ ${store[index].price}',store[index].photo,store[index].cat,store[index].time,context,false,store[index].docID,store[index].price,store[index].type,store[index]);
                       }
                       final masseges = snapshot.data?.docs;
                       if(masseges!.isEmpty){
-                        return _buildCard('\$ ${store[index].price}',store[index].photo,store[index].cat,store[index].time,context,false,store[index].docID,store[index].price,store[index].type);
+                        return _buildCard('\$ ${store[index].price}',store[index].photo,store[index].cat,store[index].time,context,false,store[index].docID,store[index].price,store[index].type,store[index]);
                       }
                       else{
-                        return _buildCard('\$ ${store[index].price}',store[index].photo,store[index].cat,store[index].time,context,true,store[index].docID,store[index].price,store[index].type);
+                        return _buildCard('\$ ${store[index].price}',store[index].photo,store[index].cat,store[index].time,context,true,store[index].docID,store[index].price,store[index].type,store[index]);
                       }
                     },
                   );
@@ -81,7 +82,7 @@ class _FrameStore extends State<FrameStore>{
       ),
     );
   }
-  Widget _buildCard(String price, String imgPath, String category,String days, BuildContext context,bool buy,String id,String pp,String type) {
+  Widget _buildCard(String price, String imgPath, String category, String days, BuildContext context, bool buy, String id, String pp, String type, StoreModel ss) {
     return Padding(
       padding: EdgeInsets.only(top: 5.0, bottom: 5.0, left: 5.0, right: 5.0),
       child: InkWell(
@@ -103,23 +104,26 @@ class _FrameStore extends State<FrameStore>{
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Positioned(
-                child: Container(
-                  padding: EdgeInsets.all(5.0),
-                  child: Text(
-                    days=="always"?days:"$days Day",
-                    style: TextStyle(
-                      fontSize: 12.0,
-                    ),
+              Container(
+                padding: EdgeInsets.all(5.0),
+                child: Text(
+                  days == "always" ? days : "$days Day",
+                  style: TextStyle(
+                    fontSize: 12.0,
                   ),
                 ),
               ),
-              type=="svga"?CircleAvatar(
+              type == "svga"
+                  ? CircleAvatar(
                 radius: 32,
                 child: SVGASimpleImage(
                   resUrl: imgPath,
                 ),
-              ):CachedNetworkImage(imageUrl: imgPath,width: 50),
+              )
+                  : CachedNetworkImage(
+                imageUrl: imgPath,
+                width: 50,
+              ),
               SizedBox(height: 7.0),
               Text(
                 price,
@@ -138,24 +142,17 @@ class _FrameStore extends State<FrameStore>{
               ),
               // Add the button and days here
               Row(
+                mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  buy?Container(
-                    decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        color: Colors.grey
-                    ),
-                    child: Text("You Buyed",style: TextStyle(
-                      fontSize: 16, // Set the font size of the text
-                    ),),
-                  ):ElevatedButton(
-                    onPressed: () async{
-                      bool always=false;
-                      if(days=="always"){
-                        always=true;
-                      }
-                      Allarm(id,imgPath,days,always,DateTime.now().toString(),pp);
+                  ElevatedButton(
 
+                    onPressed: () async {
+                      bool always = false;
+                      if (days == "always") {
+                        always = true;
+                      }
+                      Allarm(id, imgPath, days, always, DateTime.now().toString(), pp);
                     },
                     style: ElevatedButton.styleFrom(
                       primary: Colors.green,
@@ -165,17 +162,33 @@ class _FrameStore extends State<FrameStore>{
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Text(
-                        'Buy Now',
-                        style: TextStyle(
-                          fontSize: 16, // Set the font size of the text
-                        ),
+                    child: Text(
+                      'Buy Now',
+                      style: TextStyle(
+                        fontSize: 16, // Set the font size of the text
                       ),
                     ),
                   ),
-                  // You can replace '30 Days' with your desired text
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => SendItemStore(ss)));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.grey,
+                      onPrimary: Colors.white,
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text(
+                      'Send',
+                      style: TextStyle(
+                        fontSize: 16, // Set the font size of the text
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ],

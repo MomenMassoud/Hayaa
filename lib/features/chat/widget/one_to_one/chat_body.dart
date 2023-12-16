@@ -710,10 +710,12 @@ class _ChatBody extends State<ChatBody> {
                           Column(
                             children: [
                               gifts[index].type=="svga"?CircleAvatar(
+                                radius: 30,
                                 child: SVGASimpleImage(
                                   resUrl: gifts[index].photo,
                                 ),
                               ):CircleAvatar(
+                                radius: 30,
                                 child: CachedNetworkImage(imageUrl: gifts[index].photo),
                               ),
                               Text(gifts[index].Name),

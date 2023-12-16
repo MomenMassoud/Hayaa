@@ -16,11 +16,11 @@ class ReplayGiftCard extends StatelessWidget{
           maxWidth: MediaQuery.of(context).size.width - 45,
         ),
         child: Card(
+          color: Colors.white,
           elevation: 1,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(22),
           ),
-          color: Colors.blueGrey,
           margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           child: Stack(
             children: [
@@ -31,21 +31,10 @@ class ReplayGiftCard extends StatelessWidget{
                   top: 9,
                   bottom: 20,
                 ),
-                child:Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text("لقد استلمت هدية"),
-                    type=="svga"?CircleAvatar(
-                      child: SVGASimpleImage(
-                        resUrl: path,
-                      ),
-                    ):CircleAvatar(
-                      child: CachedNetworkImage(imageUrl: path),
-                    ),
-                  ],
-                )
+                child:type=="svga"?SVGASimpleImage(
+                  resUrl: path,
+                ):CachedNetworkImage(imageUrl: path),
               ),
-
             ],
           ),
         ),

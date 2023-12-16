@@ -122,7 +122,7 @@ class _OwnAudio extends State<OwnAudio>{
               borderRadius: BorderRadius.circular(15),
             ),
             child: Card(
-              color: Colors.orange,
+              color: Color(0xffdcf8c6),
               margin: EdgeInsets.all(3),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(9)

@@ -212,7 +212,7 @@ class OwnMassege extends StatelessWidget{
         child: Card(
           elevation: 1,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(22),
+            borderRadius: BorderRadius.circular(15),
           ),
           color: const Color(0xffdcf8c6),
           margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),

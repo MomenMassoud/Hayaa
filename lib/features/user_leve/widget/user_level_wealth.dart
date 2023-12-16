@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import '../../../core/Utils/app_images.dart';
 import '../../../models/user_model.dart';
 
@@ -105,19 +106,16 @@ class _UserLevelWealth extends State<UserLevelWealth> {
                         height: 200,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle, // Clip the container to a circle
-                          border: Border.all(
-                            color: Colors.brown, // Add a border color if desired
-                            width: 2.0, // Specify the border width
-                          ),
                         ),
-                        child: ClipOval(
-                          child: CachedNetworkImage(
-                            imageUrl:
-                            userModel.photo,
-                            width: 200,
-                            height: 200,
-                            fit: BoxFit.cover, // Adjust the fit based on your needs
-                          ),
+                        child: Stack(
+                          children: [
+                            SVGASimpleImage(
+                              resUrl: "https://firebasestorage.googleapis.com/v0/b/hayaa-161f5.appspot.com/o/gifts%2F30977485Eid%20al-Fitr3.svga?alt=media&token=a149e1da-da01-45dc-b434-a62c9789a9d8",
+                            ),
+                            Center(
+                              child: Text("Level ${userModel.level}",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                            )
+                          ],
                         ),
                       ),
                     ],
