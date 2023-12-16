@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,8 @@ class SettingViewBody extends StatefulWidget{
 }
 
 class _SettingViewBody extends State<SettingViewBody>{
+  final FirebaseAuth _auth=FirebaseAuth.instance;
+  final FirebaseFirestore _firestore=FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,9 +45,21 @@ class _SettingViewBody extends State<SettingViewBody>{
                     leading: Icon(Icons.language,color: Colors.greenAccent,),
                     onTap: (){
                       if(context.locale.languageCode=="en"){
+                        _firestore.collection('user').doc(_auth.currentUser!.uid).update({
+                          'country':'DZ',
+                          'lang':'ar'
+                        }).then((value){
+                          print("Switch");
+                        });
                         context.setLocale(Locale("ar","DZ"));
                       }
                       else{
+                        _firestore.collection('user').doc(_auth.currentUser!.uid).update({
+                          'country':'US',
+                          'lang':'en'
+                        }).then((value){
+                          print("Switch");
+                        });
                         context.setLocale(Locale("en","US"));
                       }
                     },

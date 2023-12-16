@@ -130,10 +130,7 @@ class _OwnAudio extends State<OwnAudio>{
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  widget.type=="audio"?CircleAvatar(
-                    backgroundImage:AssetImage("Images/sound.png"),
-                    radius: 20,
-                  ):CircleAvatar(
+                  CircleAvatar(
                     backgroundImage:CachedNetworkImageProvider(widget.img),
                     radius: 20,
                   ),

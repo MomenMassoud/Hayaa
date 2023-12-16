@@ -27,6 +27,7 @@ import '../../features/salery/view/salery_view.dart';
 import '../../features/splash/views/splash_view.dart';
 import '../../features/store/ListViewStore.dart';
 import '../../features/user_leve/FirstList.dart';
+import '../../features/user_leve/view/user_level_view.dart';
 
 
 Map<String, Widget Function(BuildContext)> appRoutes = {
@@ -58,4 +59,5 @@ Map<String, Widget Function(BuildContext)> appRoutes = {
   SettingView.id:(context)=> SettingView(),
   SearchView.id:(context)=>SearchView(),
   FriendReuest.id:(context)=>FriendReuest(),
+  UserLevelView.id:(context)=>UserLevelView()
 };

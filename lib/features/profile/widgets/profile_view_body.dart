@@ -14,7 +14,7 @@ import '../../friend_list/widget/friend_list_body.dart';
 import '../../recharge_coins/views/recharge_view.dart';
 import '../../salery/view/salery_view.dart';
 import '../../store/ListViewStore.dart';
-import '../../user_leve/FirstList.dart';
+import '../../user_leve/view/user_level_view.dart';
 import '../views/profile_edit_view.dart';
 
 class ProfileViewBody extends StatefulWidget {
@@ -66,6 +66,7 @@ class _ProfileViewBody extends State<ProfileViewBody>{
           userModel.type=massege.get('type');
           userModel.vip=massege.get('vip');
           userModel.docID=massege.id;
+          context.setLocale(Locale(userModel.lang,userModel.country));
         }
        return StreamBuilder<QuerySnapshot>(
          stream:_firestore.collection('user').doc(userModel.docID).collection('friends').snapshots() ,
@@ -253,7 +254,7 @@ class _ProfileViewBody extends State<ProfileViewBody>{
                                          trailing: Icon(Icons.arrow_forward_ios_rounded,color: Colors.grey,size: 12,),
                                          leading: Icon(Icons.stars_sharp,color: Colors.purpleAccent,),
                                          onTap: (){
-                                           Navigator.pushNamed(context, FirstList.id);
+                                           Navigator.pushNamed(context, UserLevelView.id);
                                          },
                                        ),
                                      ),

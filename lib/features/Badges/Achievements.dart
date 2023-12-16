@@ -35,7 +35,8 @@ class Achievements extends StatelessWidget {
               crossAxisSpacing: 20.0,
               mainAxisSpacing: 10.0,
               childAspectRatio: 0.8,
-              children: list)),
+              children: list)
+      ),
     );
   }
 
