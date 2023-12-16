@@ -25,8 +25,7 @@ import '../../features/profile/views/profile_view.dart';
 import '../../features/recharge_coins/views/recharge_view.dart';
 import '../../features/salery/view/salery_view.dart';
 import '../../features/splash/views/splash_view.dart';
-import '../../features/store/ListViewStore.dart';
-import '../../features/user_leve/FirstList.dart';
+import '../../features/store/view/store_view.dart';
 import '../../features/user_leve/view/user_level_view.dart';
 
 
@@ -50,14 +49,13 @@ Map<String, Widget Function(BuildContext)> appRoutes = {
   FamilyView.id: (context) => const FamilyView(),
   VisitorView.id:(context)=>const VisitorView(),
   ProfileEditView.id:(context)=>const ProfileEditView(),
-  ListViewStore.id:(context)=>const ListViewStore(),
   VipView.id :(context)=>const VipView(),
   SaleryView.id:(context)=>const SaleryView(),
   Badges.id:(context)=>const Badges(),
-  FirstList.id:(context)=>const FirstList(),
   SignupView.id:(context)=>const SignupView(),
   SettingView.id:(context)=> SettingView(),
   SearchView.id:(context)=>SearchView(),
   FriendReuest.id:(context)=>FriendReuest(),
-  UserLevelView.id:(context)=>UserLevelView()
+  UserLevelView.id:(context)=>UserLevelView(),
+  StoreView.id:(context)=>StoreView(),
 };

@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hayaa_main/features/setting/views/setting_view.dart';
+import 'package:hayaa_main/features/store/view/store_view.dart';
 import '../../../core/Utils/app_colors.dart';
 import '../../../models/user_model.dart';
 import '../../Badges/Badgespage.dart';
@@ -13,7 +14,6 @@ import '../../friend_list/view/visitor_view.dart';
 import '../../friend_list/widget/friend_list_body.dart';
 import '../../recharge_coins/views/recharge_view.dart';
 import '../../salery/view/salery_view.dart';
-import '../../store/ListViewStore.dart';
 import '../../user_leve/view/user_level_view.dart';
 import '../views/profile_edit_view.dart';
 
@@ -153,7 +153,7 @@ class _ProfileViewBody extends State<ProfileViewBody>{
                                      mainAxisAlignment: MainAxisAlignment.end,
                                      children: [
                                        IconButton(onPressed: (){
-                                         Navigator.pushNamed(context, SettingView.id);
+                                         Navigator.pushNamed(context, ProfileEditView.id);
                                        }, icon: Icon(Icons.arrow_forward_ios_rounded))
                                      ],
                                    )
@@ -299,7 +299,7 @@ class _ProfileViewBody extends State<ProfileViewBody>{
                                          trailing: Icon(Icons.arrow_forward_ios_rounded,color: Colors.grey,size: 12,),
                                          leading: Icon(Icons.storefront_sharp,color: Colors.greenAccent,),
                                          onTap: (){
-                                           Navigator.pushNamed(context, ListViewStore.id);
+                                           Navigator.pushNamed(context, StoreView.id);
                                          },
                                        ),
                                      ),
