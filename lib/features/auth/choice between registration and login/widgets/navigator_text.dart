@@ -19,7 +19,7 @@ class NavigatorText extends StatelessWidget {
       child: Text( content ,
                     style: const TextStyle(
                       fontFamily: "Questv1",
-                      color: Colors.white,
+                      color: Colors.black,
                       fontSize: 14,
                     ),),
     );

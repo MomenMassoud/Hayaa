@@ -24,6 +24,8 @@ class UserModel{
   late String exp2;
   late String level2;
   late String docID;
+  late String myfamily;
+  late String familytype;
   UserModel(
       this.email,this.name,this.gender,this.photo,this.id,this.phonenumber,this.devicetoken,this.daimond,this.vip,this.bio,this.seen,this.lang,this.country,this.type,this.birthdate,this.coin,this.exp,this.level,
       );

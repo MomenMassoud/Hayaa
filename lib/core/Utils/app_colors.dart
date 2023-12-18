@@ -3,6 +3,15 @@ import 'package:flutter/material.dart';
 //all App Colors
 
 abstract class AppColors {
+
+
+  static const Color appMainColor = Colors.cyan;
+  static const Color app2MainColor =Colors.white;
+  static const Color app3MainColor = Colors.cyanAccent;
+
+
+
+
   static const Color appPrimaryColors900 = Color(0XFF091A7A);
   static const Color appPrimaryColors800 = Color(0XFF102693);
   static const Color appPrimaryColors700 = Color(0XFF1939B7);

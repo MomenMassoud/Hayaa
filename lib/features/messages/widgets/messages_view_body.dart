@@ -22,18 +22,12 @@ class _MessagesViewBody extends State<MessagesViewBody>{
   final FirebaseFirestore _firestore=FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Container(
-          height: screenHight * 0.12,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [
-                AppColors.appPrimaryColors400,
-                AppColors.appInformationColors700
-              ],
+              colors: [AppColors.app3MainColor, AppColors.appMainColor],
               begin: Alignment.topLeft,
               end: Alignment.topRight,
               stops: [0.0, 0.8],
@@ -44,10 +38,9 @@ class _MessagesViewBody extends State<MessagesViewBody>{
         title:GestureDetector(
           onTap: () {},
           child: SizedBox(
-            width: screenWidth * 0.12,
             child: Text(
               "الدردشة",
-              style: TextStyle(fontFamily: "Hayah", fontSize: 22),
+              style: TextStyle(fontFamily: "Hayah", fontSize: 22,color: Colors.white),
             ).tr(args: ['الدردشة']),
           ),
         ),
@@ -56,12 +49,12 @@ class _MessagesViewBody extends State<MessagesViewBody>{
               onPressed: () {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => FriendListBody(userModel)));
-              }, icon: const Icon(Icons.people_outlined,color: Colors.black,)),
+              }, icon: const Icon(Icons.people_outlined,color: Colors.white,)),
           IconButton(
               onPressed: (){
                 Navigator.pushNamed(context, SearchView.id);
               },
-              icon: Icon(Icons.search,color: Colors.black,))
+              icon: Icon(Icons.search,color: Colors.white,))
         ],
       ),
       body: StreamBuilder<QuerySnapshot>(

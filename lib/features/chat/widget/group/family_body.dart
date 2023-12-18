@@ -17,7 +17,7 @@ class _FamilyBody extends State<FamilyBody>with SingleTickerProviderStateMixin{
   void initState() {
     // TODO: implement initState
     super.initState();
-    _tabController=TabController(length: 4, vsync: this);
+    _tabController=TabController(length: 3, vsync: this);
   }
   @override
   Widget build(BuildContext context) {
@@ -58,9 +58,6 @@ class _FamilyBody extends State<FamilyBody>with SingleTickerProviderStateMixin{
               Tab(
                 child: Text("شهري",style: TextStyle(fontFamily: "Hayah", fontSize: 20,color: Colors.white)).tr(args: ['شهري']),
               ),
-              Tab(
-                child: Text("مسابقة",style: TextStyle(fontFamily: "Hayah", fontSize: 20,color: Colors.white)).tr(args: ['مسابقة']),
-              ),
             ],
         ),
       ),
@@ -70,7 +67,6 @@ class _FamilyBody extends State<FamilyBody>with SingleTickerProviderStateMixin{
             FamilyNewsView(),
             FamilyWeaklyView(),
             FamilyMonthView(),
-            FamilyRaceView(),
       ]),
     );
   }

@@ -6,7 +6,6 @@ import '../views/all_rooms_view.dart';
 import 'gradient_rounded_container.dart';
 import 'horezintal_rooms_list_view_builder.dart';
 
-
 class HorezintalSection extends StatelessWidget {
   const HorezintalSection({
     super.key,
@@ -23,7 +22,7 @@ class HorezintalSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(children: [
       GradientRoundedContainer(
-        colorOne: Colors.pink.withOpacity(0.3),
+        colorOne: Colors.pink.withOpacity(0),
         colorTwo: Colors.pink.withOpacity(0),
         screenWidth: screenWidth,
         screenHeight: screenHight * 0.15,
@@ -40,32 +39,32 @@ class HorezintalSection extends StatelessWidget {
                   onTap: () {
                     Navigator.pushNamed(context, AllRoomsView.id);
                   },
-                  child:  Row(
+                  child: Row(
                     children: [
-                      Icon(Icons.arrow_back, color: Colors.pink),
+                      const Icon(Icons.arrow_back, color: Colors.pink),
                       Text("الكل",
                           style: TextStyle(
                               color: Colors.pink,
-                              fontSize: 16,
-                              fontFamily: "Questv1")).tr(args: ['الكل']),
+                              fontSize: screenHight * 0.02,
+                              fontFamily: "Questv1"))
+                          .tr(args: ['الكل']),
                     ],
                   ),
                 ),
               ),
-               Padding(
-                padding: EdgeInsets.only(right: 8, top: 8),
+              Padding(
+                padding: const EdgeInsets.only(right: 8, top: 8),
                 child: Text("قد تكون مهتماً",
                     style: TextStyle(
                         color: Colors.pink,
-                        fontSize: 16,
-                        fontFamily: "Questv1")).tr(args: ['قد تكون مهتماً']),
+                        fontSize: screenHight * 0.02,
+                        fontFamily: "Questv1"))
+                    .tr(args: ['قد تكون مهتماً']),
               ),
             ],
           ),
           HorezintalRoomsListViewBuilder(
-              screenHight: screenHight,
-              rooms: rooms,
-              screenWidth: screenWidth),
+              screenHight: screenHight, rooms: rooms, screenWidth: screenWidth),
         ],
       )
     ]);

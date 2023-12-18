@@ -55,7 +55,7 @@ class _UserLevelCharming extends State<UserLevelCharming>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFFFFFF),
+      backgroundColor: Colors.transparent,
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore
             .collection('user')
@@ -218,6 +218,7 @@ class _UserLevelCharming extends State<UserLevelCharming>{
                           backgroundImage: AssetImage(AppImages.crown),
                         ),
                       ),
+                      SizedBox(height: 20,)
                     ],
                   ),
                 ),

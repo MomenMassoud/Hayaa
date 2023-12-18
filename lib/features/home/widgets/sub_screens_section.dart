@@ -34,14 +34,15 @@ class SubScreensSection extends StatelessWidget {
                   SizedBox(
                       width: screenWidth * 0.1,
                       child: const Image(image: AssetImage(AppImages.trophy))),
-                   Padding(
-                    padding: EdgeInsets.all(8.0),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Text(
                       "جينيس",
                       style: TextStyle(
+                          overflow: TextOverflow.clip,
                           fontFamily: 'Questv1',
                           color: Colors.white,
-                          fontSize: 18),
+                          fontSize: screenHight * 0.017),
                     ).tr(args: ['جينيس']),
                   )
                 ],
@@ -64,15 +65,16 @@ class SubScreensSection extends StatelessWidget {
                   SizedBox(
                       width: screenWidth * 0.1,
                       child:
-                          const Image(image: AssetImage(AppImages.megaPhone))),
-                   Padding(
-                    padding: EdgeInsets.all(8.0),
+                      const Image(image: AssetImage(AppImages.megaPhone))),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Text(
                       "الفعاليات",
                       style: TextStyle(
+                          overflow: TextOverflow.clip,
                           fontFamily: 'Questv1',
                           color: Colors.white,
-                          fontSize: 18),
+                          fontSize: screenHight * 0.018),
                     ).tr(args: ['الفعاليات']),
                   )
                 ],
@@ -95,14 +97,15 @@ class SubScreensSection extends StatelessWidget {
                   SizedBox(
                       width: screenWidth * 0.1,
                       child: const Image(image: AssetImage(AppImages.badge))),
-                   Padding(
-                    padding: EdgeInsets.all(8.0),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Text(
                       "العائلة",
                       style: TextStyle(
+                          overflow: TextOverflow.clip,
                           fontFamily: 'Questv1',
                           color: Colors.white,
-                          fontSize: 18),
+                          fontSize: screenHight * 0.018),
                     ).tr(args: ['العائلة']),
                   )
                 ],

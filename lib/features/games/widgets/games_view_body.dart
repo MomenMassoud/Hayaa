@@ -27,10 +27,7 @@ class _GamesViewBody extends State<GamesViewBody>with SingleTickerProviderStateM
           height: screenHight * 0.12,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [
-                AppColors.appPrimaryColors400,
-                AppColors.appInformationColors700
-              ],
+              colors: [AppColors.app3MainColor, AppColors.appMainColor],
               begin: Alignment.topLeft,
               end: Alignment.topRight,
               stops: [0.0, 0.8],

@@ -211,24 +211,41 @@ class _HeadStore extends State<HeadStore>{
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ElevatedButton(onPressed: ()async{
-                        if(coins>=int.parse(price)){
-                          await _firestore.collection('user').doc(_auth.currentUser!.uid).collection('mylook').doc(id).set({
-                            'photo':path,
-                            'id':id,
-                            'dead':dead,
-                            'always':always.toString(),
-                            'time':DateTime.now().toString(),
-                          }).then((value){
-                            Navigator.pop(context);
-                            SendDone();
-                          });
-                        }
-                        else{
-                          Navigator.pop(context);
-                          NotSend();
-                        }
-                      }, child: Text("شراء")),
+                      ElevatedButton(
+                          onPressed: ()async{
+                            if(coins>=int.parse(price)){
+                              await _firestore.collection('user').doc(_auth.currentUser!.uid).collection('mylook').where('id',isEqualTo:id).get().then((value){
+                                if(value.size==0){
+                                  _firestore.collection('user').doc(_auth.currentUser!.uid).collection('mylook').doc(id).set({
+                                    'photo':path,
+                                    'id':id,
+                                    'dead':dead,
+                                    'cat':'bubble',
+                                    'always':always.toString(),
+                                    'time':DateTime.now().toString(),
+                                  }).then((value){
+                                    Navigator.pop(context);
+                                    SendDone();
+                                  });
+                                }
+                                else{
+                                  int day=int.parse(value.docs[0].get('dead'));
+                                  day+=int.parse(dead);
+                                  _firestore.collection('user').doc(_auth.currentUser!.uid).collection('mylook').doc(id).update({
+                                    'dead':day.toString()
+                                  }).then((value){
+                                    Navigator.pop(context);
+                                    SendDone();
+                                  });
+                                }
+                              });
+
+                            }
+                            else{
+                              Navigator.pop(context);
+                              NotSend();
+                            }
+                          }, child: Text("شراء")),
                       ElevatedButton(onPressed: (){
                         Navigator.pop(context);
                       }, child: Text("الغاء")),

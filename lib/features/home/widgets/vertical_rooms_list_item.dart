@@ -20,7 +20,7 @@ class VerticalRoomsListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.all(6),
       child: GestureDetector(
         onTap: () {
           log("${index}tapped");
@@ -31,12 +31,11 @@ class VerticalRoomsListItem extends StatelessWidget {
                 image: AssetImage(roomModel.image!), fit: BoxFit.cover),
             color: Colors.amber,
             borderRadius: const BorderRadius.all(
-              Radius.circular(20),
+              Radius.circular(10),
             ),
           ),
-          height: screenHight * 0.15,
-          width: screenWidth*0.4,
-          child: Text(""),
+          height: screenHight * 0.12,
+          width: screenWidth * 0.42,
         ),
       ),
     );

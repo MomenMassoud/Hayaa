@@ -30,7 +30,7 @@ class GradiantButton extends StatelessWidget {
           end: Alignment.topCenter,
         ),
         borderRadius:
-            BorderRadius.circular(10.0), // Adjust the border radius as needed
+        BorderRadius.circular(10.0), // Adjust the border radius as needed
       ),
       child: ElevatedButton(
         style: ButtonStyle(

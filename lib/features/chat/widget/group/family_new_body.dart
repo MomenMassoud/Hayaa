@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hayaa_main/features/chat/widget/group/top_card.dart';
 
 import '../../../../core/Utils/app_images.dart';
+import '../../group/view/create_family_view.dart';
 import '../../model/group_rand_card.dart';
 import 'other_card.dart';
 
@@ -95,7 +96,9 @@ class _FamilyNewsBody extends State<FamilyNewsBody>{
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 child: ElevatedButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      Navigator.pushNamed(context, CreateFamilyView.id);
+                    },
                     child: Text("انشاء عائلة").tr(args: ['انشاء عائلة'])
                 ),
               ),

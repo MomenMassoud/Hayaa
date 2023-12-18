@@ -212,14 +212,16 @@ class _CarStoreList extends State<CarStoreList>{
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ElevatedButton(onPressed: ()async{
+                      ElevatedButton(
+                          onPressed: ()async{
                         if(coins>=int.parse(price)){
-                          await _firestore.collection('user').doc(_auth.currentUser!.uid).collection('mylook').doc(id).get().then((value){
-                            if(value.data()!.isEmpty){
+                          await _firestore.collection('user').doc(_auth.currentUser!.uid).collection('mylook').where('id',isEqualTo:id).get().then((value){
+                            if(value.size==0){
                                _firestore.collection('user').doc(_auth.currentUser!.uid).collection('mylook').doc(id).set({
                                 'photo':path,
                                 'id':id,
                                 'dead':dead,
+                                 'cat':'car',
                                 'always':always.toString(),
                                 'time':DateTime.now().toString(),
                               }).then((value){
@@ -228,7 +230,7 @@ class _CarStoreList extends State<CarStoreList>{
                               });
                             }
                             else{
-                              int day=int.parse(value.get('dead'));
+                              int day=int.parse(value.docs[0].get('dead'));
                               day+=int.parse(dead);
                               _firestore.collection('user').doc(_auth.currentUser!.uid).collection('mylook').doc(id).update({
                                 'dead':day.toString()

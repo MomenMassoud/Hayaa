@@ -54,7 +54,7 @@ class _UserLevelWealth extends State<UserLevelWealth> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xFFFFFFFF),
+        backgroundColor: Colors.transparent,
         body: StreamBuilder<QuerySnapshot>(
           stream: _firestore
               .collection('user')
@@ -138,7 +138,7 @@ class _UserLevelWealth extends State<UserLevelWealth> {
                           semanticsValue: userModel.exp,
                           semanticsLabel: userModel.exp,
                           value: (int.parse(userModel.exp)/1000), // percent filled
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                           backgroundColor: Colors.grey,
                         ),
                       ),
@@ -215,6 +215,7 @@ class _UserLevelWealth extends State<UserLevelWealth> {
                             backgroundImage: AssetImage(AppImages.crown),
                           ),
                         ),
+                        SizedBox(height: 20,),
                       ],
                     ),
                   ),

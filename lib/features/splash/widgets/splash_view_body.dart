@@ -5,7 +5,6 @@ import '../../../core/Utils/app_images.dart';
 import 'circular_gradiant_opacity_container.dart';
 import 'gradient_container.dart';
 
-
 class SplashViewBody extends StatefulWidget {
   const SplashViewBody({super.key});
 
@@ -38,8 +37,8 @@ class _SplashViewBodyState extends State<SplashViewBody>
         GradientContainer(
           screenHeight: screenHeight,
           screenWidth: screenWidth,
-          colorOne: AppColors.appPrimaryColors400,
-          colorTwo: AppColors.appPrimaryColors800,
+          colorOne: AppColors.appMainColor,
+          colorTwo: AppColors.app2MainColor,
         ),
         SizedBox(
           height: screenHeight,
@@ -56,16 +55,16 @@ class _SplashViewBodyState extends State<SplashViewBody>
           child: Column(
             children: [
               SizedBox(
-                height: screenHeight * 0.4,
+                height: screenHeight * 0.35,
               ),
               CircularGradiantOpacityContainer(
                 screenHeight: screenHeight,
                 screenWidth: screenWidth,
                 hightRatio: 0.45,
                 widthRatio: 0.65,
-                colorOne: Colors.white,
-                colorTwo: Colors.white,
-                colorOneOpacity: 0.4,
+                colorOne: AppColors.app3MainColor,
+                colorTwo: AppColors.app3MainColor,
+                colorOneOpacity: 0.5,
                 colorTwoOpacity: 0,
                 radius: 0.46,
               )
@@ -79,7 +78,7 @@ class _SplashViewBodyState extends State<SplashViewBody>
                 height: screenHeight * 0.55,
               ),
               SizedBox(
-                width: screenWidth * 0.45,
+                width: screenWidth * 0.55,
                 child: Opacity(
                     opacity: animationController.value,
                     child: Image.asset(AppImages.appPLogo)),

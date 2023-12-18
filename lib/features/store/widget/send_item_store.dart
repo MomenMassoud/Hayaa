@@ -156,6 +156,7 @@ class _SendItemStore extends State<SendItemStore>{
                                    'id':widget.storeModel.docID,
                                    'dead':widget.storeModel.time,
                                    'always':'false',
+                                   'cat':widget.storeModel.cat,
                                    'time':DateTime.now().toString(),
                                  });
                                }

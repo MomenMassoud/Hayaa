@@ -3,6 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hayaa_main/features/agencies/views/agency_creation_view.dart';
+import 'package:hayaa_main/features/chat/widget/group/my_family_body.dart';
+import 'package:hayaa_main/features/mylook/view/my_look_view.dart';
 import 'package:hayaa_main/features/setting/views/setting_view.dart';
 import 'package:hayaa_main/features/store/view/store_view.dart';
 import '../../../core/Utils/app_colors.dart';
@@ -66,6 +69,7 @@ class _ProfileViewBody extends State<ProfileViewBody>{
           userModel.type=massege.get('type');
           userModel.vip=massege.get('vip');
           userModel.docID=massege.id;
+          userModel.myfamily=massege.get('myfamily');
           context.setLocale(Locale(userModel.lang,userModel.country));
         }
        return StreamBuilder<QuerySnapshot>(
@@ -265,6 +269,12 @@ class _ProfileViewBody extends State<ProfileViewBody>{
                                          title: Text("الوكالات",style: TextStyle(fontSize: 19),).tr(args: ['الوكالات']),
                                          trailing: Icon(Icons.arrow_forward_ios_rounded,color: Colors.grey,size: 12,),
                                          leading: Icon(Icons.favorite,color: Colors.greenAccent,),
+                                         onTap: (){
+                                           print(userModel.type);
+                                           if(userModel.type=="normal"){
+                                             Navigator.pushNamed(context, AgencyCreationView.id);
+                                           }
+                                         },
                                        ),
                                      ),
                                      Divider(thickness: 0.2,),
@@ -310,6 +320,9 @@ class _ProfileViewBody extends State<ProfileViewBody>{
                                          title: Text("مظهري",style: TextStyle(fontSize: 19),).tr(args: ['مظهري']),
                                          trailing: Icon(Icons.arrow_forward_ios_rounded,color: Colors.grey,size: 12,),
                                          leading: Icon(Icons.backpack,color: Colors.greenAccent,),
+                                         onTap: (){
+                                           Navigator.pushNamed(context, MyLookView.id);
+                                         },
                                        ),
                                      ),
                                      Divider(thickness: 0.2,),
@@ -320,7 +333,12 @@ class _ProfileViewBody extends State<ProfileViewBody>{
                                          trailing: Icon(Icons.arrow_forward_ios_rounded,color: Colors.grey,size: 12,),
                                          leading: Icon(Icons.home_sharp,color: Colors.purple,),
                                          onTap: (){
-                                           Navigator.pushNamed(context, FamilyView.id);
+                                           if(userModel.myfamily==""){
+                                             Navigator.pushNamed(context, FamilyView.id);
+                                           }
+                                           else{
+                                             Navigator.pushNamed(context, MyFamilyBody.id);
+                                           }
                                          },
                                        ),
                                      ),

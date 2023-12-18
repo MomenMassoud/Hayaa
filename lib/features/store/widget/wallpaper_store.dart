@@ -205,6 +205,7 @@ class _WallpaperStore extends State<WallpaperStore> {
                             'id':id,
                             'dead':dead,
                             'always':always.toString(),
+                            'cat':'wallpaper',
                             'time':DateTime.now().toString(),
                           }).then((value){
                             Navigator.pop(context);

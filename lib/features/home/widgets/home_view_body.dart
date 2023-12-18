@@ -21,58 +21,82 @@ class HomeViewBody extends StatefulWidget {
 }
 
 class _HomeViewBodyState extends State<HomeViewBody> {
-  FirebaseAuth _auth=FirebaseAuth.instance;
-  FirebaseFirestore _firestore=FirebaseFirestore.instance;
-  UserModel userModel=UserModel("email", "name", "gende", "photo", "id", "phonenumber", "devicetoken", "daimond", "vip", "bio", "seen", "lang", "country", "type", "birthdate", "coin", "exp", "level");
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  UserModel userModel = UserModel(
+      "email",
+      "name",
+      "gende",
+      "photo",
+      "id",
+      "phonenumber",
+      "devicetoken",
+      "daimond",
+      "vip",
+      "bio",
+      "seen",
+      "lang",
+      "country",
+      "type",
+      "birthdate",
+      "coin",
+      "exp",
+      "level");
 
   @override
   void initState() {
     super.initState();
     start();
   }
-  void start()async{
-    if(_auth.currentUser!.email==null){
-      await for(var snap in _firestore.collection('user').where('phonenumber',isEqualTo:_auth.currentUser!.phoneNumber).snapshots()){
-        userModel.bio=snap.docs[0].get('bio');
-        userModel.birthdate=snap.docs[0].get('birthdate');
-        userModel.coin=snap.docs[0].get('coin');
-        userModel.country=snap.docs[0].get('country');
-        userModel.daimond=snap.docs[0].get('daimond');
-        userModel.devicetoken=snap.docs[0].get('devicetoken');
-        userModel.email=snap.docs[0].get('email');
-        userModel.exp=snap.docs[0].get('exp');
-        userModel.gender=snap.docs[0].get('gender');
-        userModel.id=snap.docs[0].get('id');
-        userModel.lang=snap.docs[0].get('lang');
-        userModel.level=snap.docs[0].get('level');
-        userModel.name=snap.docs[0].get('name');
-        userModel.phonenumber=snap.docs[0].get('phonenumber');
-        userModel.photo=snap.docs[0].get('photo');
-        userModel.seen=snap.docs[0].get('seen');
-        userModel.type=snap.docs[0].get('type');
-        userModel.vip=snap.docs[0].get('vip');
+
+  void start() async {
+    if (_auth.currentUser!.email == null) {
+      await for (var snap in _firestore
+          .collection('user')
+          .where('phonenumber', isEqualTo: _auth.currentUser!.phoneNumber)
+          .snapshots()) {
+        userModel.bio = snap.docs[0].get('bio');
+        userModel.birthdate = snap.docs[0].get('birthdate');
+        userModel.coin = snap.docs[0].get('coin');
+        userModel.country = snap.docs[0].get('country');
+        userModel.daimond = snap.docs[0].get('daimond');
+        userModel.devicetoken = snap.docs[0].get('devicetoken');
+        userModel.email = snap.docs[0].get('email');
+        userModel.exp = snap.docs[0].get('exp');
+        userModel.gender = snap.docs[0].get('gender');
+        userModel.id = snap.docs[0].get('id');
+        userModel.lang = snap.docs[0].get('lang');
+        userModel.level = snap.docs[0].get('level');
+        userModel.name = snap.docs[0].get('name');
+        userModel.phonenumber = snap.docs[0].get('phonenumber');
+        userModel.photo = snap.docs[0].get('photo');
+        userModel.seen = snap.docs[0].get('seen');
+        userModel.type = snap.docs[0].get('type');
+        userModel.vip = snap.docs[0].get('vip');
       }
-    }
-    else{
-      await for(var snap in _firestore.collection('user').where('email',isEqualTo:_auth.currentUser!.email).snapshots()){
-        userModel.bio=snap.docs[0].get('bio');
-        userModel.birthdate=snap.docs[0].get('birthdate');
-        userModel.coin=snap.docs[0].get('coin');
-        userModel.country=snap.docs[0].get('country');
-        userModel.daimond=snap.docs[0].get('daimond');
-        userModel.devicetoken=snap.docs[0].get('devicetoken');
-        userModel.email=snap.docs[0].get('email');
-        userModel.exp=snap.docs[0].get('exp');
-        userModel.gender=snap.docs[0].get('gender');
-        userModel.id=snap.docs[0].get('id');
-        userModel.lang=snap.docs[0].get('lang');
-        userModel.level=snap.docs[0].get('level');
-        userModel.name=snap.docs[0].get('name');
-        userModel.phonenumber=snap.docs[0].get('phonenumber');
-        userModel.photo=snap.docs[0].get('photo');
-        userModel.seen=snap.docs[0].get('seen');
-        userModel.type=snap.docs[0].get('type');
-        userModel.vip=snap.docs[0].get('vip');
+    } else {
+      await for (var snap in _firestore
+          .collection('user')
+          .where('email', isEqualTo: _auth.currentUser!.email)
+          .snapshots()) {
+        userModel.bio = snap.docs[0].get('bio');
+        userModel.birthdate = snap.docs[0].get('birthdate');
+        userModel.coin = snap.docs[0].get('coin');
+        userModel.country = snap.docs[0].get('country');
+        userModel.daimond = snap.docs[0].get('daimond');
+        userModel.devicetoken = snap.docs[0].get('devicetoken');
+        userModel.email = snap.docs[0].get('email');
+        userModel.exp = snap.docs[0].get('exp');
+        userModel.gender = snap.docs[0].get('gender');
+        userModel.id = snap.docs[0].get('id');
+        userModel.lang = snap.docs[0].get('lang');
+        userModel.level = snap.docs[0].get('level');
+        userModel.name = snap.docs[0].get('name');
+        userModel.phonenumber = snap.docs[0].get('phonenumber');
+        userModel.photo = snap.docs[0].get('photo');
+        userModel.seen = snap.docs[0].get('seen');
+        userModel.type = snap.docs[0].get('type');
+        userModel.vip = snap.docs[0].get('vip');
       }
     }
     setState(() {
@@ -113,10 +137,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
           height: screenHight * 0.12,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [
-                AppColors.appPrimaryColors400,
-                AppColors.appInformationColors700
-              ],
+              colors: [AppColors.app3MainColor, AppColors.appMainColor],
               begin: Alignment.topLeft,
               end: Alignment.topRight,
               stops: [0.0, 0.8],
@@ -138,10 +159,11 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               GestureDetector(
                 onTap: () {},
                 child: SizedBox(
-                  width: screenWidth * 0.12,
-                  child:  Text(
+                  width: screenWidth * 0.19,
+                  child: const Text(
                     "مجاورون",
-                    style: TextStyle(fontFamily: "Hayah", fontSize: 20),
+                    style: TextStyle(
+                        fontFamily: "Hayah", fontSize: 20, color: Colors.white),
                   ).tr(args: ['مجاورون']),
                 ),
               ),
@@ -151,9 +173,12 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                   padding: const EdgeInsets.all(8.0),
                   child: SizedBox(
                     width: screenWidth * 0.12,
-                    child:  Text(
+                    child: const Text(
                       "شعبي",
-                      style: TextStyle(fontFamily: "Hayah", fontSize: 22),
+                      style: TextStyle(
+                          fontFamily: "Hayah",
+                          fontSize: 22,
+                          color: Colors.white),
                     ).tr(args: ['شعبي']),
                   ),
                 ),
@@ -161,10 +186,11 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               GestureDetector(
                 onTap: () {},
                 child: SizedBox(
-                  width: screenWidth * 0.12,
-                  child:  Text(
+                  width: screenWidth * 0.15,
+                  child: const Text(
                     "متعلق",
-                    style: TextStyle(fontFamily: "Hayah", fontSize: 20),
+                    style: TextStyle(
+                        fontFamily: "Hayah", fontSize: 20, color: Colors.white),
                   ).tr(args: ['متعلق']),
                 ),
               ),
