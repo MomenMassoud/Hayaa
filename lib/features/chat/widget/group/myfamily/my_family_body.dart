@@ -3,8 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hayaa_main/core/Utils/app_images.dart';
-import 'package:hayaa_main/features/chat/widget/group/list_member_family.dart';
-import 'package:hayaa_main/features/chat/widget/group/my_family_request.dart';
+import 'package:hayaa_main/features/chat/widget/group/contribution/family_member_rank.dart';
+import 'package:hayaa_main/features/chat/widget/group/gravity/gravity_body.dart';
+import 'package:hayaa_main/features/chat/widget/group/myfamily/list_member_family.dart';
+import 'package:hayaa_main/features/chat/widget/group/myfamily/my_family_rank_list.dart';
+import 'package:hayaa_main/features/chat/widget/group/myfamily/my_family_request.dart';
 import 'package:hayaa_main/models/family_model.dart';
 import 'package:hayaa_main/models/family_user_model.dart';
 
@@ -20,12 +23,19 @@ class _MyFamilyBody extends State<MyFamilyBody> {
   String mytype = "";
   String familyID = "";
   int req=0;
+  int total=0;
+  int level=0;
   late FamilyModel familyModel;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getFamilyName();
+    getLevelFamily();
+  }
+  void getLevelFamily()async{
+
+
   }
 
   void getFamilyName() async {
@@ -36,6 +46,31 @@ class _MyFamilyBody extends State<MyFamilyBody> {
       setState(() {
         familyID = snap.get('myfamily');
       });
+      await for(var snap in _firestore.collection('family').doc(familyID).collection('count').snapshots()){
+        for(int i=0;i<snap.size;i++){
+          total+=int.parse(snap.docs[i].get('coin'));
+          print(total);
+        }
+        int j=0;
+        while(j==0){
+          if(total>=1000){
+            total=total-1000;
+            level+=1;
+          }
+          else{
+            break;
+          }
+        }
+        print('level $level');
+        _firestore.collection('family').doc(familyID).update({
+          'level':level.toString()
+        }).then((value){
+          setState(() {
+            level;
+            total;
+          });
+        });
+      }
     }
 
   }
@@ -46,7 +81,7 @@ class _MyFamilyBody extends State<MyFamilyBody> {
       decoration: BoxDecoration(
           image: DecorationImage(
               fit: BoxFit.cover,
-              image: AssetImage(AppImages.family))
+              image: AssetImage(AppImages.family2))
       ),
       child: Scaffold(
         appBar: AppBar(
@@ -56,12 +91,17 @@ class _MyFamilyBody extends State<MyFamilyBody> {
             Navigator.pop(context);
           }, icon: Icon(Icons.arrow_back,color: Colors.white,)),
           actions: [
-            IconButton(onPressed: (){
-              if(mytype=="owner"){
-                print("object");
-              }
-            },
-                icon: Icon(Icons.edit,color: Colors.white,)
+            Row(
+              children: [
+                Text("تعديل العائلة",style: TextStyle(fontSize: 18,color: Colors.white),),
+                IconButton(onPressed: (){
+                  if(mytype=="owner"){
+                    print("object");
+                  }
+                },
+                    icon: Icon(Icons.note_alt,color: Colors.white,)
+                ),
+              ],
             ),
             IconButton(onPressed: (){
               if(mytype=="owner"){
@@ -70,7 +110,11 @@ class _MyFamilyBody extends State<MyFamilyBody> {
               }
             },
                 icon: Icon(Icons.mail,color: Colors.white,)
-            )
+            ),
+            IconButton(onPressed: (){
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => MyFamilyRankList(familyID)));
+            }, icon: Icon(Icons.recommend,color: Colors.white,))
           ],
         ),
         backgroundColor: Colors.transparent,
@@ -140,6 +184,26 @@ class _MyFamilyBody extends State<MyFamilyBody> {
                           SizedBox(height: 10,),
                           Text(familyModel.name,style: TextStyle(color: Colors.white),),
                           Text("ID: ${familyModel.id},",style: TextStyle(color: Colors.grey),),
+                          SizedBox(height: 10,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Level $level',style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.bold),),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Container(
+                                  height: 10,
+                                  width: 250,
+                                  child: LinearProgressIndicator(
+                                    value: (total/1000), // percent filled
+                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                    backgroundColor: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                              Text('Level ${level+1}',style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.bold),)
+                            ],
+                          )
                         ],
                       ),
                       SizedBox(height: 50,),
@@ -180,6 +244,10 @@ class _MyFamilyBody extends State<MyFamilyBody> {
                             ),
                             child: Icon(Icons.favorite,color: Colors.white,)
                         ),
+                        onTap: (){
+                          Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) => FamilyMemeberRank(familyID)));
+                        },
                       ),
                       ListTile(
                         title: Text("ترتيب الكاريزما",style: TextStyle(fontSize: 18,color: Colors.white),),
@@ -195,6 +263,10 @@ class _MyFamilyBody extends State<MyFamilyBody> {
                             ),
                             child: Icon(Icons.recommend,color: Colors.white,)
                         ),
+                        onTap: (){
+                          Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) => GravityBody(familyID)));
+                        },
                       ),
                       SizedBox(height: 50,),
                       ListTile(
@@ -236,13 +308,13 @@ class _MyFamilyBody extends State<MyFamilyBody> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text("هل انت متاكد من مغادرة هذه العائلة"),
-                  SizedBox(height: 70,),
+                  Text("هل انت متاكد من مغادرة هذه العائلة",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                  SizedBox(height: 10,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       ElevatedButton(onPressed: ()async{
-                        int count=0; String mydoc="";
+                        int count=0; String mydoc="";String mytype="";
                        for(int i=0;i<familyModel.users.length;i++){
                          if(familyModel.users[i].id!=_auth.currentUser!.uid){
                            if(familyModel.users[i].type=="owner" || familyModel.users[i].type=="admin"){
@@ -251,16 +323,31 @@ class _MyFamilyBody extends State<MyFamilyBody> {
                          }
                          else{
                            mydoc=familyModel.users[i].doc;
+                           mytype=familyModel.users[i].type;
                          }
                        }
-                       if(count==0){
+                       if(mytype!="owner"){
+                         await _firestore.collection('family').doc(familyID).collection('user').doc(mydoc).delete().then((value){
+                           _firestore.collection('user').doc(_auth.currentUser!.uid).update({
+                             'myfamily':''
+                           }).then((value){
+                             Navigator.pop(context);
+                             LeaveDone();
+                           });
+                         });
+                       }
+                       else if(count==0){
                          Navigator.pop(context);
                          LeaveCancell();
                        }
                        else{
                          await _firestore.collection('family').doc(familyID).collection('user').doc(mydoc).delete().then((value){
-                           Navigator.pop(context);
-                           LeaveDone();
+                           _firestore.collection('user').doc(_auth.currentUser!.uid).update({
+                             'myfamily':''
+                           }).then((value){
+                             Navigator.pop(context);
+                             LeaveDone();
+                           });
                          });
 
                        }

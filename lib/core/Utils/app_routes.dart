@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hayaa_main/features/agencies/views/agency_creation_view.dart';
 import 'package:hayaa_main/features/agencies/views/agency_join_view.dart';
-import 'package:hayaa_main/features/chat/widget/group/my_family_body.dart';
+import 'package:hayaa_main/features/chat/widget/group/myfamily/my_family_body.dart';
 import 'package:hayaa_main/features/friend_list/widget/friend_requset.dart';
 import 'package:hayaa_main/features/search/view/search_view.dart';
 import 'package:hayaa_main/features/setting/views/setting_view.dart';

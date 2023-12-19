@@ -6,12 +6,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:hayaa_main/features/chat/widget/group/myfamily/my_family_body.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import '../../../../core/Utils/app_images.dart';
-import '../../../agencies/widgets/custom_image_picker.dart';
-import '../../../agencies/widgets/seperated_text.dart';
+import '../../../../../core/Utils/app_images.dart';
+import '../../../../agencies/widgets/custom_image_picker.dart';
+import '../../../../agencies/widgets/seperated_text.dart';
 
 class CreateFamilyBody extends StatefulWidget{
   _CreateFamilyBody createState()=>_CreateFamilyBody();
@@ -220,7 +221,8 @@ class _CreateFamilyBody extends State<CreateFamilyBody>{
                             'photo':urlDownload,
                             'join':setting.name,
                             'id':id,
-                            'idd':idd
+                            'idd':idd,
+                            'level':'0'
                           }).then((value){
                             _firestore.collection('family').doc(id).collection('user').doc().set({
                               'user':_auth.currentUser!.uid,
@@ -269,9 +271,14 @@ class _CreateFamilyBody extends State<CreateFamilyBody>{
               title: Text("مبروك"),
               content: Container(
                 height: 120,
-                child: Center(
-                  child: Text("تم انشاء العائلة"),
-                ),
+                child: Column(
+                  children: [
+                    Text("تم انشاء العائلة"),
+                    ElevatedButton(onPressed: (){
+                      Navigator.popAndPushNamed(context, MyFamilyBody.id);
+                    }, child: Text("مشاهدة العائلة"))
+                  ],
+                )
               )
           );
         });

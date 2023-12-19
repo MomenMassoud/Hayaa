@@ -7,6 +7,7 @@ class FamilyModel {
   String doc;
   String join;
   String photo;
+  int count=0;
   List<FamilyUserModel> users=[];
   FamilyModel(this.name,this.id,this.doc,this.bio,this.join,this.photo);
 }

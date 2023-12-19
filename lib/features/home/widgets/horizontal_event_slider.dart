@@ -28,7 +28,11 @@ class HorizontalEventSlider extends StatelessWidget {
           // dotSpacing: 10,
           // dotIncreaseSize: 1.5,
           // dotVerticalPadding: 20,
-          options: CarouselOptions(),
+          options: CarouselOptions(
+            autoPlayAnimationDuration: Duration(seconds: 1),
+            autoPlayCurve: Curves.linear,
+            autoPlay: true
+          ),
           items: images.map((item){
             return Builder(
               builder: (BuildContext context) {

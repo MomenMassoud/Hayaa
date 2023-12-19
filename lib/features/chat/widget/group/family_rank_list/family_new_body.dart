@@ -2,10 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hayaa_main/features/chat/widget/group/top_card.dart';
 
-import '../../../../core/Utils/app_images.dart';
-import '../../group/view/create_family_view.dart';
-import '../../model/group_rand_card.dart';
-import 'other_card.dart';
+import '../../../../../core/Utils/app_images.dart';
+import '../../../group/view/create_family_view.dart';
+import '../../../model/group_rand_card.dart';
+import '../other_card.dart';
 
 
 class FamilyNewsBody extends StatefulWidget{
@@ -67,18 +67,18 @@ class _FamilyNewsBody extends State<FamilyNewsBody>{
                       TopCard(
                           screenHeight: screenHeight,
                           screenWidth: screenWidth,
-                          cardModel: cards[1]),
+                          cardModel: cards[1],coin: "",coinPic: true),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 100),
                         child: TopCard(
                             screenHeight: screenHeight,
                             screenWidth: screenWidth,
-                            cardModel: cards[2]),
+                            cardModel: cards[2],coin: "",coinPic: true),
                       ),
                       TopCard(
                           screenHeight: screenHeight,
                           screenWidth: screenWidth,
-                          cardModel: cards[0]),
+                          cardModel: cards[0],coin: "",coinPic: true),
                     ],
                     ),
                   ),

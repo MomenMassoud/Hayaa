@@ -63,4 +63,5 @@ abstract class AppImages {
   static const String UserImage = "lib/core/Utils/assets/images/user.jpeg";
   static const String crown="lib/core/Utils/assets/images/crown.png";
   static const String family="lib/core/Utils/assets/images/family.jpg";
+  static const String family2="lib/core/Utils/assets/images/family2.jpg";
 }

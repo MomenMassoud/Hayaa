@@ -16,11 +16,11 @@ class OwnGiftCard extends StatelessWidget{
           maxWidth: MediaQuery.of(context).size.width - 45,
         ),
         child: Card(
+          color: const Color(0xffdcf8c6),
           elevation: 1,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(22),
           ),
-          color: Color(0xffdcf8c6),
           margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           child: Stack(
             children: [
@@ -31,21 +31,10 @@ class OwnGiftCard extends StatelessWidget{
                   top: 9,
                   bottom: 20,
                 ),
-                child:Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text("لقد ارسلت هدية"),
-                    type=="svga"?CircleAvatar(
-                      child: SVGASimpleImage(
-                        resUrl: path,
-                      ),
-                    ):CircleAvatar(
-                      child: CachedNetworkImage(imageUrl: path),
-                    ),
-                  ],
-                )
+                child:type=="svga"?SVGASimpleImage(
+                  resUrl: path,
+                ):CachedNetworkImage(imageUrl: path),
               ),
-
             ],
           ),
         ),

@@ -1,3 +1,5 @@
+import 'family_rank.dart';
+
 class UserModel{
   String bio;
   String birthdate;
@@ -26,6 +28,8 @@ class UserModel{
   late String docID;
   late String myfamily;
   late String familytype;
+  List<FamilyRankModel> familyRank=[];
+  int valueRank=0;
   UserModel(
       this.email,this.name,this.gender,this.photo,this.id,this.phonenumber,this.devicetoken,this.daimond,this.vip,this.bio,this.seen,this.lang,this.country,this.type,this.birthdate,this.coin,this.exp,this.level,
       );

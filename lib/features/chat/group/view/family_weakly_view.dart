@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../widget/group/family_weakly_body.dart';
+import '../../widget/group/family_rank_list/family_weakly_body.dart';
 
 
 

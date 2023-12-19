@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:hayaa_main/core/Utils/app_images.dart';
 
 import '../../model/group_rand_card.dart';
 class TopCard extends StatelessWidget {
@@ -7,9 +9,13 @@ class TopCard extends StatelessWidget {
     required this.screenHeight,
     required this.screenWidth,
     required this.cardModel,
+    required this.coin,
+    required this.coinPic,
   });
 
   final double screenHeight;
+  final String coin;
+  final bool coinPic;
   final double screenWidth;
   final GroupRandCard cardModel;
 
@@ -41,28 +47,49 @@ class TopCard extends StatelessWidget {
               border: Border.all(color: cardModel.strokColor, width: 3),
               shape: BoxShape.circle,
               image: DecorationImage(
-                image: AssetImage(cardModel.userImge),
+                image:CachedNetworkImageProvider(cardModel.userImge),
               ),
             ),
           ),
         ),
         Positioned(
-          top: 75,
+          top: 91,
           child: Text(cardModel.rating,
               style: TextStyle(
-                color: cardModel.ratingColor ?? Colors.white,
+                color: cardModel.ratingColor ?? Colors.black,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               )),
         ),
         Positioned(
-          top: 110,
-          child: Text(cardModel.userName,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              )),
+          top: 200,
+          child: Column(
+            children: [
+              Text(cardModel.userName,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  )),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(coin,
+                      style: const TextStyle(
+                        color: Colors.yellow,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      )),
+                  SizedBox(width: 10,),
+                  CircleAvatar(
+                    backgroundImage: coinPic?AssetImage(AppImages.gold_coin):AssetImage(AppImages.daimond),
+                    radius: 10,
+
+                  )
+                ],
+              ),
+            ],
+          ),
         ),
       ],
     );

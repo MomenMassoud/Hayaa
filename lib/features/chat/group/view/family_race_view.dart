@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../widget/group/family_race_body.dart';
+import '../../widget/group/family_rank_list/family_race_body.dart';
 
 
 class FamilyRaceView extends StatefulWidget{

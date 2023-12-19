@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../widget/group/family_body.dart';
+import '../../widget/group/family_rank_list/family_body.dart';
 
 
 class FamilyView extends StatefulWidget{

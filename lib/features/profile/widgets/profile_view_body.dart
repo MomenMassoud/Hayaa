@@ -4,7 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hayaa_main/features/agencies/views/agency_creation_view.dart';
-import 'package:hayaa_main/features/chat/widget/group/my_family_body.dart';
+import 'package:hayaa_main/features/chat/widget/group/myfamily/my_family_body.dart';
 import 'package:hayaa_main/features/mylook/view/my_look_view.dart';
 import 'package:hayaa_main/features/setting/views/setting_view.dart';
 import 'package:hayaa_main/features/store/view/store_view.dart';

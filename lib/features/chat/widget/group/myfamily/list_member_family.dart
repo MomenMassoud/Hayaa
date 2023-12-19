@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/Utils/app_images.dart';
-import '../../../../models/user_model.dart';
+import '../../../../../core/Utils/app_images.dart';
+import '../../../../../models/user_model.dart';
 
 class ListMemberFamily extends StatefulWidget{
   String familyID;
@@ -118,13 +118,7 @@ class _ListMemberFamily extends State<ListMemberFamily>{
                                 backgroundImage: CachedNetworkImageProvider(users[index].photo),
                               ),
                               subtitle: Text("BIO: ${users[index].bio}  - ID: ${users[index].id}",style: TextStyle(color: Colors.white),),
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  ElevatedButton(onPressed: (){}, child: Text("تغير الرتبة")),
-                                  ElevatedButton(onPressed: (){}, child: Text("طرد"))
-                                ],
-                              ),
+                              trailing: ElevatedButton(onPressed: (){}, child: Text("طرد"))
                             ):_mytype=="admin" && users[index].familytype=="owner"?ListTile(
                               title: Text("${users[index].name} - ${users[index].familytype}",style: TextStyle(color: Colors.white),),
                               leading: CircleAvatar(
@@ -137,13 +131,7 @@ class _ListMemberFamily extends State<ListMemberFamily>{
                                 backgroundImage: CachedNetworkImageProvider(users[index].photo),
                               ),
                               subtitle: Text("BIO: ${users[index].bio}  - ID: ${users[index].id}",style: TextStyle(color: Colors.white),),
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  ElevatedButton(onPressed: (){}, child: Text("تغير الرتبة")),
-                                  ElevatedButton(onPressed: (){}, child: Text("طرد"))
-                                ],
-                              ),
+                              trailing:ElevatedButton(onPressed: (){}, child: Text("طرد"))
                             ),
                             Divider(thickness: 0.5,)
                           ],

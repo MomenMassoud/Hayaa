@@ -189,6 +189,7 @@ class _ChatBody extends State<ChatBody> {
                       userModel.seen = massege.get('seen');
                       userModel.type = massege.get('type');
                       userModel.vip = massege.get('vip');
+                      userModel.myfamily=massege.get('myfamily');
                       userModel.docID = massege.id;
                     }
                     return StreamBuilder<QuerySnapshot>(
@@ -694,8 +695,37 @@ class _ChatBody extends State<ChatBody> {
                                     'type': "msg",
                                   };
                                   docRef2.update(updates2);
-                                  Navigator.pop(context);
-                                  SendDone();
+                                }).then((value){
+                                  if(userModel.myfamily!=""){
+                                    _firestore.collection('family').doc(userModel.myfamily).collection('count').doc().set({
+                                      'user':userModel.docID,
+                                      'day':DateTime.now().day.toString(),
+                                      'month':DateTime.now().month.toString(),
+                                      'year':DateTime.now().year.toString(),
+                                      'coin':gifts[index].price
+                                    }).then((value){
+                                      _firestore.collection('user').doc(widget.friend.docID).get().then((value){
+                                        String friendfamily=value.get('myfamily');
+                                        if(friendfamily==""){
+                                          Navigator.pop(context);
+                                          SendDone();
+                                        }
+                                        else{
+                                          _firestore.collection('family').doc(friendfamily).collection('count2').doc().set({
+                                            'user':widget.friend.docID,
+                                            'day':DateTime.now().day.toString(),
+                                            'month':DateTime.now().month.toString(),
+                                            'year':DateTime.now().year.toString(),
+                                            'coin':gifts[index].price
+                                          });
+                                        }
+                                      });
+                                    });
+                                  }
+                                  else{
+                                    Navigator.pop(context);
+                                    SendDone();
+                                  }
                                 });
                               });
                             });

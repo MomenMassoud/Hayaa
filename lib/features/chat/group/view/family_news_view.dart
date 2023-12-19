@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../widget/group/family_new_body.dart';
+import '../../widget/group/family_rank_list/family_new_body.dart';
 
 
 class FamilyNewsView extends StatefulWidget{
