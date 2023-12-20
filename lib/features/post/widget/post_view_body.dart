@@ -190,7 +190,7 @@ class _PostViewBody extends State<PostViewBody>with SingleTickerProviderStateMix
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                  height: 100,
+                  height: 150,
                   child: StoryViewScreen()),
             ),
             Container(

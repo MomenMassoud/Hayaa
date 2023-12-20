@@ -40,13 +40,22 @@ class AuthServiceGoogle{
             'coin':'250',
             'vip':'0',
             'level':'0',
+            'level2':'0',
             'birthdate':'',
             'phonenumber':'',
             'type':'normal',
+            'doc':_auth.currentUser!.uid,
             'id':id,
             'exp':'0',
-            'daimond':'0'
+            'exp2':'0',
+            'daimond':'0',
+            'myagent':'',
+            'mybubble':'',
+            'mycar':'',
+            'myframe':'',
+            'myfamily':''
           });
+          
         }
       });
     });

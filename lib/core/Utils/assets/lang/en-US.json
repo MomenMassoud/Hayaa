@@ -84,6 +84,15 @@
   "ادخال": "Enter",
   "ادخل تاريخ الميلاد": "Enter Your BirthDate:",
   "رقم الهاتف": "Phone Number",
-  "Edit Your Bio": "Edit Your Bio",
-  "Save New Bio": "Save New Bio"
+  "اضافة مضيف جديد": "Add New Host",
+  "بحث باستخدام ID": "Search by ID",
+  "لا توجد بيانات للعرض": "No Data Found",
+  "اراسل دعوة": "Send Invitation",
+  "انضمام": "Join",
+  "مرحبا وكيلنا العزيز": "Welcome Agent",
+  "الاعدادات": "Setting",
+  "طلبات الانضمام": "Join Request",
+  "اضافة مضيف": "Add Host",
+  "اجمالي دخل الوكالة الشهري": "Total Income Agency Monthly",
+  "تحميل التقرير الشهري": "Download Monthly Report"
 }

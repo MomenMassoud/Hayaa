@@ -191,7 +191,7 @@ class _UserLevelCharming extends State<UserLevelCharming>{
                         title:Text("استلام دخولية") ,
                         subtitle: Text('4 Daimond = 1EXP'),
                         leading: CircleAvatar(
-                          child: Icon(IconData(0xf012,fontFamily: 'MaterialIcons'),color: Colors.white),
+                          child: Icon(Icons.car_repair,color: Colors.white),
                           backgroundColor: Colors.pink.shade400,
                         ),
                       ),
@@ -203,7 +203,7 @@ class _UserLevelCharming extends State<UserLevelCharming>{
                         title:Text("استلام اطار") ,
                         subtitle: Text('4 Daimond = 1EXP'),
                         leading: CircleAvatar(
-                          child: Icon(IconData(0xf27b,fontFamily: 'MaterialIcons'),color: Colors.white),
+                          child: Icon(Icons.person,color: Colors.white),
                           backgroundColor: Colors.purple.shade400,
                         ),
                       ),

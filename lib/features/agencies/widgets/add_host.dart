@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../../core/Utils/app_colors.dart';
@@ -53,7 +54,7 @@ class _AddHost extends State<AddHost>{
             ),
           ),
         ),
-        title: Text("اضافة مضيف جديد"),
+        title: Text("اضافة مضيف جديد").tr(args: ['اضافة مضيف جديد']),
       ),
       body: Column(
         mainAxisSize: MainAxisSize.max,
@@ -63,7 +64,7 @@ class _AddHost extends State<AddHost>{
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: 'Search by ID',
+                hintText: 'بحث باستخدام ID'.tr(args: ['بحث باستخدام ID']),
               ),
               onChanged: performSearch,
             ),
@@ -97,7 +98,7 @@ class _AddHost extends State<AddHost>{
                     }
                   }
                 }
-                return searchfriends.length==0?Text("No Data Found"):
+                return searchfriends.length==0?Text("لا توجد بيانات للعرض").tr(args: ['لا توجد بيانات للعرض']):
                 ListView.builder(
                     itemCount: searchfriends.length,
                     itemBuilder: (context,index){
@@ -124,7 +125,7 @@ class _AddHost extends State<AddHost>{
                               'agent':widget.id
                             });
                             Navigator.pop(context);
-                          }, child: Text("اراسل دعوة")),
+                          }, child: Text("اراسل دعوة").tr(args: ['اراسل دعوة'])),
                         );
                       }
                     }

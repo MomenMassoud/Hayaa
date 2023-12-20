@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hayaa_main/core/Utils/app_colors.dart';
 import 'package:hayaa_main/core/Utils/app_images.dart';
 import 'package:hayaa_main/features/agencies/models/host_model.dart';
 import 'package:hayaa_main/features/agencies/widgets/add_host.dart';
+import 'package:hayaa_main/features/agencies/widgets/agent_requests.dart';
 import 'package:hayaa_main/features/agencies/widgets/hostes_list_Iitem.dart';
 import 'package:hayaa_main/models/user_model.dart';
 
@@ -58,8 +60,8 @@ class _AgencyAgentViewBodyState extends State<AgencyAgentViewBody> {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text("Welcome Agent",
-              style: TextStyle(fontWeight: FontWeight.bold)),
+          title:  Text("مرحبا وكيلنا العزيز",
+              style: TextStyle(fontWeight: FontWeight.bold)).tr(args: ['مرحبا وكيلنا العزيز']),
         ),
         body: StreamBuilder<QuerySnapshot>(
           stream: _firestore
@@ -121,7 +123,7 @@ class _AgencyAgentViewBodyState extends State<AgencyAgentViewBody> {
                   user.add(us);
                   userDoc.add(massege.id);
                 }
-                return ListView.builder(
+                return user.length>0?ListView.builder(
                   itemCount: user.length,
                   itemBuilder: (context, index) {
                     return StreamBuilder<QuerySnapshot>(
@@ -198,18 +200,21 @@ class _AgencyAgentViewBodyState extends State<AgencyAgentViewBody> {
                                         width: screenWidth * 0.3,
                                         child: ElevatedButton(
                                           onPressed: () {},
-                                          child: const Text("Setting",
+                                          child:  Text("الاعدادات",
                                               style:
-                                              TextStyle(color: Colors.black)),
+                                              TextStyle(color: Colors.black)).tr(args: ['الاعدادات']),
                                         ),
                                       ),
                                       SizedBox(
                                         width: screenWidth * 0.3,
                                         child: ElevatedButton(
-                                          onPressed: () {},
-                                          child: const Text("Joining Requests",
+                                          onPressed: () {
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(builder: (context) => AgentRequest(myagend)));
+                                          },
+                                          child:  Text("طلبات الانضمام",
                                               style:
-                                              TextStyle(color: Colors.black)),
+                                              TextStyle(color: Colors.black)).tr(args: ['طلبات الانضمام']),
                                         ),
                                       ),
                                       SizedBox(
@@ -219,9 +224,9 @@ class _AgencyAgentViewBodyState extends State<AgencyAgentViewBody> {
                                             Navigator.of(context).push(
                                                 MaterialPageRoute(builder: (context) => AddHost(myagend)));
                                           },
-                                          child: const Text("Add Hosts",
+                                          child:  Text("اضافة مضيف",
                                               style:
-                                              TextStyle(color: Colors.black)),
+                                              TextStyle(color: Colors.black)).tr(args: ['اضافة مضيف']),
                                         ),
                                       ),
                                     ],
@@ -230,10 +235,10 @@ class _AgencyAgentViewBodyState extends State<AgencyAgentViewBody> {
                                     height: 20,
                                   ),
                                   Text(
-                                    "The Agency's Total Monthly Income",
+                                    "اجمالي دخل الوكالة الشهري",
                                     style:
                                     TextStyle(fontSize: screenWidth * 0.05),
-                                  ),
+                                  ).tr(args: ['اجمالي دخل الوكالة الشهري']),
                                   const SizedBox(
                                     height: 20,
                                   ),
@@ -265,10 +270,10 @@ class _AgencyAgentViewBodyState extends State<AgencyAgentViewBody> {
                                   ),
                                   ElevatedButton(
                                     onPressed: () {},
-                                    child: const Text(
-                                      "Download Monthly Report ",
+                                    child:  Text(
+                                      "تحميل التقرير الشهري",
                                       style: TextStyle(color: Colors.black),
-                                    ),
+                                    ).tr(args: ['تحميل التقرير الشهري']),
                                   ),
                                   const SizedBox(
                                     height: 20,
@@ -286,194 +291,100 @@ class _AgencyAgentViewBodyState extends State<AgencyAgentViewBody> {
                                   screenHeight: screenHeight,
                                   hostModel: host[index]);
                             }
-                            // if(index==0){
-                            //   return Column(
-                            //     children: [
-                            //       Row(
-                            //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            //         children: [
-                            //           SizedBox(
-                            //             width: screenWidth * 0.3,
-                            //             child: ElevatedButton(
-                            //               onPressed: () {},
-                            //               child: const Text("Setting",
-                            //                   style: TextStyle(color: Colors.black)),
-                            //             ),
-                            //           ),
-                            //           SizedBox(
-                            //             width: screenWidth * 0.3,
-                            //             child: ElevatedButton(
-                            //               onPressed: () {},
-                            //               child: const Text("Joining Requests",
-                            //                   style: TextStyle(color: Colors.black)),
-                            //             ),
-                            //           ),
-                            //           SizedBox(
-                            //             width: screenWidth * 0.3,
-                            //             child: ElevatedButton(
-                            //               onPressed: () {},
-                            //               child: const Text("Add Hosts",
-                            //                   style: TextStyle(color: Colors.black)),
-                            //             ),
-                            //           ),
-                            //         ],
-                            //       ),
-                            //       const SizedBox(
-                            //         height: 20,
-                            //       ),
-                            //       Text(
-                            //         "The Agency's Total Monthly Income",
-                            //         style: TextStyle(fontSize: screenWidth * 0.05),
-                            //       ),
-                            //       const SizedBox(
-                            //         height: 20,
-                            //       ),
-                            //       Container(
-                            //         height: screenHeight * 0.2,
-                            //         width: screenWidth * 0.7,
-                            //         decoration: const BoxDecoration(
-                            //           color: AppColors.app3MainColor,
-                            //           borderRadius: BorderRadius.all(Radius.circular(20)),
-                            //         ),
-                            //         child: Column(children: [
-                            //           SizedBox(
-                            //             width: screenWidth * 0.3,
-                            //             child: const Image(
-                            //               image: AssetImage(AppImages.daimond),
-                            //             ),
-                            //           ),
-                            //           Text(
-                            //             "9999",
-                            //             style: TextStyle(
-                            //                 fontWeight: FontWeight.bold, fontSize: screenWidth * 0.07),
-                            //           ),
-                            //         ]),
-                            //       ),
-                            //       const SizedBox(
-                            //         height: 20,
-                            //       ),
-                            //       ElevatedButton(
-                            //         onPressed: () {},
-                            //         child: const Text(
-                            //           "Download Monthly Report ",
-                            //           style: TextStyle(color: Colors.black),
-                            //         ),
-                            //       ),
-                            //       const SizedBox(
-                            //         height: 20,
-                            //       ),
-                            //       Expanded(
-                            //         child: Padding(
-                            //           padding: const EdgeInsets.symmetric(horizontal: 20),
-                            //           child: Container(
-                            //             height: 200,
-                            //             child: HostsListItem(
-                            //                 screenWidth: screenWidth,
-                            //                 screenHeight: screenHeight,
-                            //                 hostModel: hosts[0])
-                            //           ),
-                            //         ),
-                            //       )
-                            //     ],
-                            //   );
-                            // }
-                            // else{
-                            //   return Column(
-                            //     children: [
-                            //       Row(
-                            //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            //         children: [
-                            //           SizedBox(
-                            //             width: screenWidth * 0.3,
-                            //             child: ElevatedButton(
-                            //               onPressed: () {},
-                            //               child: const Text("Setting",
-                            //                   style: TextStyle(color: Colors.black)),
-                            //             ),
-                            //           ),
-                            //           SizedBox(
-                            //             width: screenWidth * 0.3,
-                            //             child: ElevatedButton(
-                            //               onPressed: () {},
-                            //               child: const Text("Joining Requests",
-                            //                   style: TextStyle(color: Colors.black)),
-                            //             ),
-                            //           ),
-                            //           SizedBox(
-                            //             width: screenWidth * 0.3,
-                            //             child: ElevatedButton(
-                            //               onPressed: () {},
-                            //               child: const Text("Add Hosts",
-                            //                   style: TextStyle(color: Colors.black)),
-                            //             ),
-                            //           ),
-                            //         ],
-                            //       ),
-                            //       const SizedBox(
-                            //         height: 20,
-                            //       ),
-                            //       Text(
-                            //         "The Agency's Total Monthly Income",
-                            //         style: TextStyle(fontSize: screenWidth * 0.05),
-                            //       ),
-                            //       const SizedBox(
-                            //         height: 20,
-                            //       ),
-                            //       Container(
-                            //         height: screenHeight * 0.2,
-                            //         width: screenWidth * 0.7,
-                            //         decoration: const BoxDecoration(
-                            //           color: AppColors.app3MainColor,
-                            //           borderRadius: BorderRadius.all(Radius.circular(20)),
-                            //         ),
-                            //         child: Column(children: [
-                            //           SizedBox(
-                            //             width: screenWidth * 0.3,
-                            //             child: const Image(
-                            //               image: AssetImage(AppImages.daimond),
-                            //             ),
-                            //           ),
-                            //           Text(
-                            //             "9999",
-                            //             style: TextStyle(
-                            //                 fontWeight: FontWeight.bold, fontSize: screenWidth * 0.07),
-                            //           ),
-                            //         ]),
-                            //       ),
-                            //       const SizedBox(
-                            //         height: 20,
-                            //       ),
-                            //       ElevatedButton(
-                            //         onPressed: () {},
-                            //         child: const Text(
-                            //           "Download Monthly Report ",
-                            //           style: TextStyle(color: Colors.black),
-                            //         ),
-                            //       ),
-                            //       const SizedBox(
-                            //         height: 20,
-                            //       ),
-                            //       Expanded(
-                            //         child: Padding(
-                            //           padding: const EdgeInsets.symmetric(horizontal: 20),
-                            //           child: ListView.builder(
-                            //               itemCount: hosts.length,
-                            //               itemBuilder: (context, index) {
-                            //                 return HostsListItem(
-                            //                     screenWidth: screenWidth,
-                            //                     screenHeight: screenHeight,
-                            //                     hostModel: hosts[index]);
-                            //               }),
-                            //         ),
-                            //       )
-                            //     ],
-                            //   );
-                            // }
                           },
                         );
                       },
                     );
                   },
+                ):Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment:
+                      MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: screenWidth * 0.3,
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            child: Text("الاعدادات",
+                                style:
+                                TextStyle(color: Colors.black)),
+                          ),
+                        ),
+                        SizedBox(
+                          width: screenWidth * 0.3,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (context) => AgentRequest(myagend)));
+                            },
+                            child: Text("طلبات الانضمام",
+                                style:
+                                TextStyle(color: Colors.black)).tr(args: ['طلبات الانضمام']),
+                          ),
+                        ),
+                        SizedBox(
+                          width: screenWidth * 0.3,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (context) => AddHost(myagend)));
+                            },
+                            child: Text("اضافة مضيف",
+                                style:
+                                TextStyle(color: Colors.black)).tr(args: ['اضافة مضيف']),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "اجمالي دخل الوكالة الشهري",
+                      style:
+                      TextStyle(fontSize: screenWidth * 0.05),
+                    ).tr(args: ['اجمالي دخل الوكالة الشهري']),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      height: screenHeight * 0.2,
+                      width: screenWidth * 0.7,
+                      decoration: const BoxDecoration(
+                        color: AppColors.app3MainColor,
+                        borderRadius:
+                        BorderRadius.all(Radius.circular(20)),
+                      ),
+                      child: Column(children: [
+                        SizedBox(
+                          width: screenWidth * 0.3,
+                          child: const Image(
+                            image: AssetImage(AppImages.daimond),
+                          ),
+                        ),
+                        Text(
+                          "0",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: screenWidth * 0.07),
+                        ),
+                      ]),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child:  Text(
+                        "تحميل التقرير الشهري",
+                        style: TextStyle(color: Colors.black),
+                      ).tr(args: ['تحميل التقرير الشهري']),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                  ],
                 );
               },
             );
