@@ -12,6 +12,7 @@ import 'package:hayaa_main/features/agencies/widgets/seperated_text.dart';
 import 'package:hayaa_main/features/auth/choice%20between%20registration%20and%20login/widgets/gradiant_button.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../../../core/Utils/app_images.dart';
 
 class AgencyCreationViewBody extends StatefulWidget {
@@ -49,233 +50,236 @@ class _AgencyCreationViewBodyState extends State<AgencyCreationViewBody> {
         title:
             const Text("Hayaa", style: TextStyle(fontWeight: FontWeight.bold)),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              showPickedFile == false
-                  ? CustomImagePicker(
-                      screenWidth: screenWidth,
-                      onTap: () {
-                        _pickImage();
-                      },
-                    )
-                  : InkWell(
-                      onTap: () {
-                        _pickImage();
-                      },
-                      child: CircleAvatar(
-                        radius: 75,
-                        backgroundImage: showPickedFile
-                            ? FileImage(imageFile!)
-                            : AssetImage(AppImages.UserImage) as ImageProvider,
-                      ),
-                    ),
-              const SeperatedText(
-                tOne: "Agency Name ",
-                tTwo: "*",
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextField(
-                controller: _namefield,
-                decoration: InputDecoration(
-                    hintText: "Please Enter Name",
-                    hintStyle: TextStyle(fontSize: screenWidth * 0.035)),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              const SeperatedText(
-                tOne: "Definition Of Agency ",
-                tTwo: "*",
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextField(
-                controller: _definefiled,
-                style: const TextStyle(fontSize: 22),
-                maxLength: 300,
-                decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    hintText: "Please Define Your Agency",
-                    hintStyle: TextStyle(fontSize: screenWidth * 0.035)),
-              ),
-              const SeperatedText(
-                tOne: "Mean Of Communication ",
-                tTwo: "*",
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextField(
-                controller: _mainemail,
-                decoration: InputDecoration(
-                    hintText: "Please Enter Your E-mail",
-                    hintStyle: TextStyle(fontSize: screenWidth * 0.035)),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              const SeperatedText(
-                tOne: "A Photo Of The ID Card ",
-                tTwo: "*",
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    showPickedFile2==false?GestureDetector(
-                      onTap: () {
-                        _pickImage2();
-                      },
-                      child: Container(
-                        width: screenWidth * 0.4,
-                        height: screenWidth * 0.4,
-                        decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.35),
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Center(
-                            child: Icon(
-                          Icons.add,
-                          size: screenWidth * 0.2,
-                          color: Colors.blueGrey,
-                        )),
-                      ),
-                    ):InkWell(
-                      onTap: (){
-                        _pickImage();
-                      },
-                      child: CircleAvatar(
-                        radius: 75,
-                        backgroundImage: showPickedFile2
-                            ? FileImage(imageFile2!)
-                            : AssetImage(AppImages.UserImage) as ImageProvider,
-                      ),
-                    ),
-                    showPickedFile3==false?GestureDetector(
-                      onTap: () {
-                        _pickImage3();
-                      },
-                      child: Container(
-                        width: screenWidth * 0.4,
-                        height: screenWidth * 0.4,
-                        decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.35),
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Center(
-                            child: Icon(
-                          Icons.add,
-                          size: screenWidth * 0.2,
-                          color: Colors.blueGrey,
-                        )),
-                      ),
-                    ):InkWell(
-                      onTap: (){
-                        _pickImage();
-                      },
-                      child: CircleAvatar(
-                        radius: 75,
-                        backgroundImage: showPickedFile3
-                            ? FileImage(imageFile3!)
-                            : AssetImage(AppImages.UserImage) as ImageProvider,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              const SeperatedText(
-                tOne: "Country",
-                tTwo: "*",
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  showCountryPicker(
-                    context: context,
-                    exclude: <String>['KN', 'MF'],
-                    favorite: <String>['SE'],
-                    showPhoneCode: true,
-                    onSelect: (Country country) {
-                      mycountry=country.toString().split(" ")[3].split(")")[0];
-                      print('Select country: ${mycountry}');
-                    },
-                    countryListTheme: CountryListThemeData(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(40.0),
-                        topRight: Radius.circular(40.0),
-                      ),
-                      // Optional. Styles the search field.
-                      inputDecoration: InputDecoration(
-                        labelText: 'Search',
-                        hintText: 'Start typing to search',
-                        prefixIcon: const Icon(Icons.search),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: const Color(0xFF8C98A8).withOpacity(0.2),
-                          ),
+      body: ModalProgressHUD(
+        inAsyncCall: _showspinner,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                showPickedFile == false
+                    ? CustomImagePicker(
+                        screenWidth: screenWidth,
+                        onTap: () {
+                          _pickImage();
+                        },
+                      )
+                    : InkWell(
+                        onTap: () {
+                          _pickImage();
+                        },
+                        child: CircleAvatar(
+                          radius: 75,
+                          backgroundImage: showPickedFile
+                              ? FileImage(imageFile!)
+                              : AssetImage(AppImages.UserImage) as ImageProvider,
                         ),
                       ),
-                      searchTextStyle: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 18,
+                const SeperatedText(
+                  tOne: "Agency Name ",
+                  tTwo: "*",
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextField(
+                  controller: _namefield,
+                  decoration: InputDecoration(
+                      hintText: "Please Enter Name",
+                      hintStyle: TextStyle(fontSize: screenWidth * 0.035)),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                const SeperatedText(
+                  tOne: "Definition Of Agency ",
+                  tTwo: "*",
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextField(
+                  controller: _definefiled,
+                  style: const TextStyle(fontSize: 22),
+                  maxLength: 300,
+                  decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      hintText: "Please Define Your Agency",
+                      hintStyle: TextStyle(fontSize: screenWidth * 0.035)),
+                ),
+                const SeperatedText(
+                  tOne: "Mean Of Communication ",
+                  tTwo: "*",
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextField(
+                  controller: _mainemail,
+                  decoration: InputDecoration(
+                      hintText: "Please Enter Your E-mail",
+                      hintStyle: TextStyle(fontSize: screenWidth * 0.035)),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                const SeperatedText(
+                  tOne: "A Photo Of The ID Card ",
+                  tTwo: "*",
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      showPickedFile2==false?GestureDetector(
+                        onTap: () {
+                          _pickImage2();
+                        },
+                        child: Container(
+                          width: screenWidth * 0.4,
+                          height: screenWidth * 0.4,
+                          decoration: BoxDecoration(
+                              color: Colors.grey.withOpacity(0.35),
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Center(
+                              child: Icon(
+                            Icons.add,
+                            size: screenWidth * 0.2,
+                            color: Colors.blueGrey,
+                          )),
+                        ),
+                      ):InkWell(
+                        onTap: (){
+                          _pickImage();
+                        },
+                        child: CircleAvatar(
+                          radius: 75,
+                          backgroundImage: showPickedFile2
+                              ? FileImage(imageFile2!)
+                              : AssetImage(AppImages.UserImage) as ImageProvider,
+                        ),
                       ),
-                    ),
-                  );
-                },
-                child:Text('اختار دولتك').tr(args: ['اختار دولتك']),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              GradiantButton(
-                  screenWidth: screenWidth,
-                  buttonLabel: "Create Agency ",
-                  onPressed: () async{
-                    if(imageFile==null){
-                      AllarmError("برجاء اختيار صورة للوكالة");
-                    }
-                    else if(_namefield.text==""){
-                      AllarmError("برجاء ادخال اسم للوكالة");
-                    }
-                    else if(_definefiled.text==""){
-                      AllarmError("برجاء ادخال تعريف للوكالة");
-                    }
-                    else if(_mainemail.text==""){
-                      AllarmError("برجاء ادخال بريد للوكالة");
-                    }
-                    else if(imageFile2==null){
-                      AllarmError("برجاء رفع وجه البطاقة الشخصية");
-                    }
-                    else if(imageFile3==null){
-                      AllarmError("برجاء رفع ظهر البطاقة الشخصية");
-                    }
-                    else if(mycountry==""){
-                      AllarmError("برجاء ادخال الدولة");
-                    }
-                    else{
-                      Allarm();
-                    }
-                    //Navigator.pushNamed(context, AgencyAgentView.id);
+                      showPickedFile3==false?GestureDetector(
+                        onTap: () {
+                          _pickImage3();
+                        },
+                        child: Container(
+                          width: screenWidth * 0.4,
+                          height: screenWidth * 0.4,
+                          decoration: BoxDecoration(
+                              color: Colors.grey.withOpacity(0.35),
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Center(
+                              child: Icon(
+                            Icons.add,
+                            size: screenWidth * 0.2,
+                            color: Colors.blueGrey,
+                          )),
+                        ),
+                      ):InkWell(
+                        onTap: (){
+                          _pickImage();
+                        },
+                        child: CircleAvatar(
+                          radius: 75,
+                          backgroundImage: showPickedFile3
+                              ? FileImage(imageFile3!)
+                              : AssetImage(AppImages.UserImage) as ImageProvider,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                const SeperatedText(
+                  tOne: "Country",
+                  tTwo: "*",
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    showCountryPicker(
+                      context: context,
+                      exclude: <String>['KN', 'MF'],
+                      favorite: <String>['SE'],
+                      showPhoneCode: true,
+                      onSelect: (Country country) {
+                        mycountry=country.toString().split(" ")[3].split(")")[0];
+                        print('Select country: ${mycountry}');
+                      },
+                      countryListTheme: CountryListThemeData(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(40.0),
+                          topRight: Radius.circular(40.0),
+                        ),
+                        // Optional. Styles the search field.
+                        inputDecoration: InputDecoration(
+                          labelText: 'Search',
+                          hintText: 'Start typing to search',
+                          prefixIcon: const Icon(Icons.search),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: const Color(0xFF8C98A8).withOpacity(0.2),
+                            ),
+                          ),
+                        ),
+                        searchTextStyle: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 18,
+                        ),
+                      ),
+                    );
                   },
-                  buttonRatio: 0.8),
-              const SizedBox(
-                height: 30,
-              ),
-            ],
+                  child:Text('اختار دولتك').tr(args: ['اختار دولتك']),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                GradiantButton(
+                    screenWidth: screenWidth,
+                    buttonLabel: "Create Agency ",
+                    onPressed: () async{
+                      if(imageFile==null){
+                        AllarmError("برجاء اختيار صورة للوكالة");
+                      }
+                      else if(_namefield.text==""){
+                        AllarmError("برجاء ادخال اسم للوكالة");
+                      }
+                      else if(_definefiled.text==""){
+                        AllarmError("برجاء ادخال تعريف للوكالة");
+                      }
+                      else if(_mainemail.text==""){
+                        AllarmError("برجاء ادخال بريد للوكالة");
+                      }
+                      else if(imageFile2==null){
+                        AllarmError("برجاء رفع وجه البطاقة الشخصية");
+                      }
+                      else if(imageFile3==null){
+                        AllarmError("برجاء رفع ظهر البطاقة الشخصية");
+                      }
+                      else if(mycountry==""){
+                        AllarmError("برجاء ادخال الدولة");
+                      }
+                      else{
+                        Allarm();
+                      }
+                      //Navigator.pushNamed(context, AgencyAgentView.id);
+                    },
+                    buttonRatio: 0.8),
+                const SizedBox(
+                  height: 30,
+                ),
+              ],
+            ),
           ),
         ),
       ),

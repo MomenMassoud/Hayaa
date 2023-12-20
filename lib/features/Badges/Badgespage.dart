@@ -64,7 +64,6 @@ class _BadgesState extends State<Badges> with SingleTickerProviderStateMixin {
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage(AppImages.badges2),
-            // Replace with your image asset
             fit: BoxFit.cover,
           ),
         ),
@@ -76,16 +75,16 @@ class _BadgesState extends State<Badges> with SingleTickerProviderStateMixin {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-
                 Padding(
-                  padding: EdgeInsets.only(left: 160,bottom: 30,top: 300,right: 25),
+                  padding: EdgeInsets.only(top: 188.0),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       selectedImagePath.isNotEmpty
                           ? Image.asset(
                         selectedImagePath,
                         //fit: BoxFit.fill,
-                        scale: 1.2,
+                        scale: 4,
                       )
                           : Container(),
                       // Add any other widgets or text as needed

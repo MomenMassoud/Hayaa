@@ -134,7 +134,7 @@ class _StoryViewBody extends State<StoryViewBody>{
               uss.id=mystory.id;
               myfriends.add(uss);
             }
-            return ListView.builder(
+            return myfriends.length>0?ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: myfriends.length,
               itemBuilder: (context,index){
@@ -358,6 +358,40 @@ class _StoryViewBody extends State<StoryViewBody>{
                   },
                 );
               },
+            ):InkWell(
+              onTap: (){
+                if(MystoryWedgites.isEmpty){
+                  Allarm();
+                }
+                else{
+                  us.storys=MystoryWedgites;
+                  Navigator.push(context, MaterialPageRoute(builder: (builder)=>ViewStoryScreen(us)));
+                }
+              },
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                              color: Colors.green.shade300,
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  image: CachedNetworkImageProvider(_auth.currentUser!.photoURL.toString())
+                              )
+                          ),
+                        ),
+                        MystoryWedgites.isNotEmpty?Text("Tab to view"):Text("Tab to Add Story")
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             );
           },
         );

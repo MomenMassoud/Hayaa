@@ -65,6 +65,7 @@ class activity extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(imgPath),
+
                   Text(name,
                       style: TextStyle(
                           color: Color(0xFFFFFFFF),
