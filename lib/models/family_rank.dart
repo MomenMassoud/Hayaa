@@ -5,5 +5,6 @@ class FamilyRankModel{
   String month;
   String year;
   String coin;
+  late String family;
   FamilyRankModel(this.doc,this.user,this.coin,this.day,this.month,this.year);
 }

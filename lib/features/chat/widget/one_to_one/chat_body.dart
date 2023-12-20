@@ -93,6 +93,7 @@ class _ChatBody extends State<ChatBody> {
         });
       }
     });
+    print(chatID);
   }
 
   @override
@@ -550,6 +551,7 @@ class _ChatBody extends State<ChatBody> {
     //     message
     // );
     print("Massege Send");
+    print(chatID);
   }
 
   Future getImages(ImageSource media, String sourceId, String targetId) async {

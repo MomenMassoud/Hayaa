@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hayaa_main/core/Utils/app_images.dart';
 
 class VipList extends StatelessWidget {
   @override
@@ -8,71 +9,64 @@ class VipList extends StatelessWidget {
       left: 0,
       right: 0,
       child: Container(
+        //color: Colors.cyan,
         padding: const EdgeInsets.only(top: 15, left: 25, right: 25),
         height: 220,
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Colors.blue,
-              Colors.pink,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.topRight,
-            tileMode: TileMode.clamp,
-          ),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
-          ),
-        ),
+          //color: Color(0xa1696868),
+            image: DecorationImage(
+              image: AssetImage('lib/core/Utils/assets/images/vip5.jpeg'),
+              // Replace with your image asset
+              fit: BoxFit.cover,
+            ),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(100),
+                topRight: Radius.circular(100))),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 10),
-            // Call your function to display every 3 images with special text
             buildImageRows(),
             SizedBox(height: 10),
-            // Add the buttons and text
             buildAdditionalButtons(),
           ],
         ),
       ),
     );
   }
-
   // Function to display every 3 images with special text in rows
   Widget buildImageRows() {
     // Replace this with your logic to get images from your PC
     List<String> imagePaths = [
-      'lib/core/Utils/assets/images/1.png',
-      'lib/core/Utils/assets/images/2.png',
-      'lib/core/Utils/assets/images/3.png',
-      'lib/core/Utils/assets/images/4.png',
-      'lib/core/Utils/assets/images/5.png',
-      'lib/core/Utils/assets/images/6.png',
-      'lib/core/Utils/assets/images/1.png',
-      'lib/core/Utils/assets/images/2.png',
-      'lib/core/Utils/assets/images/3.png',
-      'lib/core/Utils/assets/images/4.png',
-      'lib/core/Utils/assets/images/5.png',
-      'lib/core/Utils/assets/images/6.png',
+      AppImages.vip1,
+      AppImages.vip2,
+      AppImages.vip3,
+      AppImages.vip4,
+      AppImages.vip5,
+      AppImages.vip6,
+      AppImages.vip7,
+      AppImages.vip8,
+      AppImages.vip9,
+      AppImages.vip1,
+      AppImages.vip2,
+      AppImages.vip3,
       // Add more image paths as needed
     ];
 
     List<String> imageTexts = [
-      'Text 1',
-      'Text 2',
-      'Text 3',
-      'Text 4',
-      'Text 5',
-      'Text 6',
-      'Text 1',
-      'Text 2',
-      'Text 3',
-      'Text 4',
-      'Text 5',
-      'Text 6',
-      // Add more texts as needed
+      'ايقونه vip',
+      'برواويز',
+      'مؤثرات',
+      'سياره',
+      'الاصدقاء',
+      'متابعه',
+      'نص ملون',
+      'ايقونه vip',
+      'برواويز',
+      'مؤثرات',
+      'سياره',
+      'الاصدقاء',
+      'متابعه',      // Add more texts as needed
     ];
 
     List<Widget> rows = [];
@@ -91,7 +85,7 @@ class VipList extends StatelessWidget {
                 Text(
                   imageTexts[j],
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Color(0xFFC7C3C3),
                     fontSize: 12,
                   ),
                 ),
@@ -118,24 +112,36 @@ class VipList extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        ElevatedButton(
-          onPressed: () {
-            // Handle button 1 press
-          },
-          child: Text('Button 1'),
-        ),
-        ElevatedButton(
-          onPressed: () {
-            // Handle button 2 press
-          },
-          child: Text('Button 2'),
+        Row(
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                // Handle button 1 press
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.yellow),
+              ),
+              child: Text('شراء'),
+
+            ),
+            SizedBox(width: 10,),
+            ElevatedButton(
+              onPressed: () {
+                // Handle button 2 press
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.yellow),
+              ),
+              child: Text('ارسال'),
+            ),
+          ],
         ),
         Text(
-          'Right Text',
+          '500 gold',
           style: TextStyle(
             fontFamily: 'Varela',
-            fontSize: 12,
-            color: Color(0xFFCDCDCD),
+            fontSize: 20,
+            color: Color(0xFFE0FF02),
           ),
         ),
       ],

@@ -81,7 +81,7 @@ class _MyFamilyBody extends State<MyFamilyBody> {
       decoration: BoxDecoration(
           image: DecorationImage(
               fit: BoxFit.cover,
-              image: AssetImage(AppImages.family2))
+              image: AssetImage(AppImages.family6))
       ),
       child: Scaffold(
         appBar: AppBar(
@@ -111,10 +111,10 @@ class _MyFamilyBody extends State<MyFamilyBody> {
             },
                 icon: Icon(Icons.mail,color: Colors.white,)
             ),
-            IconButton(onPressed: (){
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => MyFamilyRankList(familyID)));
-            }, icon: Icon(Icons.recommend,color: Colors.white,))
+            // IconButton(onPressed: (){
+            //   Navigator.of(context).push(
+            //       MaterialPageRoute(builder: (context) => MyFamilyRankList(familyID)));
+            // }, icon: Icon(Icons.recommend,color: Colors.white,))
           ],
         ),
         backgroundColor: Colors.transparent,

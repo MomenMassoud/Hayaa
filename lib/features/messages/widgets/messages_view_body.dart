@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hayaa_main/features/friend_list/widget/friend_requset.dart';
+import 'package:hayaa_main/features/hayaa_team/view/hayaa_team_view.dart';
 import 'package:hayaa_main/features/search/view/search_view.dart';
 import 'package:hayaa_main/models/firends_model.dart';
 import 'package:hayaa_main/models/friends_card_model.dart';
@@ -11,6 +12,7 @@ import '../../../core/Utils/app_colors.dart';
 import '../../../models/user_model.dart';
 import '../../chat/widget/one_to_one/chat_body.dart';
 import '../../friend_list/widget/friend_list_body.dart';
+import 'invite_body.dart';
 
 class MessagesViewBody extends StatefulWidget {
   _MessagesViewBody createState()=>_MessagesViewBody();
@@ -20,6 +22,12 @@ class _MessagesViewBody extends State<MessagesViewBody>{
   UserModel userModel=UserModel("email", "name", "gende", "photo", "id", "phonenumber", "devicetoken", "daimond", "vip", "bio", "seen", "lang", "country", "type", "birthdate", "coin", "exp", "level");
   final FirebaseAuth _auth=FirebaseAuth.instance;
   final FirebaseFirestore _firestore=FirebaseFirestore.instance;
+  int count=0;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +62,12 @@ class _MessagesViewBody extends State<MessagesViewBody>{
               onPressed: (){
                 Navigator.pushNamed(context, SearchView.id);
               },
-              icon: Icon(Icons.search,color: Colors.white,))
+              icon: Icon(Icons.search,color: Colors.white,)),
+          IconButton(
+              onPressed: (){
+                Navigator.pushNamed(context, InviteBody.id);
+              },
+              icon: Icon(Icons.mail,color: Colors.white,))
         ],
       ),
       body: StreamBuilder<QuerySnapshot>(
@@ -72,7 +85,7 @@ class _MessagesViewBody extends State<MessagesViewBody>{
           for (var massege in masseges!.reversed){
             friendIDs.add(FriendsCardModel(massege.get('mycontact'), massege.get('type'), massege.get('time'), massege.get('lastmsg')));
           }
-          return ListView.builder(
+          return friendIDs.length>0?ListView.builder(
               itemCount: friendIDs.length,
               itemBuilder: (context,index){
                 return StreamBuilder<QuerySnapshot>(
@@ -100,6 +113,9 @@ class _MessagesViewBody extends State<MessagesViewBody>{
                             title: Text("فريق Hayaa"),
                             subtitle: Text("اضغط لمعرفة اخر الاخبار"),
                             trailing: Icon(Icons.arrow_forward_ios_rounded),
+                            onTap: (){
+                              Navigator.pushNamed(context, HayaaTeamView.id);
+                            },
                           ),
                           ListTile(
                             leading: Icon(Icons.person_add_alt_1_sharp,color: Colors.blue,),
@@ -132,6 +148,14 @@ class _MessagesViewBody extends State<MessagesViewBody>{
                     }
                     else{
                       return ListTile(
+                        onTap: (){
+                          FriendsModel ff= FriendsModel("email", "id", "docID", "photo", "name", "phonenumber", "gender");
+                          ff.photo=friendIDs[index].photo;
+                          ff.docID=friendIDs[index].docID;
+                          ff.name=friendIDs[index].name;
+                          Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) => ChatBody(ff)));
+                        },
                         title: Text(friendIDs[index].name),
                         subtitle: Text(friendIDs[index].lastmsg),
                         leading: CircleAvatar(
@@ -143,6 +167,29 @@ class _MessagesViewBody extends State<MessagesViewBody>{
                   },
                 );
               }
+          ):Column(
+            children: [
+              ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: AssetImage("lib/core/Utils/assets/images/logo.png"),
+                ),
+                title: Text("فريق Hayaa"),
+                subtitle: Text("اضغط لمعرفة اخر الاخبار"),
+                trailing: Icon(Icons.arrow_forward_ios_rounded),
+                onTap: (){
+                  Navigator.pushNamed(context, HayaaTeamView.id);
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.person_add_alt_1_sharp,color: Colors.blue,),
+                title: Text("طلبات الصداقة"),
+                subtitle: Text("اضغط لمعرفة من ارسل لك طلب صداقة"),
+                trailing: Icon(Icons.arrow_forward_ios_rounded),
+                onTap: (){
+                  Navigator.pushNamed(context, FriendReuest.id);
+                },
+              ),
+            ],
           );
         },
       )

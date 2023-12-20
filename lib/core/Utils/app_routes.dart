@@ -3,10 +3,13 @@ import 'package:hayaa_main/features/agencies/views/agency_creation_view.dart';
 import 'package:hayaa_main/features/agencies/views/agency_join_view.dart';
 import 'package:hayaa_main/features/chat/widget/group/myfamily/my_family_body.dart';
 import 'package:hayaa_main/features/friend_list/widget/friend_requset.dart';
+import 'package:hayaa_main/features/hayaa_team/view/hayaa_team_view.dart';
 import 'package:hayaa_main/features/search/view/search_view.dart';
 import 'package:hayaa_main/features/setting/views/setting_view.dart';
 import '../../features/Badges/Badgespage.dart';
 import '../../features/VIP/view/vip_view.dart';
+import '../../features/agencies/views/agency_agent_view.dart';
+import '../../features/agencies/views/agency_host_view.dart';
 import '../../features/auth/choice between registration and login/views/choice_between_registration_and_login_view.dart';
 import '../../features/auth/choice between registration and login/views/privacy_terms_view.dart';
 import '../../features/auth/choice between registration and login/views/user_agreement_view.dart';
@@ -24,9 +27,9 @@ import '../../features/history_recharge/view/history_recharge_view.dart';
 import '../../features/home/views/all_rooms_view.dart';
 import '../../features/home/views/home_view.dart';
 import '../../features/messages/views/messages_view.dart';
+import '../../features/messages/widgets/invite_body.dart';
 import '../../features/mylook/view/my_look_view.dart';
 import '../../features/profile/views/profile_edit_view.dart';
-import '../../features/profile/views/profile_view.dart';
 import '../../features/recharge_coins/views/recharge_view.dart';
 import '../../features/salery/view/salery_view.dart';
 import '../../features/splash/views/splash_view.dart';
@@ -65,7 +68,11 @@ Map<String, Widget Function(BuildContext)> appRoutes = {
   StoreView.id:(context)=>StoreView(),
   MyLookView.id:(context)=>MyLookView(),
   CreateFamilyView.id:(context)=>const CreateFamilyView(),
-  AgencyCreationView.id:(context)=> AgencyCreationView(),
-  AgencyJoiningView.id:(context)=>AgencyJoiningView(),
+  AgencyJoiningView.id: (context) => const AgencyJoiningView(),
+  AgencyCreationView.id: (context) => const AgencyCreationView(),
+  AgencyAgentView.id: (context) => const AgencyAgentView(),
+  AgencyHostView.id: (context) => const AgencyHostView(),
   MyFamilyBody.id:(context)=>MyFamilyBody(),
+  HayaaTeamView.id:(context)=>HayaaTeamView(),
+  InviteBody.id:(context)=>InviteBody(),
 };

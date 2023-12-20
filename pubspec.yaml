@@ -60,6 +60,8 @@ dependencies:
   permission_handler: ^11.0.1
   flare_flutter: ^3.0.2
   svgaplayer_flutter: ^2.2.0
+  font_awesome_flutter: ^10.6.0
+  story_view: ^0.16.0
 flutter_icons:
   android: true
   ios: true
@@ -100,7 +102,11 @@ flutter:
   assets:
     - lib/core/Utils/assets/images/
     - lib/core/Utils/assets/lang/
-
+    - lib/core/Utils/assets/images/icons/
+    - lib/core/Utils/assets/images/gif/
+    - lib/core/Utils/assets/images/badges/
+    - lib/core/Utils/assets/images/post/
+    - lib/core/Utils/assets/images/Vip/
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

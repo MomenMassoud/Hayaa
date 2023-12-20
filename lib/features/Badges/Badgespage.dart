@@ -13,6 +13,8 @@ class Badges extends StatefulWidget {
 
 class _BadgesState extends State<Badges> with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  String selectedImagePath = '';
+
 
   @override
   void initState() {
@@ -20,24 +22,20 @@ class _BadgesState extends State<Badges> with SingleTickerProviderStateMixin {
     _tabController = TabController(length: 2, vsync: this);
   }
 
+
   @override
   Widget build(BuildContext context) {
+
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Container(
-          height: screenHight * 0.12,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Colors.brown,
-                Colors.brown
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.topRight,
-              stops: [0.0, 0.8],
-              tileMode: TileMode.clamp,
+          height: screenHight * 0.2,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(AppImages.badges1), // Replace with your image asset
+              fit: BoxFit.cover,
             ),
           ),
         ),
@@ -61,16 +59,13 @@ class _BadgesState extends State<Badges> with SingleTickerProviderStateMixin {
         ],
       ),
       body: Container(
+        height: screenHight,
+        width: screenWidth,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Colors.brown,
-              Colors.brown
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.topRight,
-            stops: [0.0, 0.8],
-            tileMode: TileMode.clamp,
+          image: DecorationImage(
+            image: AssetImage(AppImages.badges2),
+            // Replace with your image asset
+            fit: BoxFit.cover,
           ),
         ),
         child: ListView(
@@ -81,28 +76,22 @@ class _BadgesState extends State<Badges> with SingleTickerProviderStateMixin {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircleAvatar(
-                  backgroundImage: AssetImage(AppImages.momen),
-                  radius: 51,
-                ),
-          SizedBox(height: 20),
-                // Example text below the image
-                Text(
-                  'Momen Mohamed',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 30,
+
+                Padding(
+                  padding: EdgeInsets.only(left: 160,bottom: 30,top: 300,right: 25),
+                  child: Row(
+                    children: [
+                      selectedImagePath.isNotEmpty
+                          ? Image.asset(
+                        selectedImagePath,
+                        //fit: BoxFit.fill,
+                        scale: 1.2,
+                      )
+                          : Container(),
+                      // Add any other widgets or text as needed
+                    ],
                   ),
-                ),
-                SizedBox(height: 20),
-                // Example text below the image
-                Text(
-                  'نقاط الخبرة :10',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
+                )
               ],
             ),
             SizedBox(height: 20),
@@ -142,8 +131,21 @@ class _BadgesState extends State<Badges> with SingleTickerProviderStateMixin {
                       controller: _tabController,
                       children: [
                         // Replace these with your actual widgets
-                        Achievements(),
-                        activity(),
+                        Achievements(
+                          onImageTap: (path) {
+                            // Update the selected image path
+                            setState(() {
+                              selectedImagePath = path;
+                            });
+                          },),
+                        activity(
+                          onImageTap: (path) {
+                            // Update the selected image path
+                            setState(() {
+                              selectedImagePath = path;
+                            });
+                          },
+                        ),
                       ],
                     ),
                   ),

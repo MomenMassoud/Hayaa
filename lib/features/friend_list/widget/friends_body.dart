@@ -34,19 +34,12 @@ class _FriendsBody extends State<FriendsBody> {
       "level");
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  List<FriendsModel> friendsModels = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: StreamBuilder<QuerySnapshot>(
-      stream: _auth.currentUser!.email == null
-          ? _firestore
-              .collection('user')
-              .where('email', isEqualTo: _auth.currentUser!.phoneNumber)
-              .snapshots()
-          : _firestore
-              .collection('user')
-              .where('email', isEqualTo: _auth.currentUser!.email)
-              .snapshots(),
+      stream: _firestore.collection('user').where('doc',isEqualTo: _auth.currentUser!.uid).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const Center(
@@ -97,67 +90,66 @@ class _FriendsBody extends State<FriendsBody> {
             for (var massege in masseges!.reversed) {
               FriendID.add(massege.get('id'));
             }
+            print("friends ${FriendID[1]}");
             return ListView.builder(
                 itemCount: FriendID.length,
                 itemBuilder: (context, index) {
                   return StreamBuilder<QuerySnapshot>(
-                    stream: _firestore
-                        .collection('user')
-                        .where('id', isEqualTo: FriendID[index])
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      List<FriendsModel> friendsModels = [];
-                      if (!snapshot.hasData) {
-                        return const Center(
-                          child: CircularProgressIndicator(
-                            backgroundColor: Colors.blue,
+                      stream: _firestore.collection('user').where('id',isEqualTo: FriendID[index]).snapshots(),
+                      builder: (context,snapshot){
+
+                        if (!snapshot.hasData) {
+                          return const Center(
+                            child: CircularProgressIndicator(
+                              backgroundColor: Colors.blue,
+                            ),
+                          );
+                        }
+                        final masseges = snapshot.data?.docs;
+                        for (var massege in masseges!.reversed){
+                          FriendsModel ff = FriendsModel(
+                              massege.get('email'),
+                              massege.get('id'),
+                              massege.id,
+                              massege.get('photo'),
+                              massege.get('name'),
+                              massege.get('phonenumber'),
+                              massege.get('gender'));
+                          ff.bio = massege.get('bio');
+                          friendsModels.add(ff);
+                        }
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListTile(
+                            title: Text(friendsModels[index].name),
+                            leading: CircleAvatar(
+                              backgroundImage: CachedNetworkImageProvider(
+                                  friendsModels[index].photo),
+                            ),
+                            subtitle: Text(friendsModels[index].bio),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ElevatedButton(
+                                    onPressed: ()  {
+                                      Navigator.pop(context);
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(builder: (context) => ChatBody(friendsModels[index])));
+                                    },
+                                    child: Text("دردشة")),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(builder: (context) => VisitorProfile(friendsModels[index])));
+                                    }, child: Text("الحساب"))
+                              ],
+                            ),
                           ),
                         );
                       }
-                      final masseges = snapshot.data?.docs;
-                      for (var massege in masseges!.reversed) {
-                        FriendsModel ff = FriendsModel(
-                            massege.get('email'),
-                            massege.get('id'),
-                            massege.id,
-                            massege.get('photo'),
-                            massege.get('name'),
-                            massege.get('phonenumber'),
-                            massege.get('gender'));
-                        ff.bio = massege.get('bio');
-                        friendsModels.add(ff);
-                      }
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ListTile(
-                          title: Text(friendsModels[index].name),
-                          leading: CircleAvatar(
-                            backgroundImage: CachedNetworkImageProvider(
-                                friendsModels[index].photo),
-                          ),
-                          subtitle: Text(friendsModels[index].bio),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              ElevatedButton(
-                                  onPressed: ()  {
-                                    Navigator.pop(context);
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(builder: (context) => ChatBody(friendsModels[index])));
-                                  },
-                                  child: Text("دردشة")),
-                              ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(builder: (context) => VisitorProfile(friendsModels[index])));
-                                  }, child: Text("الحساب"))
-                            ],
-                          ),
-                        ),
-                      );
-                    },
                   );
-                });
+                }
+                );
           },
         );
       },

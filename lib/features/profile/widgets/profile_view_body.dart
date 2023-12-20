@@ -12,6 +12,9 @@ import '../../../core/Utils/app_colors.dart';
 import '../../../models/user_model.dart';
 import '../../Badges/Badgespage.dart';
 import '../../VIP/view/vip_view.dart';
+import '../../agencies/views/agency_agent_view.dart';
+import '../../agencies/views/agency_host_view.dart';
+import '../../agencies/views/agency_join_view.dart';
 import '../../chat/group/view/family_view.dart';
 import '../../friend_list/view/visitor_view.dart';
 import '../../friend_list/widget/friend_list_body.dart';
@@ -271,8 +274,16 @@ class _ProfileViewBody extends State<ProfileViewBody>{
                                          leading: Icon(Icons.favorite,color: Colors.greenAccent,),
                                          onTap: (){
                                            print(userModel.type);
-                                           if(userModel.type=="normal"){
-                                             Navigator.pushNamed(context, AgencyCreationView.id);
+                                           if (userModel.type == "agent") {
+                                             Navigator.pushNamed(context,
+                                                 AgencyAgentView.id);
+                                           } else if (userModel.type ==
+                                               "host") {
+                                             Navigator.pushNamed(context,
+                                                 AgencyHostView.id);
+                                           } else {
+                                             Navigator.pushNamed(context,
+                                                 AgencyJoiningView.id);
                                            }
                                          },
                                        ),

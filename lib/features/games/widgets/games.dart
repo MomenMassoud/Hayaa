@@ -40,12 +40,7 @@ class _Games extends State<Games>{
     SubGames(AppImages.uno, "Free", "UNO"),
     SubGames(AppImages.uno, "Free", "UNO")
   ];
-  List<dynamic> images = [
-    Image.asset(AppImages.event1),
-    Image.asset(AppImages.event2),
-    Image.asset(AppImages.event3),
-    Image.asset(AppImages.event4),
-  ];
+  List<String> images = [];
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;

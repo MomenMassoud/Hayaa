@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/Utils/app_colors.dart';
 import '../../games/views/games_view.dart';
 import '../../messages/views/messages_view.dart';
+import '../../post/widget/post_view_body.dart';
 import '../../profile/views/profile_view.dart';
 import '../widgets/home_view_body.dart';
 
@@ -29,12 +30,14 @@ class _HomeViewState extends State<HomeView> {
      MessagesView(),
      HomeViewBody(),
      GamesView(),
+     PostViewBody(),
   ];
   List<Icon> iconList = [
     Icon(Icons.menu, color: Colors.white, size: 60),
     Icon(Icons.message_rounded, color: Colors.white, size: 60),
     Icon(Icons.home_outlined, color: Colors.white, size: 60),
     Icon(Icons.games, color: Colors.white, size: 60),
+    Icon(Icons.groups, color: Colors.white, size: 60),
   ];
 
   @override
@@ -154,6 +157,7 @@ class _HomeViewState extends State<HomeView> {
               getIcon(1),
               getIcon(2),
               getIcon(3),
+              getIcon(4),
             ],
         ),
       ),

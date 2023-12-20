@@ -42,7 +42,9 @@ class honorary extends StatelessWidget {
 
   Widget _buildCard(String name,  String imgPath, context) {
     return InkWell(
-        onTap: () {},
+        onTap: () {
+
+        },
         child: Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.0),

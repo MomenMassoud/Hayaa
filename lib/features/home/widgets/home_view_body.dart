@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -47,6 +48,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   void initState() {
     super.initState();
     start();
+    getEvent();
   }
 
   void start() async {
@@ -103,13 +105,18 @@ class _HomeViewBodyState extends State<HomeViewBody> {
       userModel;
     });
   }
-
-  List<dynamic> images = [
-    Image.asset(AppImages.event1),
-    Image.asset(AppImages.event2),
-    Image.asset(AppImages.event3),
-    Image.asset(AppImages.event4),
-  ];
+  void getEvent()async{
+    await for(var snap in _firestore.collection('event').snapshots()){
+      for(int i=0;i<snap.size;i++){
+        setState(() {
+          images.add(
+              snap.docs[i].get('photo')
+          );
+        });
+      }
+    }
+  }
+  List<String> images = [];
 
   List<RoomModel> rooms = [
     RoomModel(

@@ -64,4 +64,33 @@ abstract class AppImages {
   static const String crown="lib/core/Utils/assets/images/crown.png";
   static const String family="lib/core/Utils/assets/images/family.jpg";
   static const String family2="lib/core/Utils/assets/images/family2.jpg";
+  static const String family3="lib/core/Utils/assets/images/family3.jpg";
+  static const String family4="lib/core/Utils/assets/images/family4.jpg";
+  static const String family5="lib/core/Utils/assets/images/family5.jpg";
+  static const String family6="lib/core/Utils/assets/images/family6.jpg";
+  static const String vip1='lib/core/Utils/assets/images/icons/1.png';
+  static const String vip2='lib/core/Utils/assets/images/icons/2.png';
+  static const String vip3='lib/core/Utils/assets/images/icons/3.png';
+  static const String vip4='lib/core/Utils/assets/images/icons/4.png';
+  static const String vip5='lib/core/Utils/assets/images/icons/5.png';
+  static const String vip6='lib/core/Utils/assets/images/icons/6.png';
+  static const String vip7='lib/core/Utils/assets/images/icons/7.png';
+  static const String vip8='lib/core/Utils/assets/images/icons/8.png';
+  static const String vip9='lib/core/Utils/assets/images/icons/9.png';
+  static const String achievmnet1='lib/core/Utils/assets/images/badges/2.jpeg';
+  static const String achievmnet2='lib/core/Utils/assets/images/brown1.jpeg';
+  static const String activity1='lib/core/Utils/assets/images/badges/4b.png';
+  static const String activity2='lib/core/Utils/assets/images/badges/5b.png';
+  static const String activity3='lib/core/Utils/assets/images/badges/6b.png';
+  static const String activity4='lib/core/Utils/assets/images/badges/7b.png';
+  static const String activity5='lib/core/Utils/assets/images/badges/8b.png';
+  static const String activity6='lib/core/Utils/assets/images/badges/8b.png';
+  static const String badges1='lib/core/Utils/assets/images/badges/1.jpeg';
+  static const String badges2='lib/core/Utils/assets/images/badges/backgrounvip.jpg';
+  static const String likepost='lib/core/Utils/assets/images/post/1.png';
+  static const String commentpost='lib/core/Utils/assets/images/post/2.png';
+  static const String goldenDollar =
+      "lib/core/Utils/assets/images/golden_dollar.png";
+  static const String goldenDiamond =
+      "lib/core/Utils/assets/images/golden_diamond.png";
 }

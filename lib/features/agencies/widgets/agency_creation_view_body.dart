@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hayaa_main/features/agencies/views/agency_agent_view.dart';
 import 'package:hayaa_main/features/agencies/widgets/custom_image_picker.dart';
 import 'package:hayaa_main/features/agencies/widgets/seperated_text.dart';
 import 'package:hayaa_main/features/auth/choice%20between%20registration%20and%20login/widgets/gradiant_button.dart';
@@ -146,7 +147,9 @@ class _AgencyCreationViewBodyState extends State<AgencyCreationViewBody> {
               GradiantButton(
                   screenWidth: screenWidth,
                   buttonLabel: "Create Agency ",
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, AgencyAgentView.id);
+                  },
                   buttonRatio: 0.8),
               const SizedBox(
                 height: 30,

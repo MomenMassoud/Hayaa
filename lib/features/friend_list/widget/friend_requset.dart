@@ -21,7 +21,7 @@ class _FriendRequest extends State<FriendReuest> {
     getID();
   }
   void getID()async{
-    await _firestore.collection('user').where('email',isEqualTo: _auth.currentUser!.email).get().then((value){
+    await _firestore.collection('user').where('doc',isEqualTo: _auth.currentUser!.uid).get().then((value){
       setState(() {
         id=value.docs[0].get('id');
         docID=value.docs[0].id;
@@ -93,7 +93,7 @@ class _FriendRequest extends State<FriendReuest> {
         friend=value.docs[0].id;
       }).then((value){
         _firestore.collection('user').doc(friend).collection('friends').doc(docID).set({
-          'id':docID
+          'id':id
         }).then((value){
           _firestore.collection('friendreq').doc(req.doc).delete().then((value){
             print("Deleted Request And Accept Friend");

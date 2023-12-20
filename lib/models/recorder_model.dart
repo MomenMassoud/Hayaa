@@ -84,9 +84,10 @@ class Recorder {
     print("Download Link : $urlDownload");
     final id = DateTime.now().toString();
     String idd = "$id-$useremail";
-    print("Massege Send");
+
     await _firestore.collection('chat').doc(idd).set({
-      'chatid': ChatRoomID,
+
+      'chatroom': ChatRoomID,
       'sender': useremail,
       'type': 'record',
       'time': DateTime.now().toString().substring(10, 16),
@@ -111,6 +112,7 @@ class Recorder {
       'typeLast': "msg"
     };
     docRef2.update(updates2);
+    print("Massege Send");
 
   }
   Future initRecorder()async{
