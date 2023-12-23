@@ -254,10 +254,10 @@ class _StoryViewBody extends State<StoryViewBody>{
                                   }
                                 },
                                 child: Padding(
-                                  padding: const EdgeInsets.only(top: 8.0),
+                                  padding: const EdgeInsets.all( 8.0),
                                   child: Container(
-                                    height: 10,
-                                    width: 10,
+                                    height: 80,
+                                    width: 80,
                                     decoration: BoxDecoration(
                                       color: Colors.green.shade300,
                                         shape: BoxShape.circle,
@@ -319,7 +319,7 @@ class _StoryViewBody extends State<StoryViewBody>{
                                   ),
                                 ),
                               ),
-                              MystoryWedgites.isEmpty ?Text("Add Story",style: TextStyle(color: Colors.black),):Text('View Your Story')
+                              MystoryWedgites.isNotEmpty?Text("Tab to view",style: TextStyle(color: Colors.black),):Text("Tab to Add Story")
                             ],
                           );
                         }
@@ -385,7 +385,7 @@ class _StoryViewBody extends State<StoryViewBody>{
                               )
                           ),
                         ),
-                        MystoryWedgites.isNotEmpty?Text("Tab to view"):Text("Tab to Add Story")
+                        MystoryWedgites.isNotEmpty?Text("Tab to view",style: TextStyle(color: Colors.black),):Text("Tab to Add Story")
                       ],
                     ),
                   ),

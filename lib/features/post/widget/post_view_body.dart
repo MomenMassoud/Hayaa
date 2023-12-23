@@ -93,6 +93,7 @@ class _PostViewBody extends State<PostViewBody>with SingleTickerProviderStateMix
       body: ModalProgressHUD(
         inAsyncCall: _showspinner,
         child: ListView(
+
           children: [
             Container(
                 height: 150,

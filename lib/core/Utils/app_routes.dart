@@ -7,7 +7,6 @@ import 'package:hayaa_main/features/hayaa_team/view/hayaa_team_view.dart';
 import 'package:hayaa_main/features/search/view/search_view.dart';
 import 'package:hayaa_main/features/setting/views/setting_view.dart';
 import '../../features/Badges/views/badges_center.dart';
-import '../../features/VIP/view/vip_view.dart';
 import '../../features/agencies/views/agency_agent_view.dart';
 import '../../features/agencies/views/agency_host_view.dart';
 import '../../features/auth/choice between registration and login/views/choice_between_registration_and_login_view.dart';
@@ -60,7 +59,6 @@ Map<String, Widget Function(BuildContext)> appRoutes = {
   FamilyView.id: (context) => const FamilyView(),
   VisitorView.id:(context)=>const VisitorView(),
   ProfileEditView.id:(context)=>const ProfileEditView(),
-  VipView.id :(context)=>const VipView(),
   SaleryView.id:(context)=>const SaleryView(),
   SignupView.id:(context)=>const SignupView(),
   SettingView.id:(context)=> SettingView(),

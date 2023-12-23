@@ -54,7 +54,7 @@ class _BadgesCenterViewBodyState extends State<BadgesCenterViewBody> {
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
           ),
           leading: IconButton(
-              onPressed: () {},
+              onPressed: () {Navigator.pop(context);},
               icon: const Icon(
                 Icons.arrow_back_ios,
                 color: Colors.white,

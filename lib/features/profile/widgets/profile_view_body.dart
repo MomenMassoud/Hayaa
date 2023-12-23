@@ -8,10 +8,10 @@ import 'package:hayaa_main/features/chat/widget/group/myfamily/my_family_body.da
 import 'package:hayaa_main/features/mylook/view/my_look_view.dart';
 import 'package:hayaa_main/features/setting/views/setting_view.dart';
 import 'package:hayaa_main/features/store/view/store_view.dart';
+import 'package:hayaa_main/features/vip%20center/views/vip_center_view.dart';
 import '../../../core/Utils/app_colors.dart';
 import '../../../models/user_model.dart';
 import '../../Badges/views/badges_center.dart';
-import '../../VIP/view/vip_view.dart';
 import '../../agencies/views/agency_agent_view.dart';
 import '../../agencies/views/agency_host_view.dart';
 import '../../agencies/views/agency_join_view.dart';
@@ -314,7 +314,8 @@ class _ProfileViewBody extends State<ProfileViewBody>{
                                            trailing: Icon(Icons.arrow_forward_ios_rounded,color: Colors.grey,size: 12,),
                                            leading: Icon(Icons.spa_outlined,color: Colors.brown,),
                                            onTap: (){
-                                             Navigator.pushNamed(context, VipView.id);
+                                             Navigator.of(context).push(
+                                                 MaterialPageRoute(builder: (context) => VipCenterView()));
                                            },
                                          ),
                                        ),
