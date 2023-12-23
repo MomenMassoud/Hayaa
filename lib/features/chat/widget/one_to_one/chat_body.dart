@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:hayaa_main/core/Utils/app_images.dart';
 import 'package:hayaa_main/features/chat/widget/common/own_gift_card.dart';
 import 'package:hayaa_main/features/chat/widget/common/replay_gift_card.dart';
@@ -49,12 +48,25 @@ class _ChatBody extends State<ChatBody> {
   bool _showspinner = false;
   final audioPlayer = AudioPlayer();
   final recordMethod = Recorder();
+  String firendType="";
+  String friendAgency="";
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    CheckType();
     checkContact();
+
     recordMethod.initRecorder();
+  }
+
+  void CheckType()async{
+    await for(var snap in _firestore.collection('user').doc(widget.friend.docID).snapshots()){
+      print("hhhh");
+      firendType=snap.get('type');
+      friendAgency=snap.get('myagent');
+
+    }
   }
 
   void checkContact() async {
@@ -130,7 +142,7 @@ class _ChatBody extends State<ChatBody> {
           child: Stack(
             children: [
               Container(
-                height: MediaQuery.of(context).size.height - 160,
+                height: MediaQuery.of(context).size.height - 210,
                 child: StreamBuilder<QuerySnapshot>(
                   stream: _auth.currentUser!.email == null
                       ? _firestore
@@ -709,8 +721,7 @@ class _ChatBody extends State<ChatBody> {
                                       _firestore.collection('user').doc(widget.friend.docID).get().then((value){
                                         String friendfamily=value.get('myfamily');
                                         if(friendfamily==""){
-                                          Navigator.pop(context);
-                                          SendDone();
+
                                         }
                                         else{
                                           _firestore.collection('family').doc(friendfamily).collection('count2').doc().set({
@@ -721,12 +732,40 @@ class _ChatBody extends State<ChatBody> {
                                             'coin':gifts[index].price
                                           });
                                         }
+
+
                                       });
                                     });
                                   }
                                   else{
                                     Navigator.pop(context);
                                     SendDone();
+                                  }
+                                }).then((value){
+                                  print(firendType);
+                                  print(friendAgency);
+                                  String docs="${DateTime.now().month.toString()}-${DateTime.now().day.toString()}";
+                                  if(firendType=="host"){
+                                    int lastincome=0;
+                                    _firestore.collection('agency').doc(friendAgency).collection('users').doc(widget.friend.docID).collection('income').doc(docs).get().then((value){
+                                      lastincome=int.parse(value.get('count'))+int.parse(gifts[index].price);
+                                    }).whenComplete((){
+                                      if(lastincome==0){
+                                        _firestore.collection('agency').doc(friendAgency).collection('users').doc(widget.friend.docID).collection('income').doc(docs).set({
+                                          'date':DateTime.now().toString(),
+                                          'hosttime':'0',
+                                          'numberradio':'0',
+                                          'count':gifts[index].price,
+                                        });
+                                      }
+                                      else{
+                                        _firestore.collection('agency').doc(friendAgency).collection('users').doc(widget.friend.docID).collection('income').doc(docs).update({
+                                          'count':lastincome.toString()
+                                        });
+                                      }
+                                    });
+
+
                                   }
                                 });
                               });

@@ -144,7 +144,7 @@ class _CreateFamilyBody extends State<CreateFamilyBody>{
                 else{
                   Allarm();
                 }
-              }, child: Text("انشاء العائلة 10000 ماسة"))
+              }, child: Text("انشاء العائلة 10000 عملة ذهبية"))
             ],
           ),
         ),
@@ -189,7 +189,7 @@ class _CreateFamilyBody extends State<CreateFamilyBody>{
                       ElevatedButton(onPressed: ()async{
                         int diamond=0;
                         await _firestore.collection('user').doc(_auth.currentUser!.uid).get().then((value){
-                          diamond=int.parse(value.get('daimond'));
+                          diamond=int.parse(value.get('coin'));
                         });
                         if(diamond>=10000){
                           setState(() {
@@ -228,7 +228,7 @@ class _CreateFamilyBody extends State<CreateFamilyBody>{
                               'type':'owner'
                             }).then((value){
                               _firestore.collection('user').doc(_auth.currentUser!.uid).update({
-                                'daimond':diamond.toString(),
+                                'coin':diamond.toString(),
                                 'myfamily':id
                               }).then((value){
                                 setState(() {
@@ -274,6 +274,8 @@ class _CreateFamilyBody extends State<CreateFamilyBody>{
                   children: [
                     Text("تم انشاء العائلة"),
                     ElevatedButton(onPressed: (){
+                      Navigator.pop(context);
+                      Navigator.pop(context);
                       Navigator.popAndPushNamed(context, MyFamilyBody.id);
                     }, child: Text("مشاهدة العائلة"))
                   ],

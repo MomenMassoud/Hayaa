@@ -344,6 +344,7 @@ class _AgencyCreationViewBodyState extends State<AgencyCreationViewBody> {
                         await _firestore.collection('agency').doc(doc).set({
                           'bio':_definefiled.text,
                           'name':_namefield.text,
+                          'doc':doc,
                           'photo':urlDownload,
                           'id':idd,
                           'photo2':urlDownload2,
@@ -354,7 +355,7 @@ class _AgencyCreationViewBodyState extends State<AgencyCreationViewBody> {
                           _firestore.collection('agency').doc(doc).collection('users').doc().set({
                             'userid':_auth.currentUser!.uid,
                             'type':'agent',
-                            'time':DateTime.now.toString(),
+                            'time':DateTime.now().toString(),
                           }).then((value){
                             _firestore.collection('user').doc(_auth.currentUser!.uid).update({
                               'myagent':doc,
@@ -390,6 +391,8 @@ class _AgencyCreationViewBodyState extends State<AgencyCreationViewBody> {
                     children: [
                       Text("تم انشاء الوكالة"),
                       ElevatedButton(onPressed: (){
+                        Navigator.pop(context);
+                        Navigator.pop(context);
                         Navigator.popAndPushNamed(context, AgencyAgentView.id);
                       }, child: Text("مشاهدة الوكالة"))
                     ],
@@ -444,7 +447,7 @@ class _AgencyCreationViewBodyState extends State<AgencyCreationViewBody> {
     });
   }
   _pickImage2() async {
-    XFile? xFile = await ImagePicker().pickImage(source: ImageSource.camera);
+    XFile? xFile = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (xFile == null) return;
     final tempImage = File(xFile.path);
     setState(() {
@@ -453,7 +456,7 @@ class _AgencyCreationViewBodyState extends State<AgencyCreationViewBody> {
     });
   }
   _pickImage3() async {
-    XFile? xFile = await ImagePicker().pickImage(source: ImageSource.camera);
+    XFile? xFile = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (xFile == null) return;
     final tempImage = File(xFile.path);
     setState(() {

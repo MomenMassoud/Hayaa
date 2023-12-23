@@ -1,9 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hayaa_main/features/post/widget/post_card.dart';
 import 'package:hayaa_main/models/user_model.dart';
-
 import '../../../models/comment_model.dart';
 import '../../../models/love_model.dart';
 import '../../../models/post_model.dart';
@@ -94,6 +93,7 @@ class _PostFriends extends State<PostFriends>{
                                     .collection('like')
                                     .snapshots(),
                                 builder: (context,snapshot){
+                                  int likeCounter=0;
                                   if (!snapshot.hasData) {
                                     return const Center(
                                       child: CircularProgressIndicator(
@@ -102,6 +102,7 @@ class _PostFriends extends State<PostFriends>{
                                     );
                                   }
                                   final masseges = snapshot.data?.docs;
+                                  likeCounter=masseges!.length;
                                   int i = 0;
                                   for (var massege in masseges!.reversed){
                                     String email = massege.get('email');
@@ -109,11 +110,9 @@ class _PostFriends extends State<PostFriends>{
                                     String name = massege.get('name');
                                     LoveModel love = LoveModel(email, name, photo);
                                     love.id = massege.id;
-                                    if (_auth.currentUser!.uid == email) {
+                                    if (_auth.currentUser!.uid == love.id) {
                                       posts[index].like = true;
                                       posts[index].indexLike = i;
-                                    } else {
-                                      posts[index].like = false;
                                     }
                                     posts[index].likes.add(love);
                                     i++;
@@ -125,6 +124,7 @@ class _PostFriends extends State<PostFriends>{
                                         .collection('comment')
                                         .snapshots(),
                                     builder: (context,snapshot){
+                                      int commentCounter=0;
                                       if (!snapshot.hasData) {
                                         return const Center(
                                           child: CircularProgressIndicator(
@@ -133,6 +133,7 @@ class _PostFriends extends State<PostFriends>{
                                         );
                                       }
                                       final masseges = snapshot.data?.docs;
+                                      commentCounter=masseges!.length;
                                       for (var massege in masseges!.reversed){
                                         String email = massege.get('email');
                                         String photo = massege.get('photo');
@@ -143,197 +144,7 @@ class _PostFriends extends State<PostFriends>{
                                         love.id = massege.id;
                                         posts[index].comments.add(love);
                                       }
-                                      return Padding(
-                                        padding: const EdgeInsets.only(top: 18.0,right: 20,left: 20),
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(4),
-                                          ),
-                                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                            children: <Widget>[
-                                              Padding(
-                                                padding: const EdgeInsets.all(15),
-                                                child: Row(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                                  children: <Widget>[
-                                                    Container(
-                                                      width: 20,
-                                                    ),
-                                                    Expanded(
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                          CrossAxisAlignment.start,
-                                                          children: <Widget>[
-                                                            Container(height: 5),
-                                                            Row(
-                                                              children: [
-                                                                InkWell(
-                                                                  onTap: () {
-                                                                    if (posts[index]
-                                                                        .owner == _auth.currentUser!.uid) {
-                                                                      // Navigator.pushNamed(
-                                                                      //     context,
-                                                                      //     AccountScreen
-                                                                      //         .ScreenRoute);
-                                                                    } else {
-                                                                      // UserModel us = UserModel(
-                                                                      //     posts[index]
-                                                                      //         .owner,
-                                                                      //     posts[index]
-                                                                      //         .ownerName,
-                                                                      //     "bio",
-                                                                      //     "id",
-                                                                      //     "gender",
-                                                                      //     "devicetoken",
-                                                                      //     posts[index]
-                                                                      //         .Owner_photo,
-                                                                      //     "seen");
-                                                                      // Navigator.push(
-                                                                      //     context,
-                                                                      //     MaterialPageRoute(
-                                                                      //         builder: (
-                                                                      //             builder) =>
-                                                                      //             ViewContactProfile(
-                                                                      //                 us)));
-                                                                    }
-                                                                  },
-                                                                  child: CircleAvatar(
-                                                                    backgroundImage:
-                                                                    CachedNetworkImageProvider(
-                                                                        posts[index]
-                                                                            .Owner_photo),
-                                                                  ),
-                                                                ),
-                                                                SizedBox(width: 20,),
-                                                                Text(
-                                                                  posts[index].ownerName,
-                                                                  style: const TextStyle(
-                                                                      color: Colors.black,
-                                                                      fontWeight:
-                                                                      FontWeight.bold,
-                                                                      fontSize: 15),
-                                                                ),
-                                                                SizedBox(width: 10,),
-                                                                Text(
-                                                                  "${posts[index].Day}/${posts[index].Month}/${posts[index].Year}",style: TextStyle(fontSize: 16),
-                                                                ),
-
-                                                              ],
-                                                            ),
-                                                            Container(height: 5),
-                                                            Text(
-                                                              posts[index].Text,style: TextStyle(fontSize: 16),
-                                                            ),
-                                                            Container(height: 5),
-
-                                                            InkWell(
-                                                              child: CachedNetworkImage(
-                                                                imageUrl: posts[index].Photo,
-                                                                fit: BoxFit.cover,
-                                                              ),
-                                                              onTap: (){
-                                                                //Navigator.push(context, MaterialPageRoute(builder: (builder)=>ViewMedia(posts[index].Photo)));
-                                                              },
-                                                            ),
-                                                            Container(height: 10),
-                                                            Row(
-                                                              children: [
-                                                                Row(
-                                                                  children: [
-                                                                    Text(posts[index]
-                                                                        .likes
-                                                                        .length
-                                                                        .toString()),
-                                                                    IconButton(
-                                                                      onPressed:
-                                                                          () async {
-                                                                        if (posts[index]
-                                                                            .like) {
-                                                                          final docRef = _firestore
-                                                                              .collection(
-                                                                              'post')
-                                                                              .doc(posts[
-                                                                          index]
-                                                                              .id);
-                                                                          docRef
-                                                                              .collection(
-                                                                              "like")
-                                                                              .doc(posts[
-                                                                          index]
-                                                                              .likes[posts[index]
-                                                                              .indexLike]
-                                                                              .id)
-                                                                              .delete();
-                                                                          setState(() {
-                                                                            posts[index]
-                                                                                .likes
-                                                                                .elementAt(
-                                                                                posts[index]
-                                                                                    .indexLike);
-                                                                          });
-                                                                        } else {
-                                                                          // final docRef =
-                                                                          // _firestore
-                                                                          //     .collection(
-                                                                          //     'post');
-                                                                          // docRef.doc(posts[index].id).collection('like').doc(source.id).set({
-                                                                          //   'email': source
-                                                                          //       .email,
-                                                                          //   'photo': source
-                                                                          //       .photo,
-                                                                          //   'name': source
-                                                                          //       .name,
-                                                                          // });
-                                                                        }
-                                                                      },
-                                                                      icon: posts[index]
-                                                                          .like
-                                                                          ? const Icon(Icons
-                                                                          .favorite_outlined)
-                                                                          : const Icon(Icons
-                                                                          .favorite_outline_sharp),
-                                                                      color: posts[index]
-                                                                          .like
-                                                                          ? Colors.red
-                                                                          : Colors.grey,
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                                Row(
-                                                                  children: [
-                                                                    Text(posts[index]
-                                                                        .comments
-                                                                        .length
-                                                                        .toString()),
-                                                                    IconButton(
-                                                                      onPressed: () {
-                                                                        // Navigator.push(
-                                                                        //     context,
-                                                                        //     MaterialPageRoute(
-                                                                        //         builder: (builder) =>
-                                                                        //             ViewComment(posts[index].id)));
-                                                                      },
-                                                                      icon: const Icon(
-                                                                          Icons.comment),
-                                                                      color: Colors.grey,
-                                                                    ),
-                                                                  ],
-                                                                )
-                                                              ],
-                                                            )
-                                                          ],
-                                                        )),
-                                                  ],
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      );
+                                      return PostCard(posts[index], commentCounter, likeCounter);
                                     },
                                   );
                                 },

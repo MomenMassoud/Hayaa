@@ -161,13 +161,10 @@ class _WallpaperStore extends State<WallpaperStore> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Text(
-                          'Buy Now',
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
+                      child: Text(
+                        'Buy Now',
+                        style: TextStyle(
+                          fontSize: 16,
                         ),
                       ),
                     ),

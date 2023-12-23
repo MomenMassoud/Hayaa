@@ -15,28 +15,19 @@ class OwnGiftCard extends StatelessWidget{
         constraints: BoxConstraints(
           maxWidth: MediaQuery.of(context).size.width - 45,
         ),
-        child: Card(
-          color: const Color(0xffdcf8c6),
-          elevation: 1,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(22),
-          ),
-          margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-          child: Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 10,
-                  right: 80,
-                  top: 9,
-                  bottom: 20,
-                ),
-                child:type=="svga"?SVGASimpleImage(
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child:type=="svga"?CircleAvatar(
+                radius: 40,
+                backgroundColor: Colors.white,
+                child: SVGASimpleImage(
                   resUrl: path,
-                ):CachedNetworkImage(imageUrl: path),
-              ),
-            ],
-          ),
+                ),
+              ):CachedNetworkImage(imageUrl: path),
+            ),
+          ],
         ),
       ),
     );

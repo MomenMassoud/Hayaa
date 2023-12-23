@@ -1,9 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-
 import '../../../group/view/family_month_view.dart';
 import '../../../group/view/family_news_view.dart';
-import '../../../group/view/family_race_view.dart';
 import '../../../group/view/family_weakly_view.dart';
 
 

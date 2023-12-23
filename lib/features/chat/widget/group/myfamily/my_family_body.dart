@@ -8,6 +8,7 @@ import 'package:hayaa_main/features/chat/widget/group/gravity/gravity_body.dart'
 import 'package:hayaa_main/features/chat/widget/group/myfamily/list_member_family.dart';
 import 'package:hayaa_main/features/chat/widget/group/myfamily/my_family_rank_list.dart';
 import 'package:hayaa_main/features/chat/widget/group/myfamily/my_family_request.dart';
+import 'package:hayaa_main/features/chat/widget/group/myfamily/send_invite_family.dart';
 import 'package:hayaa_main/models/family_model.dart';
 import 'package:hayaa_main/models/family_user_model.dart';
 
@@ -93,13 +94,14 @@ class _MyFamilyBody extends State<MyFamilyBody> {
           actions: [
             Row(
               children: [
-                Text("تعديل العائلة",style: TextStyle(fontSize: 18,color: Colors.white),),
+                Text("ارسال دعوة",style: TextStyle(fontSize: 18,color: Colors.white),),
                 IconButton(onPressed: (){
                   if(mytype=="owner"){
-                    print("object");
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => SendInviteFamily(familyID)));
                   }
                 },
-                    icon: Icon(Icons.note_alt,color: Colors.white,)
+                    icon: Icon(Icons.add,color: Colors.white,)
                 ),
               ],
             ),
@@ -111,10 +113,6 @@ class _MyFamilyBody extends State<MyFamilyBody> {
             },
                 icon: Icon(Icons.mail,color: Colors.white,)
             ),
-            // IconButton(onPressed: (){
-            //   Navigator.of(context).push(
-            //       MaterialPageRoute(builder: (context) => MyFamilyRankList(familyID)));
-            // }, icon: Icon(Icons.recommend,color: Colors.white,))
           ],
         ),
         backgroundColor: Colors.transparent,

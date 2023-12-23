@@ -154,7 +154,7 @@ class _ReplyCard extends State<ReplyCard>{
         child: Card(
           elevation: 1,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(22)
+              borderRadius: BorderRadius.circular(14)
           ),
           color: Colors.white,
           margin: const EdgeInsets.symmetric(horizontal: 15,vertical: 5),

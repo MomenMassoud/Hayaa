@@ -13,11 +13,18 @@ class MyAvatar extends StatefulWidget{
 class _MyAvatar extends State<MyAvatar>{
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  String mycar="";
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     checkDead();
+    getMycar();
+  }
+  void getMycar()async{
+    await for(var snap in _firestore.collection('user').doc(_auth.currentUser!.uid).snapshots()){
+      mycar=snap.get('myframe');
+    }
   }
   void checkDead()async{
     await for(var snap in _firestore.collection('user').doc(_auth.currentUser!.uid).collection('mylook').where('cat',isEqualTo: 'frame').snapshots()){
@@ -152,19 +159,32 @@ class _MyAvatar extends State<MyAvatar>{
                 children: [
                   ElevatedButton(
                     onPressed: () async{
+                      if(mycar==ss.docID){
+                        _firestore.collection('user').doc(_auth.currentUser!.uid).update({
+                          'myframe':''
+                        });
+                        setState(() {
+                          mycar='';
+                        });
+                      }
+                      else{
                       _firestore.collection('user').doc(_auth.currentUser!.uid).update({
-                        'myframe':id
+                      'myframe':id
                       });
+                      setState(() {
+                      mycar=id;
+                      });
+                      }
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.grey,
+                      primary: mycar==ss.docID?Colors.red:Colors.grey,
                       onPrimary: Colors.white,
                       elevation: 5,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    child: Text(
+                    child:mycar==ss.docID?Text("خلع"): Text(
                       'ارتداء',
                       style: TextStyle(
                         fontSize: 16, // Set the font size of the text

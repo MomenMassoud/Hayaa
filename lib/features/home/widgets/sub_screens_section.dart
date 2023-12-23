@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:hayaa_main/features/chat/widget/group/family_rank_list/family_body.dart';
 
 import '../../../core/Utils/app_images.dart';
 import 'gradient_rounded_container.dart';
@@ -83,7 +84,10 @@ class SubScreensSection extends StatelessWidget {
           ),
         ),
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => FamilyBody()));
+          },
           child: Stack(
             alignment: Alignment.center,
             children: [

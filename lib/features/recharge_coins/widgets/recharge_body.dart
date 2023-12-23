@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import '../../../core/Utils/app_images.dart';
 import '../../history_recharge/view/history_recharge_view.dart';
 import 'gold_coin.dart';
@@ -53,34 +52,6 @@ class _RechargeBody extends State<RechargeBody>with SingleTickerProviderStateMix
                 fontWeight: FontWeight.bold
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-              CircleAvatar(
-                radius: 13,
-                backgroundImage: AssetImage(AppImages.gold_coin),
-              ),
-              Text(
-                coin.toString(),
-                style: TextStyle(
-                    fontSize: 12
-                ),
-              ),
-            ],),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-              CircleAvatar(
-                radius: 13,
-                backgroundImage: AssetImage(AppImages.daimond),
-              ),
-              Text(
-                daimond.toString(),
-                style: TextStyle(
-                    fontSize: 12
-                ),
-              ),
-            ],)
           ],
         ),
         bottom: TabBar(
@@ -96,9 +67,19 @@ class _RechargeBody extends State<RechargeBody>with SingleTickerProviderStateMix
           indicatorSize: TabBarIndicatorSize.label,
         ),
         actions: [
+          CircleAvatar(
+            radius: 15,
+            backgroundImage: AssetImage(AppImages.gold_coin),
+          ),
+          Text(
+            coin.toString(),
+            style: TextStyle(
+                fontSize: 17,fontWeight: FontWeight.bold
+            ),
+          ),
           IconButton(onPressed: (){
             Navigator.pushNamed(context, HistoryRechargeView.id);
-          }, icon: Icon(Icons.receipt_long_outlined))
+          }, icon: Icon(Icons.receipt_long_outlined)),
         ],
       ),
       key: _globalKey,

@@ -19,24 +19,24 @@ class HorizontalEventSlider extends StatelessWidget {
     return CarouselSlider.builder(
         itemCount: images.length,
         itemBuilder:(context, index, realIndex) {
-          return Padding(
-            padding: const EdgeInsets.only(right: 8.0,left: 8.0),
-            child: Container(
-              height: 100,
-              width: 700,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: CachedNetworkImageProvider(images[index]),
-                  fit: BoxFit.cover
-                )
-              ),
+          return Container(
+            width: 900,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: CachedNetworkImageProvider(images[index]),
+                fit: BoxFit.fill
+              )
             ),
           );
         },
         options: CarouselOptions(
             autoPlayAnimationDuration: Duration(seconds: 1),
             autoPlayCurve: Curves.linear,
-            autoPlay: true
+            autoPlay: true,
+            height: 100,
+            aspectRatio: 9,
+            pageSnapping: true,
+            padEnds: true
         ),
     );
   }

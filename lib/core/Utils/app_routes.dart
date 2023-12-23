@@ -6,7 +6,7 @@ import 'package:hayaa_main/features/friend_list/widget/friend_requset.dart';
 import 'package:hayaa_main/features/hayaa_team/view/hayaa_team_view.dart';
 import 'package:hayaa_main/features/search/view/search_view.dart';
 import 'package:hayaa_main/features/setting/views/setting_view.dart';
-import '../../features/Badges/Badgespage.dart';
+import '../../features/Badges/views/badges_center.dart';
 import '../../features/VIP/view/vip_view.dart';
 import '../../features/agencies/views/agency_agent_view.dart';
 import '../../features/agencies/views/agency_host_view.dart';
@@ -19,6 +19,8 @@ import '../../features/auth/sinup/view/signup_view.dart';
 import '../../features/chat/group/view/create_family_view.dart';
 import '../../features/chat/group/view/family_view.dart';
 import '../../features/chat/one_to_one/view/chat_view.dart';
+import '../../features/chat/widget/group/family_rank_list/search_family.dart';
+import '../../features/chat/widget/group/family_rank_list/view_all_family_body.dart';
 import '../../features/chat/widget/one_to_one/chat_setting.dart';
 import '../../features/friend_list/view/friend_list_view.dart';
 import '../../features/friend_list/view/visitor_view.dart';
@@ -29,6 +31,7 @@ import '../../features/home/views/home_view.dart';
 import '../../features/messages/views/messages_view.dart';
 import '../../features/messages/widgets/invite_body.dart';
 import '../../features/mylook/view/my_look_view.dart';
+import '../../features/post/view/create_post_view.dart';
 import '../../features/profile/views/profile_edit_view.dart';
 import '../../features/recharge_coins/views/recharge_view.dart';
 import '../../features/salery/view/salery_view.dart';
@@ -59,7 +62,6 @@ Map<String, Widget Function(BuildContext)> appRoutes = {
   ProfileEditView.id:(context)=>const ProfileEditView(),
   VipView.id :(context)=>const VipView(),
   SaleryView.id:(context)=>const SaleryView(),
-  Badges.id:(context)=>const Badges(),
   SignupView.id:(context)=>const SignupView(),
   SettingView.id:(context)=> SettingView(),
   SearchView.id:(context)=>SearchView(),
@@ -75,4 +77,8 @@ Map<String, Widget Function(BuildContext)> appRoutes = {
   MyFamilyBody.id:(context)=>MyFamilyBody(),
   HayaaTeamView.id:(context)=>HayaaTeamView(),
   InviteBody.id:(context)=>InviteBody(),
+  ViewAllFamilyBody.id :(context)=>ViewAllFamilyBody(),
+  BadgesCenterView.id:(context)=>BadgesCenterView(),
+  SearchFamily.id:(context)=>SearchFamily(),
+  CreatePostView.id:(contex)=>CreatePostView(),
 };

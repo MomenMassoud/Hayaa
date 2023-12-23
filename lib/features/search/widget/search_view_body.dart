@@ -53,7 +53,7 @@ class _SearchViewBody extends State<SearchViewBody>{
             ),
           ),
           Container(
-            height: 500,
+            height: 350,
             child: StreamBuilder<QuerySnapshot>(
               stream:_firestore.collection('user').where('id',isGreaterThanOrEqualTo:value).where('id',isLessThanOrEqualTo: value + '\uf8ff').snapshots(),
               builder: (context,snapshot){

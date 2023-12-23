@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/Utils/app_colors.dart';
+
 class OwnMassege extends StatelessWidget{
   String msg;
   String date;
@@ -209,55 +211,60 @@ class OwnMassege extends StatelessWidget{
         constraints: BoxConstraints(
           maxWidth: MediaQuery.of(context).size.width - 45,
         ),
-        child: Card(
-          elevation: 1,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          color: const Color(0xffdcf8c6),
-          margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-          child: Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 10,
-                  right: 80,
-                  top: 9,
-                  bottom: 20,
-                ),
-                child: InkWell(
-                  onLongPress: () {
-                    myAlert();
-                  },
-                  child: Text(
-                    msg,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadiusDirectional.circular(12),
+              gradient: LinearGradient(
+                colors: [AppColors.app3MainColor, AppColors.appMainColor],
+                begin: Alignment.topLeft,
+                end: Alignment.topRight,
+              ),
+            ),
+            child: Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 10,
+                    right: 80,
+                    top: 9,
+                    bottom: 20,
+                  ),
+                  child: InkWell(
+                    onLongPress: () {
+                      myAlert();
+                    },
+                    child: Text(
+                      msg,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Positioned(
-                bottom: 4,
-                right: 10,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.done_all_rounded,
-                      color: seen == "false" ? Colors.grey : Colors.blue,
-                      size: 13,
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      date,
-                      style: const TextStyle(fontSize: 13, color: Colors.grey),
-                    ),
-                  ],
+                Positioned(
+                  bottom: 4,
+                  right: 10,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.done_all_rounded,
+                        color: seen == "false" ? Colors.grey : Colors.blue,
+                        size: 13,
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        date,
+                        style: const TextStyle(fontSize: 13, color: Colors.grey),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

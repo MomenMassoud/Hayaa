@@ -143,10 +143,8 @@ class _FrameStore extends State<FrameStore>{
               // Add the button and days here
               Row(
                 mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   ElevatedButton(
-
                     onPressed: () async {
                       bool always = false;
                       if (days == "always") {
@@ -159,13 +157,13 @@ class _FrameStore extends State<FrameStore>{
                       onPrimary: Colors.white,
                       elevation: 5,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(16),
                       ),
                     ),
                     child: Text(
                       'Buy Now',
                       style: TextStyle(
-                        fontSize: 16, // Set the font size of the text
+                        fontSize: 12, // Set the font size of the text
                       ),
                     ),
                   ),
@@ -179,13 +177,13 @@ class _FrameStore extends State<FrameStore>{
                       onPrimary: Colors.white,
                       elevation: 5,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(16),
                       ),
                     ),
                     child: Text(
                       'Send',
                       style: TextStyle(
-                        fontSize: 16, // Set the font size of the text
+                        fontSize: 12, // Set the font size of the text
                       ),
                     ),
                   ),

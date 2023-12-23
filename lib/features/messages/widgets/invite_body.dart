@@ -72,18 +72,32 @@ class _InviteBody extends State<InviteBody>{
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ElevatedButton(onPressed: ()async{
-                            await _firestore.collection('user').doc(_auth.currentUser!.uid).update({
-                              'myagent':invites[index].agent,
-                              'type':'host'
-                            }).then((value){
-                              _firestore.collection('agency').doc(invites[index].agent).collection('users').doc().set({
-                                'userid':_auth.currentUser!.uid.toString(),
-                                'type':'host',
-                                'time':DateTime.now().toString(),
+                            if(invites[index].type!="family"){
+                              await _firestore.collection('user').doc(_auth.currentUser!.uid).update({
+                                'myagent':invites[index].agent,
+                                'type':'host'
                               }).then((value){
-                                _firestore.collection('user').doc(_auth.currentUser!.uid).collection('invite').doc(invites[index].doc).delete();
+                                _firestore.collection('agency').doc(invites[index].agent).collection('users').doc(_auth.currentUser!.uid).set({
+                                  'userid':_auth.currentUser!.uid.toString(),
+                                  'type':'host',
+                                  'time':DateTime.now().toString(),
+                                }).then((value){
+                                  _firestore.collection('user').doc(_auth.currentUser!.uid).collection('invite').doc(invites[index].doc).delete();
+                                });
                               });
-                            });
+                            }
+                            else{
+                              await _firestore.collection('user').doc(_auth.currentUser!.uid).update({
+                                'myfamily':invites[index].agent,
+                              }).then((value){
+                                _firestore.collection('family').doc(invites[index].agent).collection('user').doc().set({
+                                  'type':'member',
+                                  'user':_auth.currentUser!.uid,
+                                }).then((value){
+                                  _firestore.collection('user').doc(_auth.currentUser!.uid).collection('invite').doc(invites[index].doc).delete();
+                                });
+                              });
+                            }
                           }, child: Icon(Icons.done)),
                         )
                       ],

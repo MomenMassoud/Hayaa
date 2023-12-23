@@ -48,7 +48,7 @@ class _AgencyJoiningViewBodyState extends State<AgencyJoiningViewBody> {
               AgencyModelS(massege.id, massege.get('name'), massege.get('photo'), massege.get('bio'))
             );
           }
-          return ListView.builder(
+          return agency.length>0?ListView.builder(
             itemCount: agency.length,
             itemBuilder: (context,index){
               if(index==0){
@@ -90,6 +90,34 @@ class _AgencyJoiningViewBodyState extends State<AgencyJoiningViewBody> {
                 );
               }
             },
+          ): Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                width: screenWidth * 0.4,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, AgencyCreationView.id);
+                  },
+                  child: const Text("Create Agency",
+                      style: TextStyle(color: Colors.black)),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("لا توجد اي وكالات",
+                      style: TextStyle(color: Colors.black)),
+                ],
+              ),
+            ],
           );
         },
       )

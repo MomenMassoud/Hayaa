@@ -13,11 +13,18 @@ class MyBubble extends StatefulWidget{
 class _MyBubble extends State<MyBubble>{
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  String mybubble="";
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     checkDead();
+    getMybubble();
+  }
+  void getMybubble()async{
+    await for(var snap in _firestore.collection('user').doc(_auth.currentUser!.uid).snapshots()){
+      mybubble=snap.get('mybubble');
+    }
   }
   void checkDead()async{
     await for(var snap in _firestore.collection('user').doc(_auth.currentUser!.uid).collection('mylook').where('cat',isEqualTo: 'bubble').snapshots()){
@@ -152,19 +159,32 @@ class _MyBubble extends State<MyBubble>{
                 children: [
                   ElevatedButton(
                     onPressed: () async{
-                      _firestore.collection('user').doc(_auth.currentUser!.uid).update({
-                        'mybubble':id
-                      });
+                      if(mybubble==ss.docID){
+                        _firestore.collection('user').doc(_auth.currentUser!.uid).update({
+                          'mybubble':''
+                        });
+                        setState(() {
+                          mybubble='';
+                        });
+                      }
+                      else{
+                        _firestore.collection('user').doc(_auth.currentUser!.uid).update({
+                          'mybubble':id
+                        });
+                        setState(() {
+                          mybubble=id;
+                        });
+                      }
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.grey,
+                      primary:mybubble==ss.docID?Colors.red: Colors.grey,
                       onPrimary: Colors.white,
                       elevation: 5,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    child: Text(
+                    child: mybubble==ss.docID?Text("خلع"):Text(
                       'ارتداء',
                       style: TextStyle(
                         fontSize: 16, // Set the font size of the text

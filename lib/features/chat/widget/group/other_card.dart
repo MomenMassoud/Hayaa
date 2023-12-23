@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hexagon/hexagon.dart';
 
@@ -23,7 +24,7 @@ class OtherCard extends StatelessWidget{
             width: 100,
             color: Colors.yellow,
             elevation: 8,
-            child: Image.asset(img),
+            child: CachedNetworkImage(imageUrl: img),
             inBounds: true,
           ),
         ],

@@ -45,8 +45,8 @@ class _MyFamilyRequest extends State<MyFamilyRequest>{
               }
               final masseges = snapshot.data?.docs;
               for (var massege in masseges!.reversed){
-                UserModel us=UserModel("email", "name", "gender", "photo", "massege.id", "phonenumber", "devicetoken", "daimond", "vip", "bio", "seen", "lang", "country", "type", "birthdate", "coin", "exp", "level");
-                us.docID=massege.id;
+                UserModel us=UserModel("email", "name", "gender", "photo", "massege.id", "phonenumber",massege.id, "daimond", "vip", "bio", "seen", "lang", "country", "type", "birthdate", "coin", "exp", "level");
+                us.docID=massege.get('id');
                 users.add(us);
               }
               return users.length>0?ListView.builder(
@@ -70,7 +70,6 @@ class _MyFamilyRequest extends State<MyFamilyRequest>{
                         users[index].country=massege.get('country');
                         users[index].daimond=massege.get('daimond');
                         users[index].coin=massege.get('coin');
-                        users[index].devicetoken=massege.get('devicetoken');
                         users[index].email=massege.get('email');
                         users[index].exp=massege.get('exp');
                         users[index].gender=massege.get('gender');
@@ -100,10 +99,10 @@ class _MyFamilyRequest extends State<MyFamilyRequest>{
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   ElevatedButton(onPressed: (){
-                                    Allarm(users[index].docID);
+                                    Allarm(users[index]);
                                   }, child: Text("قبول")),
                                   ElevatedButton(onPressed: (){
-                                    Allarm2(users[index].docID);
+                                    Allarm2(users[index]);
                                   }, child: Text("رفض")),
                                 ],
                               ),
@@ -127,7 +126,7 @@ class _MyFamilyRequest extends State<MyFamilyRequest>{
         ),
     );
   }
-  void Allarm(String docs) {
+  void Allarm(UserModel docs) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -143,22 +142,19 @@ class _MyFamilyRequest extends State<MyFamilyRequest>{
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       ElevatedButton(onPressed: ()async{
-                        await _firestore.collection('family').doc(widget.familyID).collection('req').doc(docs).delete().then((value){
-                          _firestore.collection('family').doc(widget.familyID).collection('user').doc(docs).set({
-                            'type':'normal',
-                            'user':docs,
+                        await _firestore.collection('user').doc(docs.docID).update({
+                          'myfamily':widget.familyID
+                        }).then((value){
+                          _firestore.collection('family').doc(widget.familyID).collection('user').doc().set({
+                            'user':docs.docID,
+                            'type':'member'
                           }).then((value){
-                            _firestore.collection('user').doc(docs).update({
-                              'myfamily':widget.familyID
-                            }).then((value){
-                              Navigator.pop(context);
-                              ReqDone();
-                            });
+                            _firestore.collection('family').doc(widget.familyID).collection('req').doc(docs.devicetoken).delete();
                           });
                         });
                       }, child: Text("نعم")),
-                      ElevatedButton(onPressed: (){
-                        Navigator.pop(context);
+                      ElevatedButton(onPressed: ()async{
+                        await _firestore.collection('family').doc(widget.familyID).collection('req').doc(docs.devicetoken).delete();
                       }, child: Text("لا")),
                     ],
                   )
@@ -167,7 +163,7 @@ class _MyFamilyRequest extends State<MyFamilyRequest>{
           );
         });
   }
-  void Allarm2(String docs) {
+  void Allarm2(UserModel docs) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -183,8 +179,7 @@ class _MyFamilyRequest extends State<MyFamilyRequest>{
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       ElevatedButton(onPressed: ()async{
-                        await _firestore.collection('family').doc(widget.familyID).collection('req').doc(docs).delete().then((value){
-
+                        await _firestore.collection('family').doc(widget.familyID).collection('req').doc(docs.devicetoken).delete().then((value){
                          Navigator.pop(context);
                          ReqCancell();
                         });

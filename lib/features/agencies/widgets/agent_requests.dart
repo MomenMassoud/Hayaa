@@ -75,10 +75,10 @@ class _AgentRequest extends State<AgentRequest> {
                           'type':'host',
                           'myagent':widget.id
                         }).then((value){
-                          _firestore.collection('agency').doc(widget.id).collection('users').doc().set({
+                          _firestore.collection('agency').doc(widget.id).collection('users').doc(ids[index]).set({
                             'userid':ids[index],
                             'type':'host',
-                            'time':DateTime.now.toString()
+                            'time':DateTime.now().toString(),
                           }).then((value){
                             _firestore.collection('agency').doc(widget.id).collection('req').doc(docs[index]).delete();
                           });

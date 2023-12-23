@@ -65,7 +65,7 @@ class _ViewComment extends State<ViewComment>{
 
                           },
                           style: TextStyle(
-                            color:  Colors.white70,
+                            color:  Colors.black,
                           ),
                           decoration: InputDecoration(
                               hintText: "قم بكتباة التعليق",
@@ -124,10 +124,10 @@ class _ViewComment extends State<ViewComment>{
                   onChanged: (value) {
 
                   },
+                  style: TextStyle(color: Colors.black),
                   decoration: InputDecoration(
                       hintText: "قم بكتباة التعليق",
-                      filled: true,
-                      fillColor: Colors.grey[100], // Change the background color
+                      fillColor: Colors.black, // Change the background color
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),

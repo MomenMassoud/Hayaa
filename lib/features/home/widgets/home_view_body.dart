@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import '../../../core/Utils/app_colors.dart';
 import '../../../core/Utils/app_images.dart';
@@ -136,29 +137,24 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   ];
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Container(
-          height: screenHight * 0.12,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [AppColors.app3MainColor, AppColors.appMainColor],
               begin: Alignment.topLeft,
               end: Alignment.topRight,
-              stops: [0.0, 0.8],
-              tileMode: TileMode.clamp,
             ),
           ),
         ),
         actions: [
           IconButton(
-              onPressed: () {}, icon: const Icon(Icons.manage_search_rounded)),
+              onPressed: () {}, icon: const Icon(Icons.search)),
           IconButton(
               onPressed: () {}, icon: const Icon(Icons.add_circle_outline)),
           SizedBox(
-            width: screenWidth * 0.25,
+            width: MediaQuery.of(context).size.width * 0.25,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -166,7 +162,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               GestureDetector(
                 onTap: () {},
                 child: SizedBox(
-                  width: screenWidth * 0.19,
+                  width: MediaQuery.of(context).size.width * 0.19,
                   child: const Text(
                     "مجاورون",
                     style: TextStyle(
@@ -179,7 +175,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SizedBox(
-                    width: screenWidth * 0.12,
+                    width: MediaQuery.of(context).size.width * 0.12,
                     child: const Text(
                       "شعبي",
                       style: TextStyle(
@@ -193,7 +189,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               GestureDetector(
                 onTap: () {},
                 child: SizedBox(
-                  width: screenWidth * 0.15,
+                  width: MediaQuery.of(context).size.width * 0.15,
                   child: const Text(
                     "متعلق",
                     style: TextStyle(
@@ -205,40 +201,77 @@ class _HomeViewBodyState extends State<HomeViewBody> {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: HorizontalEventSlider(
-                  screenHight: screenHight,
-                  screenWidth: screenWidth,
-                  images: images),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SubScreensSection(
-                screenHight: screenHight,
-                screenWidth: screenWidth,
+      body: Padding(
+        padding: const EdgeInsets.only(bottom: 18.0),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 18.0),
+                child: HorizontalEventSlider(
+                    screenHight: MediaQuery.of(context).size.height,
+                    screenWidth: MediaQuery.of(context).size.width,
+                    images: images),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: HorezintalSection(
-                  screenWidth: screenWidth,
-                  screenHight: screenHight,
-                  rooms: rooms),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: VerticalRoomsListViewBuilder(
-                  rooms: rooms,
-                  screenWidth: screenWidth,
-                  screenHight: screenHight),
-            )
-          ],
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SubScreensSection(
+                  screenHight: MediaQuery.of(context).size.height,
+                  screenWidth: MediaQuery.of(context).size.width,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: HorezintalSection(
+                    screenWidth: MediaQuery.of(context).size.width,
+                    screenHight: MediaQuery.of(context).size.height,
+                    rooms: rooms),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 18.0,bottom: 18),
+                child: HorizontalEventSlider(
+                    screenHight: MediaQuery.of(context).size.height,
+                    screenWidth: MediaQuery.of(context).size.width,
+                    images: images),
+              ),
+              Container(
+                height: 80,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children:generateFlagsWithCode(),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: VerticalRoomsListViewBuilder(
+                    rooms: rooms,
+                    screenWidth: MediaQuery.of(context).size.width,
+                    screenHight: MediaQuery.of(context).size.height),
+              )
+            ],
+          ),
         ),
       ),
     );
+  }
+  List<Widget> generateFlagsWithCode() {
+    List<String> countryCodes = Flags.flagsCode;
+    return countryCodes.map((code) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Flag.fromString(
+            code,
+            height: 40,
+            width: 60,
+          ),
+          SizedBox(height: 5),
+          Text(
+            code,
+            style: TextStyle(fontSize: 12),
+          ),
+        ],
+      );
+    }).toList();
   }
 }

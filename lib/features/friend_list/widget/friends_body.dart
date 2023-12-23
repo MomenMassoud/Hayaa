@@ -90,14 +90,12 @@ class _FriendsBody extends State<FriendsBody> {
             for (var massege in masseges!.reversed) {
               FriendID.add(massege.get('id'));
             }
-            print("friends ${FriendID[1]}");
             return ListView.builder(
                 itemCount: FriendID.length,
                 itemBuilder: (context, index) {
                   return StreamBuilder<QuerySnapshot>(
                       stream: _firestore.collection('user').where('id',isEqualTo: FriendID[index]).snapshots(),
                       builder: (context,snapshot){
-
                         if (!snapshot.hasData) {
                           return const Center(
                             child: CircularProgressIndicator(
@@ -127,23 +125,14 @@ class _FriendsBody extends State<FriendsBody> {
                                   friendsModels[index].photo),
                             ),
                             subtitle: Text(friendsModels[index].bio),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                ElevatedButton(
-                                    onPressed: ()  {
-                                      Navigator.pop(context);
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(builder: (context) => ChatBody(friendsModels[index])));
-                                    },
-                                    child: Text("دردشة")),
-                                ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(builder: (context) => VisitorProfile(friendsModels[index])));
-                                    }, child: Text("الحساب"))
-                              ],
-                            ),
+                            trailing: InkWell(
+                              onTap: (){
+                                Navigator.pop(context);
+                                Navigator.of(context).push(
+                                    MaterialPageRoute(builder: (context) => ChatBody(friendsModels[index]))
+                                );
+                              },
+                                child: Text("دردشة",style: TextStyle(color: Colors.blue,fontSize: 17,fontWeight: FontWeight.bold),))
                           ),
                         );
                       }

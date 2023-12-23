@@ -69,24 +69,18 @@ class _ReplayFileCard extends State<ReplayFileCard>{
         width: MediaQuery.of(context).size.width/1.8,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            color: Colors.blueGrey
         ),
-        child: Card(
-            margin: const EdgeInsets.all(3),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15)
-            ),
-            child:Stack(
-              children: [
-                InkWell(
-                    onTap: (){
-                      //Navigator.push(context, MaterialPageRoute(builder: (builder)=>ViewMedia(widget.url)));
-                    },
-                    child: CachedNetworkImage(imageUrl: widget.url,fit: BoxFit.fitWidth,)
-                )
+        child: Stack(
+          children: [
+            InkWell(
+                onTap: (){
+                  //Navigator.push(context, MaterialPageRoute(builder: (builder)=>ViewMedia(widget.url)));
+                },
+                child: CachedNetworkImage(imageUrl: widget.url,fit: BoxFit.fitWidth,)
+            )
 
-              ],
-            )          ),
+          ],
+        ),
       ),
     );
   }

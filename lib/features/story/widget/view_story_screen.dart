@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:story_view/controller/story_controller.dart';
@@ -16,7 +15,6 @@ class ViewStoryScreen extends StatefulWidget{
 }
 class _ViewStoryScreen extends State<ViewStoryScreen>{
   int ii=0;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final _auth =FirebaseAuth.instance;
   final StoryController controller = StoryController();
   @override
@@ -66,26 +64,18 @@ class _ViewStoryScreen extends State<ViewStoryScreen>{
       body: widget.user.email==_auth.currentUser!.email?SizedBox(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        child: Stack(
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height - 160,
-              child: StoryView(
-                onVerticalSwipeComplete: (direction) {
-                  if (direction == Direction.down) {
-                    Navigator.pop(context);
-                  }
-                },
-                indicatorColor: Colors.white,
-                controller: controller,
-                inline: true,
-                onComplete: () {
-                  Navigator.pop(context);
-                },
-                storyItems: storyItemss,
-              ),
-            ),
-          ],
+        child: StoryView(
+          onVerticalSwipeComplete: (direction) {
+            if (direction == Direction.down) {
+              Navigator.pop(context);
+            }
+          },
+          controller: controller,
+          inline: true,
+          onComplete: () {
+            Navigator.pop(context);
+          },
+          storyItems: storyItemss,
         ),
       ):StoryView(
         onVerticalSwipeComplete: (direction) {
@@ -100,29 +90,6 @@ class _ViewStoryScreen extends State<ViewStoryScreen>{
           Navigator.pop(context);
         },
         storyItems: storyItemss,
-        onStoryShow: (value) async{
-          bool view=false;
-          final tt= DateTime.now().toString().substring(10, 16);
-          print('index=${widget.user.storys[ii].id}');
-          await _firestore.collection('storys').doc(widget.user.storys[ii].id).collection('userview').where('name',isEqualTo: _auth.currentUser?.displayName).get().then((value){
-            view=true;
-            if(view==true){
-
-            }
-            else{
-
-            }
-          });
-          final docRef= _firestore.collection('storys');
-          docRef.doc(widget.user.storys[ii].id).collection('userview').doc(_auth.currentUser!.email).set({
-            'time':tt,
-            'day':DateTime.now().day.toString(),
-            'name':_auth.currentUser?.displayName
-          });
-
-          ii++;
-        },
-
       ),
     );
   }

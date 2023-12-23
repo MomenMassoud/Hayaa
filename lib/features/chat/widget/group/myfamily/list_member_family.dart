@@ -118,7 +118,18 @@ class _ListMemberFamily extends State<ListMemberFamily>{
                                 backgroundImage: CachedNetworkImageProvider(users[index].photo),
                               ),
                               subtitle: Text("BIO: ${users[index].bio}  - ID: ${users[index].id}",style: TextStyle(color: Colors.white),),
-                              trailing: ElevatedButton(onPressed: (){}, child: Text("طرد"))
+                              trailing: ElevatedButton(onPressed: ()async{
+                                String doc="";
+                                await _firestore.collection('family').doc(widget.familyID).collection('user').where('user',isEqualTo: users[index].docID).get().then((value){
+                                   doc=value.docs[0].id;
+                                }).then((value){
+                                  _firestore.collection('user').doc(users[index].docID).update({
+                                    'myfamily':''
+                                  }).then((value){
+                                    _firestore.collection('family').doc(widget.familyID).collection('user').doc(doc).delete();
+                                  });
+                                });
+                              }, child: Text("طرد"))
                             ):_mytype=="admin" && users[index].familytype=="owner"?ListTile(
                               title: Text("${users[index].name} - ${users[index].familytype}",style: TextStyle(color: Colors.white),),
                               leading: CircleAvatar(

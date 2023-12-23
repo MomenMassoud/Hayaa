@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import '../../../core/Utils/app_images.dart';
 
 
@@ -82,7 +81,7 @@ class _SaleryBody extends State<SaleryBody>{
                       SizedBox(height: 30,),
                       Card(
                         margin: const EdgeInsets.only(
-                            left: 2, right: 2, bottom: 2),
+                            left: 7, right: 7, bottom: 5),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(40)),
                         child: TextField(
@@ -94,7 +93,8 @@ class _SaleryBody extends State<SaleryBody>{
                               number="";
                             }
                             else{
-                              number="$number$value";
+                              number="$value";
+                              print(number);
                             }
                           },
                           controller: _controller,
@@ -112,7 +112,7 @@ class _SaleryBody extends State<SaleryBody>{
                       SizedBox(height: 20,),
                       ElevatedButton(onPressed: ()async{
                         if(number!=""){
-                          double value=double.tryParse(_controller.text) ?? 0.0;
+                          double value=double.parse(number);
                           if(value>=1000){
                             double coinValue = value; // Initial value of the coin
                             double discountPercentage = 30.0; // Discount percentage
@@ -121,8 +121,8 @@ class _SaleryBody extends State<SaleryBody>{
                             double newCoinValue = discountedValue;
                             int mycoins=int.parse(coin);
                             mycoins=mycoins+newCoinValue.toInt();
-                            int newDaimont = int.parse(daimond)-int.parse(_controller.text);
-                            Allarm(newCoinValue.toInt(),int.parse(_controller.text),mycoins,newDaimont);
+                            int newDaimont = int.parse(daimond)-int.parse(number);
+                            Allarm(newCoinValue.toInt(),int.parse(number),mycoins,newDaimont);
                           }
                           else{
                             NotSend();
@@ -169,20 +169,25 @@ class _SaleryBody extends State<SaleryBody>{
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text("هل انت متاكد من التحويل$Daimond الي $coin"),
+                  Text("هل انت متاكد من تحويل $Daimond ماسة الي $coin عملة ذهبية"),
                   SizedBox(height: 70,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ElevatedButton(onPressed: ()async{
-                        await _firestore.collection('user').doc(_auth.currentUser!.uid).update({
-                          'coin':newCoin.toString(),
-                          'daimond':newDaimond.toString(),
-                        }).then((value){
-                          _controller.clear();
-                          Navigator.pop(context);
-                          SendDone();
-                        });
+                        if(newDaimond<0){
+                          NotSend();
+                        }
+                        else{
+                          await _firestore.collection('user').doc(_auth.currentUser!.uid).update({
+                            'coin':newCoin.toString(),
+                            'daimond':newDaimond.toString(),
+                          }).then((value){
+                            _controller.clear();
+                            Navigator.pop(context);
+                            SendDone();
+                          });
+                        }
                       }, child: Text("تحويل")),
                       ElevatedButton(onPressed: (){
                         Navigator.pop(context);

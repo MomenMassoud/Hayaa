@@ -27,7 +27,7 @@ class UserModel{
   int sizefollowing=0;
   late String exp2;
   late String level2;
-  late String docID;
+   String docID="";
   late String myfamily;
   late String familytype;
   List<FamilyRankModel> familyRank=[];

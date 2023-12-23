@@ -16,11 +16,20 @@ class _AgencyHostViewBody extends State<AgencyHostViewBody>{
   final FirebaseFirestore _firestore=FirebaseFirestore.instance;
   final FirebaseAuth _auth =FirebaseAuth.instance;
   String myagency="";
+  int myDaiomond=0;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     print(DateTime.now());
+    getMyDaimond();
+  }
+  void getMyDaimond()async{
+    await for(var snap in _firestore.collection('user').doc(_auth.currentUser!.uid).snapshots()){
+      setState(() {
+        myDaiomond=int.parse(snap.get('daimond'));
+      });
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -68,6 +77,7 @@ class _AgencyHostViewBody extends State<AgencyHostViewBody>{
                 stream: _firestore.collection('agency').doc(myagency).collection('users').doc(doc).collection('income').snapshots(),
                 builder: (context,snapshot){
                   List<DataRow> rows = [];
+                  int total=0;
                   if (!snapshot.hasData) {
                     return const Center(
                       child: CircularProgressIndicator(
@@ -78,6 +88,7 @@ class _AgencyHostViewBody extends State<AgencyHostViewBody>{
                   final masseges = snapshot.data?.docs;
                   for (var massege in masseges!.reversed){
                     DateTime date=DateTime.parse(massege.get('date'));
+                    total+=int.parse(massege.get('count'));
                     DataRow row = DataRow(
                       cells: [
                         DataCell(Text("${date.day}/${date.month}")),
@@ -163,7 +174,7 @@ class _AgencyHostViewBody extends State<AgencyHostViewBody>{
                                                   fontSize: screenWidth * 0.04),
                                             ),
                                             Text(
-                                              "100",
+                                              total<=myDaiomond?total.toString():myDaiomond.toString(),
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: screenWidth * 0.1),

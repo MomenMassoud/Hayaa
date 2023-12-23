@@ -13,12 +13,20 @@ class MyCar extends StatefulWidget {
 class _Mycar extends State<MyCar> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  String mycar="";
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     checkDead();
+    getMycar();
   }
+  void getMycar()async{
+    await for(var snap in _firestore.collection('user').doc(_auth.currentUser!.uid).snapshots()){
+      mycar=snap.get('mycar');
+    }
+  }
+  
   void checkDead()async{
     await for(var snap in _firestore.collection('user').doc(_auth.currentUser!.uid).collection('mylook').where('cat',isEqualTo: 'car').snapshots()){
       DateTime BuyTime = DateTime.parse(snap.docs[0].get('time'));
@@ -151,19 +159,33 @@ class _Mycar extends State<MyCar> {
                 children: [
                   ElevatedButton(
                     onPressed: () async{
-                      _firestore.collection('user').doc(_auth.currentUser!.uid).update({
-                        'mycar':id
-                      });
+                      if(mycar==ss.docID){
+                        _firestore.collection('user').doc(_auth.currentUser!.uid).update({
+                          'mycar':''
+                        });
+                        setState(() {
+                          mycar='';
+                        });
+                      }
+                      else{
+                        _firestore.collection('user').doc(_auth.currentUser!.uid).update({
+                          'mycar':id
+                        });
+                        setState(() {
+                          mycar=id;
+                        });
+                      }
+
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.grey,
+                      primary:mycar==ss.docID?Colors.red: Colors.grey,
                       onPrimary: Colors.white,
                       elevation: 5,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    child: Text(
+                    child:mycar==ss.docID?Text("خلع"): Text(
                       'ارتداء',
                       style: TextStyle(
                         fontSize: 16, // Set the font size of the text

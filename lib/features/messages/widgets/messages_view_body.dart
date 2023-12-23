@@ -23,10 +23,19 @@ class _MessagesViewBody extends State<MessagesViewBody>{
   final FirebaseAuth _auth=FirebaseAuth.instance;
   final FirebaseFirestore _firestore=FirebaseFirestore.instance;
   int count=0;
+  int InviteCount=0;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getInviteCount();
+  }
+  getInviteCount()async{
+    await for(var snap in _firestore.collection('user').doc(_auth.currentUser!.uid).collection('invite').snapshots()){
+      setState(() {
+        InviteCount=snap.size;
+      });
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -63,17 +72,32 @@ class _MessagesViewBody extends State<MessagesViewBody>{
                 Navigator.pushNamed(context, SearchView.id);
               },
               icon: Icon(Icons.search,color: Colors.white,)),
-          IconButton(
+          InviteCount==0?IconButton(
               onPressed: (){
                 Navigator.pushNamed(context, InviteBody.id);
               },
-              icon: Icon(Icons.mail,color: Colors.white,))
+              icon: Icon(Icons.mail,color: Colors.white,)
+          ):Stack(
+            children: [
+              IconButton(
+                  onPressed: (){
+                    Navigator.pushNamed(context, InviteBody.id);
+                  },
+                  icon: Icon(Icons.mail,color: Colors.white,)
+              ),
+              CircleAvatar(
+                radius: 5,
+                backgroundColor: Colors.red,
+                child: Text(InviteCount.toString()),
+              )
+            ],
+          )
         ],
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream:_firestore.collection('contacts').where('owner',isEqualTo: _auth.currentUser!.uid).snapshots(),
+        stream: _firestore.collection('user').where('doc',isEqualTo: _auth.currentUser!.uid).snapshots(),
         builder: (context,snapshot){
-          List<FriendsCardModel> friendIDs=[];
+          String myID="";
           if (!snapshot.hasData) {
             return const Center(
               child: CircularProgressIndicator(
@@ -83,113 +107,168 @@ class _MessagesViewBody extends State<MessagesViewBody>{
           }
           final masseges = snapshot.data?.docs;
           for (var massege in masseges!.reversed){
-            friendIDs.add(FriendsCardModel(massege.get('mycontact'), massege.get('type'), massege.get('time'), massege.get('lastmsg')));
+            myID=massege.get('id');
           }
-          return friendIDs.length>0?ListView.builder(
-              itemCount: friendIDs.length,
-              itemBuilder: (context,index){
-                return StreamBuilder<QuerySnapshot>(
-                  stream: _firestore.collection('user').where('doc',isEqualTo: friendIDs[index].docID).snapshots(),
-                  builder: (context,snapshot){
-                    if (!snapshot.hasData) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          backgroundColor: Colors.blue,
-                        ),
-                      );
-                    }
-                    final masseges = snapshot.data?.docs;
-                    for (var massege in masseges!.reversed){
-                      friendIDs[index].photo=massege.get('photo');
-                      friendIDs[index].name=massege.get('name');
-                    }
-                    if(index==0){
-                      return Column(
-                        children: [
-                          ListTile(
-                            leading: CircleAvatar(
-                              backgroundImage: AssetImage("lib/core/Utils/assets/images/logo.png"),
-                            ),
-                            title: Text("فريق Hayaa"),
-                            subtitle: Text("اضغط لمعرفة اخر الاخبار"),
-                            trailing: Icon(Icons.arrow_forward_ios_rounded),
-                            onTap: (){
-                              Navigator.pushNamed(context, HayaaTeamView.id);
-                            },
-                          ),
-                          ListTile(
-                            leading: Icon(Icons.person_add_alt_1_sharp,color: Colors.blue,),
-                            title: Text("طلبات الصداقة"),
-                            subtitle: Text("اضغط لمعرفة من ارسل لك طلب صداقة"),
-                            trailing: Icon(Icons.arrow_forward_ios_rounded),
-                            onTap: (){
-                              Navigator.pushNamed(context, FriendReuest.id);
-                            },
-                          ),
-                          Divider(thickness: 0.4,),
-                          ListTile(
-                            title: Text(friendIDs[index].name),
-                            subtitle: Text(friendIDs[index].lastmsg),
-                            leading: CircleAvatar(
-                              backgroundImage: CachedNetworkImageProvider(friendIDs[index].photo),
-                            ),
-                            trailing: Text(friendIDs[index].time),
-                            onTap: (){
-                              FriendsModel ff= FriendsModel("email", "id", "docID", "photo", "name", "phonenumber", "gender");
-                              ff.photo=friendIDs[index].photo;
-                              ff.docID=friendIDs[index].docID;
-                              ff.name=friendIDs[index].name;
-                              Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (context) => ChatBody(ff)));
-                            },
-                          ),
-                        ],
-                      );
-                    }
-                    else{
-                      return ListTile(
-                        onTap: (){
-                          FriendsModel ff= FriendsModel("email", "id", "docID", "photo", "name", "phonenumber", "gender");
-                          ff.photo=friendIDs[index].photo;
-                          ff.docID=friendIDs[index].docID;
-                          ff.name=friendIDs[index].name;
-                          Navigator.of(context).push(
-                              MaterialPageRoute(builder: (context) => ChatBody(ff)));
-                        },
-                        title: Text(friendIDs[index].name),
-                        subtitle: Text(friendIDs[index].lastmsg),
-                        leading: CircleAvatar(
-                          backgroundImage: CachedNetworkImageProvider(friendIDs[index].photo),
-                        ),
-                        trailing: Text(friendIDs[index].time),
-                      );
-                    }
-                  },
+          return StreamBuilder<QuerySnapshot>(
+            stream: _firestore.collection('friendreq').where('owner',isEqualTo: myID).snapshots(),
+            builder: (context,snapshot){
+              int friendreqCount=0;
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.blue,
+                  ),
                 );
               }
-          ):Column(
-            children: [
-              ListTile(
-                leading: CircleAvatar(
-                  backgroundImage: AssetImage("lib/core/Utils/assets/images/logo.png"),
-                ),
-                title: Text("فريق Hayaa"),
-                subtitle: Text("اضغط لمعرفة اخر الاخبار"),
-                trailing: Icon(Icons.arrow_forward_ios_rounded),
-                onTap: (){
-                  Navigator.pushNamed(context, HayaaTeamView.id);
+              final masseges = snapshot.data?.docs;
+              friendreqCount=masseges!.length;
+              for (var massege in masseges!.reversed){}
+              return StreamBuilder<QuerySnapshot>(
+                stream:_firestore.collection('contacts').where('owner',isEqualTo: _auth.currentUser!.uid).snapshots(),
+                builder: (context,snapshot){
+                  List<FriendsCardModel> friendIDs=[];
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        backgroundColor: Colors.blue,
+                      ),
+                    );
+                  }
+                  final masseges = snapshot.data?.docs;
+                  for (var massege in masseges!.reversed){
+                    friendIDs.add(FriendsCardModel(massege.get('mycontact'), massege.get('type'), massege.get('time'), massege.get('lastmsg')));
+                  }
+                  return friendIDs.length>0?ListView.builder(
+                      itemCount: friendIDs.length,
+                      itemBuilder: (context,index){
+                        return StreamBuilder<QuerySnapshot>(
+                          stream: _firestore.collection('user').where('doc',isEqualTo: friendIDs[index].docID).snapshots(),
+                          builder: (context,snapshot){
+                            if (!snapshot.hasData) {
+                              return const Center(
+                                child: CircularProgressIndicator(
+                                  backgroundColor: Colors.blue,
+                                ),
+                              );
+                            }
+                            final masseges = snapshot.data?.docs;
+                            for (var massege in masseges!.reversed){
+                              friendIDs[index].photo=massege.get('photo');
+                              friendIDs[index].name=massege.get('name');
+                            }
+                            if(index==0){
+                              return Column(
+                                children: [
+                                  ListTile(
+                                    leading: CircleAvatar(
+                                      backgroundImage: AssetImage("lib/core/Utils/assets/images/logo.png"),
+                                    ),
+                                    title: Text("فريق Hayaa"),
+                                    subtitle: Text("اضغط لمعرفة اخر الاخبار"),
+                                    trailing: Icon(Icons.arrow_forward_ios_rounded),
+                                    onTap: (){
+                                      Navigator.pushNamed(context, HayaaTeamView.id);
+                                    },
+                                  ),
+                                  ListTile(
+                                    leading: Icon(Icons.person_add_alt_1_sharp,color: Colors.blue,),
+                                    title: Text("طلبات الصداقة"),
+                                    subtitle: Text("اضغط لمعرفة من ارسل لك طلب صداقة"),
+                                    trailing: friendreqCount==0? Icon(Icons.arrow_forward_ios_rounded):Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 5,
+                                          backgroundColor: Colors.red,
+                                          child: Text(friendreqCount.toString()),
+                                        ),
+                                        Icon(Icons.arrow_forward_ios_rounded)
+                                      ],
+                                    ),
+                                    onTap: (){
+                                      Navigator.pushNamed(context, FriendReuest.id);
+                                    },
+                                  ),
+                                  Divider(thickness: 0.4,),
+                                  ListTile(
+                                    title: Text(friendIDs[index].name),
+                                    subtitle: Text(friendIDs[index].lastmsg),
+                                    leading: CircleAvatar(
+                                      backgroundImage: CachedNetworkImageProvider(friendIDs[index].photo),
+                                    ),
+                                    trailing: Text(friendIDs[index].time),
+                                    onTap: (){
+                                      FriendsModel ff= FriendsModel("email", "id", "docID", "photo", "name", "phonenumber", "gender");
+                                      ff.photo=friendIDs[index].photo;
+                                      ff.docID=friendIDs[index].docID;
+                                      ff.name=friendIDs[index].name;
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(builder: (context) => ChatBody(ff)));
+                                    },
+                                  ),
+                                ],
+                              );
+                            }
+                            else{
+                              return ListTile(
+                                onTap: (){
+                                  FriendsModel ff= FriendsModel("email", "id", "docID", "photo", "name", "phonenumber", "gender");
+                                  ff.photo=friendIDs[index].photo;
+                                  ff.docID=friendIDs[index].docID;
+                                  ff.name=friendIDs[index].name;
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) => ChatBody(ff)));
+                                },
+                                title: Text(friendIDs[index].name),
+                                subtitle: Text(friendIDs[index].lastmsg),
+                                leading: CircleAvatar(
+                                  backgroundImage: CachedNetworkImageProvider(friendIDs[index].photo),
+                                ),
+                                trailing: Text(friendIDs[index].time),
+                              );
+                            }
+                          },
+                        );
+                      }
+                  ):Column(
+                    children: [
+                      ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: AssetImage("lib/core/Utils/assets/images/logo.png"),
+                        ),
+                        title: Text("فريق Hayaa"),
+                        subtitle: Text("اضغط لمعرفة اخر الاخبار"),
+                        trailing: Icon(Icons.arrow_forward_ios_rounded),
+                        onTap: (){
+                          Navigator.pushNamed(context, HayaaTeamView.id);
+                        },
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.person_add_alt_1_sharp,color: Colors.blue,),
+                        title: Text("طلبات الصداقة"),
+                        subtitle: Text("اضغط لمعرفة من ارسل لك طلب صداقة"),
+                        trailing:friendreqCount==0? Icon(Icons.arrow_forward_ios_rounded):Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CircleAvatar(
+                              radius: 5,
+                              backgroundColor: Colors.red,
+                              child: Text(friendreqCount.toString()),
+                            ),
+                            Icon(Icons.arrow_forward_ios_rounded)
+                          ],
+                        ),
+                        onTap: (){
+                          Navigator.pushNamed(context, FriendReuest.id);
+                        },
+                      ),
+                    ],
+                  );
                 },
-              ),
-              ListTile(
-                leading: Icon(Icons.person_add_alt_1_sharp,color: Colors.blue,),
-                title: Text("طلبات الصداقة"),
-                subtitle: Text("اضغط لمعرفة من ارسل لك طلب صداقة"),
-                trailing: Icon(Icons.arrow_forward_ios_rounded),
-                onTap: (){
-                  Navigator.pushNamed(context, FriendReuest.id);
-                },
-              ),
-            ],
+              );
+            },
           );
         },
       )

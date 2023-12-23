@@ -241,7 +241,6 @@ class _StoryViewBody extends State<StoryViewBody>{
                           }
                         }
                         if(index==0){
-                          print("myfriends[index].photo   ${myfriends[index].photo}");
                           return myfriends[index].storys.isNotEmpty?Row(
                             children: [
                               InkWell(
@@ -255,10 +254,10 @@ class _StoryViewBody extends State<StoryViewBody>{
                                   }
                                 },
                                 child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: const EdgeInsets.only(top: 8.0),
                                   child: Container(
-                                    height: 80,
-                                    width: 80,
+                                    height: 10,
+                                    width: 10,
                                     decoration: BoxDecoration(
                                       color: Colors.green.shade300,
                                         shape: BoxShape.circle,

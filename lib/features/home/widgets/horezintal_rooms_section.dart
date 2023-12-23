@@ -53,8 +53,8 @@ class HorezintalSection extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(right: 8, top: 8),
-                child: Text("قد تكون مهتماً",
+                padding: const EdgeInsets.only(right: 8, top: 5),
+                child: Text("غرف الاصدقاء",
                     style: TextStyle(
                         color: Colors.pink,
                         fontSize: screenHight * 0.02,
