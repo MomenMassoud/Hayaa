@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hayaa_main/features/chat/widget/common/view_photo.dart';
 
 
 class OwnFileCard extends StatefulWidget {
@@ -112,7 +113,8 @@ class _OwnFileCard extends State<OwnFileCard>{
                     ],
                   ):InkWell(
                       onTap: (){
-                        //Navigator.push(context, MaterialPageRoute(builder: (builder)=>ViewMedia(widget.url,)));
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => ViewPhoto(widget.url)));
                       },
                       child: CachedNetworkImage(imageUrl: widget.url,fit: BoxFit.fitHeight)),
 
@@ -122,59 +124,6 @@ class _OwnFileCard extends State<OwnFileCard>{
       ),
     );
   }
-  // Future openFileUrl(String url,String fileName)async{
-  //   try{
-  //     final appStorage= await getExternalStorageDirectory();
-  //     final test =File('${appStorage?.path}/$fileName');
-  //     final cc = await test.exists();
-  //     if(cc){
-  //       OpenFile.open(test.path);
-  //     }
-  //     else{
-  //       await _requestPermision(Permission.storage);
-  //       final file=await downloadFile(url,fileName);
-  //       if (file==null) return null;
-  //       setState(() {
-  //         downloaded=true;
-  //       });
-  //       print("path : ${file.path}");
-  //       OpenFile.open(file.path);
-  //     }
-  //   }
-  //   catch(e){
-  //     print(e);
-  //   }
-  // }
-  // Future<bool?>_requestPermision (Permission per)async{
-  //   if(await per.isGranted){
-  //     return true;
-  //   }
-  //   else{
-  //     await per.request();
-  //   }
-  //   return null;
-  // }
-  // Future<File?> downloadFile(String url,String Name)async{
-  //   try{
-  //     final appStorage= await getExternalStorageDirectory();
-  //     final file =File('${appStorage?.path}/$Name');
-  //     final response = await Dio().get(
-  //         url,
-  //         options: Options(
-  //           responseType: ResponseType.bytes,
-  //           followRedirects: false,
-  //         )
-  //     );
-  //     final ref = file.openSync(mode: FileMode.write);
-  //     ref.writeFromSync(response.data);
-  //     await ref.close();
-  //     return file;
-  //   }
-  //   catch(e){
-  //     print(e);
-  //     return null;
-  //   }
-  // }
 }
 
 

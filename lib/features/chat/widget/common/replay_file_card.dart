@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:hayaa_main/features/chat/widget/common/view_photo.dart';
 
 
 class ReplayFileCard extends StatefulWidget {
@@ -74,7 +75,8 @@ class _ReplayFileCard extends State<ReplayFileCard>{
           children: [
             InkWell(
                 onTap: (){
-                  //Navigator.push(context, MaterialPageRoute(builder: (builder)=>ViewMedia(widget.url)));
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => ViewPhoto(widget.url)));
                 },
                 child: CachedNetworkImage(imageUrl: widget.url,fit: BoxFit.fitWidth,)
             )
