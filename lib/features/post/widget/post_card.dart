@@ -32,7 +32,7 @@ class _PostCard extends State<PostCard>{
               ),
               SizedBox(width: 10,),
               Text(widget.post.ownerName,style: TextStyle(fontSize: 18),),
-              SizedBox(width: 150,),
+              SizedBox(width: 100,),
               Text("${widget.post.Day}/${widget.post.Month}/${widget.post.Year}")
             ],
           ),

@@ -83,7 +83,7 @@ class _FamilyMonthBody extends State<FamilyMonthBody>{
                           familys[index].count+=int.parse(massege.get('coin'));
                         }
                         if(familys[index].doc==myfamily){
-                          familys[index].name="${familys[index].name} (your Family)";
+                          familys[index].name="${familys[index].name}(you)";
                         }
                         if(index==familys.length-1){
                           familys.sort((a, b) => b.count.compareTo(a.count));
@@ -121,7 +121,7 @@ class _FamilyMonthBody extends State<FamilyMonthBody>{
                                         userName: familys[0].name)
                                   ];
                                   List<String> coin = [];
-                                  if (familys[2].count < 1000) {
+                                  if (familys[2].count < 10000) {
                                     coin.add(familys[2].count.toString());
                                   } else if (familys[2].count >= 10000 &&
                                       familys[index].count < 1000000) {
@@ -133,7 +133,7 @@ class _FamilyMonthBody extends State<FamilyMonthBody>{
                                         "${(familys[2].count / 1000000).toString()} K");
                                   }
                                   print("");
-                                  if (familys[1].count < 1000) {
+                                  if (familys[1].count < 10000) {
                                     coin.add(familys[1].count.toString());
                                   } else if (familys[1].count >= 10000 &&
                                       familys[index].count < 1000000) {
@@ -145,7 +145,7 @@ class _FamilyMonthBody extends State<FamilyMonthBody>{
                                         "${(familys[1].count / 1000000).toString()} K");
                                   }
                                   print("");
-                                  if (familys[0].count < 1000) {
+                                  if (familys[0].count < 10000) {
                                     coin.add(familys[0].count.toString());
                                   } else if (familys[0].count >= 10000 &&
                                       familys[index].count < 1000000) {

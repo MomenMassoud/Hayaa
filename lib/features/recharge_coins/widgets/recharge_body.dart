@@ -40,47 +40,51 @@ class _RechargeBody extends State<RechargeBody>with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-                "Google Wallet",
-              style: TextStyle(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(180.0),
+        child: AppBar(
+          backgroundColor: Colors.blueAccent,
+          title:Text(
+            "Google Wallet",
+            style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold
-              ),
-            ),
-          ],
-        ),
-        bottom: TabBar(
-          indicatorPadding: EdgeInsets.all(5),
-          controller: _tabController,
-          tabs: <Widget>[
-            Tab(
-              child: Text("عملة",style: TextStyle(fontSize: 20),).tr(args: ['عملة']),
-            ),
-          ],
-          labelColor: Colors.white, // Color of the selected tab label// Color of unselected tab labels
-          indicatorColor: Colors.orange,
-          indicatorSize: TabBarIndicatorSize.label,
-        ),
-        actions: [
-          CircleAvatar(
-            radius: 15,
-            backgroundImage: AssetImage(AppImages.gold_coin),
-          ),
-          Text(
-            coin.toString(),
-            style: TextStyle(
-                fontSize: 17,fontWeight: FontWeight.bold
             ),
           ),
-          IconButton(onPressed: (){
-            Navigator.pushNamed(context, HistoryRechargeView.id);
-          }, icon: Icon(Icons.receipt_long_outlined)),
-        ],
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(50.0),
+            child: TabBar(
+              indicatorPadding: EdgeInsets.all(5),
+              controller: _tabController,
+              tabs: <Widget>[
+                Tab(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        backgroundImage: AssetImage(AppImages.gold_coin),
+                        radius: 20,
+                      ),
+                      SizedBox(width: 7,),
+                      Text(coin.toString(),style: TextStyle(fontSize: 20),),
+
+                    ],
+                  ),
+                ),
+              ],
+              labelColor: Colors.white, // Color of the selected tab label// Color of unselected tab labels
+              indicatorColor: Colors.orange,
+              indicatorSize: TabBarIndicatorSize.label,
+
+            ),
+          ),
+          actions: [
+            IconButton(onPressed: (){
+              Navigator.pushNamed(context, HistoryRechargeView.id);
+            }, icon: Icon(Icons.receipt_long_outlined)),
+          ],
+        ),
       ),
       key: _globalKey,
       body: TabBarView(

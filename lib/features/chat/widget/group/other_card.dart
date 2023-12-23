@@ -14,35 +14,29 @@ class OtherCard extends StatelessWidget{
   OtherCard(this.Name,this.index,this.bio,this.Number,this.img);
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(Name,style: TextStyle(fontSize: 20,color: Colors.white)),
-      leading: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(index,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),),
-          HexagonWidget.pointy(
-            width: 100,
-            color: Colors.yellow,
-            elevation: 8,
-            child: CachedNetworkImage(imageUrl: img),
-            inBounds: true,
-          ),
-        ],
-      ),
-      subtitle: Text(bio,style: TextStyle(color: Colors.white)),
-      trailing: Card(
-        shape: BeveledRectangleBorder( //<-- 2. SEE HERE
-          side: BorderSide(
-            color: Color.fromRGBO(255, 215, 0, 1),
-            width: 3,
-          ),
-          borderRadius: BorderRadius.circular(17.0),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ListTile(
+        title: Text(Name,style: TextStyle(fontSize: 20,color: Colors.white)),
+        leading: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(index,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),),
+            HexagonWidget.pointy(
+              width: 100,
+              color: Colors.yellow,
+              elevation: 8,
+              child: CachedNetworkImage(imageUrl: img),
+              inBounds: true,
+            ),
+          ],
         ),
-        child: Container(
+        subtitle: Text(bio,style: TextStyle(color: Colors.white)),
+        trailing: Container(
           padding: EdgeInsets.all(16),
           child: Text(
             Number,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Colors.yellow),
           ),
         ),
       ),

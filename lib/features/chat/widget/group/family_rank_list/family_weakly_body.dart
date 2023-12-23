@@ -67,8 +67,13 @@ class _FamilyWeaklyBody extends State<FamilyWeaklyBody>{
                 return ListView.builder(
                   itemCount: familys.length,
                   itemBuilder: (context,index){
+                    final date = DateTime.now();
+                    final start =date.subtract(Duration(days: date.weekday - 1));
+                    final end=date.add(Duration(days: DateTime.daysPerWeek - date.weekday));
+                    print("Start $start");
+                    print("End $end");
                     return StreamBuilder<QuerySnapshot>(
-                      stream: _firestore.collection('family').doc(familys[index].doc).collection('count').where('year',isEqualTo: DateTime.now().year.toString()).where('month',isEqualTo: DateTime.now().month.toString()).where('day',isEqualTo: DateTime.now().day.toString()).snapshots(),
+                      stream: _firestore.collection('family').doc(familys[index].doc).collection('count').where('year',isEqualTo: DateTime.now().year.toString()).where('month',isEqualTo: DateTime.now().month.toString()).snapshots(),
                       builder: (context,snapshot){
                         if (!snapshot.hasData) {
                           return const Center(
@@ -79,7 +84,11 @@ class _FamilyWeaklyBody extends State<FamilyWeaklyBody>{
                         }
                         final masseges = snapshot.data?.docs;
                         for (var massege in masseges!.reversed){
-                          familys[index].count+=int.parse(massege.get('coin'));
+                          int day=int.parse(massege.get('day'));
+                          if(day>=start.day && day<=end.day){
+                            familys[index].count+=int.parse(massege.get('coin'));
+                            print("done");
+                          }
                         }
                         if(familys[index].doc==myfamily){
                           familys[index].name="${familys[index].name} (your Family)";
@@ -120,7 +129,7 @@ class _FamilyWeaklyBody extends State<FamilyWeaklyBody>{
                                         userName: familys[0].name)
                                   ];
                                   List<String> coin = [];
-                                  if (familys[2].count < 1000) {
+                                  if (familys[2].count < 10000) {
                                     coin.add(familys[2].count.toString());
                                   } else if (familys[2].count >= 10000 &&
                                       familys[index].count < 1000000) {
@@ -132,7 +141,7 @@ class _FamilyWeaklyBody extends State<FamilyWeaklyBody>{
                                         "${(familys[2].count / 1000000).toString()} K");
                                   }
                                   print("");
-                                  if (familys[1].count < 1000) {
+                                  if (familys[1].count < 10000) {
                                     coin.add(familys[1].count.toString());
                                   } else if (familys[1].count >= 10000 &&
                                       familys[index].count < 1000000) {
@@ -144,7 +153,7 @@ class _FamilyWeaklyBody extends State<FamilyWeaklyBody>{
                                         "${(familys[1].count / 1000000).toString()} K");
                                   }
                                   print("");
-                                  if (familys[0].count < 1000) {
+                                  if (familys[0].count < 10000) {
                                     coin.add(familys[0].count.toString());
                                   } else if (familys[0].count >= 10000 &&
                                       familys[index].count < 1000000) {

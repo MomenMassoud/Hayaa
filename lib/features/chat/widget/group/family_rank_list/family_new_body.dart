@@ -74,7 +74,7 @@ class _FamilyNewsBody extends State<FamilyNewsBody> {
                   itemCount: familys.length,
                   itemBuilder: (context,index){
                     return StreamBuilder<QuerySnapshot>(
-                      stream: _firestore.collection('family').doc(familys[index].doc).collection('count').snapshots(),
+                      stream: _firestore.collection('family').doc(familys[index].doc).collection('count').where('year',isEqualTo: DateTime.now().year.toString()).where('month',isEqualTo: DateTime.now().month.toString()).where('day',isEqualTo: DateTime.now().day.toString()).snapshots(),
                       builder: (context,snapshot){
                         if (!snapshot.hasData) {
                           return const Center(
@@ -88,7 +88,7 @@ class _FamilyNewsBody extends State<FamilyNewsBody> {
                           familys[index].count+=int.parse(massege.get('coin'));
                         }
                         if(familys[index].doc==myfamily){
-                          familys[index].name="${familys[index].name} (your Family)";
+                          familys[index].name="${familys[index].name}(you)";
                         }
                         if(index==familys.length-1){
                           familys.sort((a, b) => b.count.compareTo(a.count));
@@ -126,7 +126,7 @@ class _FamilyNewsBody extends State<FamilyNewsBody> {
                                         userName: familys[0].name)
                                   ];
                                   List<String> coin = [];
-                                  if (familys[2].count < 1000) {
+                                  if (familys[2].count < 10000) {
                                     coin.add(familys[2].count.toString());
                                   } else if (familys[2].count >= 10000 &&
                                       familys[index].count < 1000000) {
@@ -138,7 +138,7 @@ class _FamilyNewsBody extends State<FamilyNewsBody> {
                                         "${(familys[2].count / 1000000).toString()} K");
                                   }
                                   print("");
-                                  if (familys[1].count < 1000) {
+                                  if (familys[1].count < 10000) {
                                     coin.add(familys[1].count.toString());
                                   } else if (familys[1].count >= 10000 &&
                                       familys[index].count < 1000000) {
@@ -150,7 +150,7 @@ class _FamilyNewsBody extends State<FamilyNewsBody> {
                                         "${(familys[1].count / 1000000).toString()} K");
                                   }
                                   print("");
-                                  if (familys[0].count < 1000) {
+                                  if (familys[0].count < 10000) {
                                     coin.add(familys[0].count.toString());
                                   } else if (familys[0].count >= 10000 &&
                                       familys[index].count < 1000000) {

@@ -145,6 +145,7 @@ class _ProfileViewBody extends State<ProfileViewBody>{
                                Padding(
                                  padding: const EdgeInsets.only(top: 190.0,bottom: 30,right: 10,left: 10),
                                  child: Row(
+                                   mainAxisSize: MainAxisSize.min,
                                    children: [
                                      CircleAvatar(
                                        backgroundImage: CachedNetworkImageProvider(userModel.photo),

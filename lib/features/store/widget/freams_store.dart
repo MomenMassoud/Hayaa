@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hayaa_main/core/Utils/app_images.dart';
 import 'package:hayaa_main/features/store/widget/send_item_store.dart';
 import 'package:svgaplayer_flutter/player.dart';
 
@@ -61,14 +62,14 @@ class _FrameStore extends State<FrameStore>{
                     stream: _firestore.collection('user').doc(_auth.currentUser!.uid).collection('mylook').where('id',isEqualTo: store[index].docID).snapshots(),
                     builder: (context,snapshot){
                       if (!snapshot.hasData) {
-                        return _buildCard('\$ ${store[index].price}',store[index].photo,store[index].cat,store[index].time,context,false,store[index].docID,store[index].price,store[index].type,store[index]);
+                        return _buildCard('${store[index].price}',store[index].photo,store[index].cat,store[index].time,context,false,store[index].docID,store[index].price,store[index].type,store[index]);
                       }
                       final masseges = snapshot.data?.docs;
                       if(masseges!.isEmpty){
-                        return _buildCard('\$ ${store[index].price}',store[index].photo,store[index].cat,store[index].time,context,false,store[index].docID,store[index].price,store[index].type,store[index]);
+                        return _buildCard('${store[index].price}',store[index].photo,store[index].cat,store[index].time,context,false,store[index].docID,store[index].price,store[index].type,store[index]);
                       }
                       else{
-                        return _buildCard('\$ ${store[index].price}',store[index].photo,store[index].cat,store[index].time,context,true,store[index].docID,store[index].price,store[index].type,store[index]);
+                        return _buildCard('${store[index].price}',store[index].photo,store[index].cat,store[index].time,context,true,store[index].docID,store[index].price,store[index].type,store[index]);
                       }
                     },
                   );
@@ -125,13 +126,22 @@ class _FrameStore extends State<FrameStore>{
                 width: 50,
               ),
               SizedBox(height: 7.0),
-              Text(
-                price,
-                style: TextStyle(
-                  color: Color(0xFFCC8053),
-                  fontFamily: 'Varela',
-                  fontSize: 14.0,
-                ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    price,
+                    style: TextStyle(
+                      color: Color(0xFFCC8053),
+                      fontFamily: 'Varela',
+                      fontSize: 14.0,
+                    ),
+                  ),
+                  CircleAvatar(
+                    radius: 8,
+                    backgroundImage: AssetImage(AppImages.gold_coin),
+                  )
+                ],
               ),
               Padding(
                 padding: EdgeInsets.all(8.0),
@@ -153,7 +163,7 @@ class _FrameStore extends State<FrameStore>{
                       Allarm(id, imgPath, days, always, DateTime.now().toString(), pp);
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.green,
+                      primary: Colors.blue.shade300,
                       onPrimary: Colors.white,
                       elevation: 5,
                       shape: RoundedRectangleBorder(
@@ -163,7 +173,7 @@ class _FrameStore extends State<FrameStore>{
                     child: Text(
                       'Buy Now',
                       style: TextStyle(
-                        fontSize: 12, // Set the font size of the text
+                        fontSize: 10, // Set the font size of the text
                       ),
                     ),
                   ),
@@ -183,7 +193,7 @@ class _FrameStore extends State<FrameStore>{
                     child: Text(
                       'Send',
                       style: TextStyle(
-                        fontSize: 12, // Set the font size of the text
+                        fontSize: 10, // Set the font size of the text
                       ),
                     ),
                   ),

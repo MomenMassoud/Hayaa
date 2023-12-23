@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hayaa_main/core/Utils/app_images.dart';
 import 'package:hayaa_main/models/store_model.dart';
 
 class WallpaperStore extends StatefulWidget {
@@ -58,14 +59,14 @@ class _WallpaperStore extends State<WallpaperStore> {
                     stream: _firestore.collection('user').doc(_auth.currentUser!.uid).collection('mylook').where('id',isEqualTo: store[index].docID).snapshots(),
                     builder: (context,snapshot){
                       if (!snapshot.hasData) {
-                        return _buildCard('\$ ${store[index].price}',store[index].photo,store[index].cat,store[index].time,context,false,store[index].docID,store[index].price);
+                        return _buildCard('${store[index].price}',store[index].photo,store[index].cat,store[index].time,context,false,store[index].docID,store[index].price);
                       }
                       final masseges = snapshot.data?.docs;
                       if(masseges!.isEmpty){
-                        return _buildCard('\$ ${store[index].price}',store[index].photo,store[index].cat,store[index].time,context,false,store[index].docID,store[index].price);
+                        return _buildCard('${store[index].price}',store[index].photo,store[index].cat,store[index].time,context,false,store[index].docID,store[index].price);
                       }
                       else{
-                        return _buildCard('\$ ${store[index].price}',store[index].photo,store[index].cat,store[index].time,context,true,store[index].docID,store[index].price);
+                        return _buildCard(' ${store[index].price}',store[index].photo,store[index].cat,store[index].time,context,true,store[index].docID,store[index].price);
                       }
                     },
                   );
@@ -125,13 +126,22 @@ class _WallpaperStore extends State<WallpaperStore> {
                   ),
                 ),
                 SizedBox(height: 7.0),
-                Text(
-                  price,
-                  style: TextStyle(
-                    color: Color(0xFFCC8053),
-                    fontFamily: 'Varela',
-                    fontSize: 14.0,
-                  ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      price,
+                      style: TextStyle(
+                        color: Color(0xFFCC8053),
+                        fontFamily: 'Varela',
+                        fontSize: 14.0,
+                      ),
+                    ),
+                    CircleAvatar(
+                      radius: 8,
+                      backgroundImage: AssetImage(AppImages.gold_coin),
+                    )
+                  ],
                 ),
                 Padding(
                   padding: EdgeInsets.all(8.0),
@@ -154,7 +164,7 @@ class _WallpaperStore extends State<WallpaperStore> {
                             DateTime.now().toString(), pp);
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.green,
+                        primary: Colors.blue.shade300,
                         onPrimary: Colors.white,
                         elevation: 5,
                         shape: RoundedRectangleBorder(
@@ -164,7 +174,7 @@ class _WallpaperStore extends State<WallpaperStore> {
                       child: Text(
                         'Buy Now',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 10,
                         ),
                       ),
                     ),

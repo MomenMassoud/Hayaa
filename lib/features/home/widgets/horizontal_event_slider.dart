@@ -17,28 +17,26 @@ class HorizontalEventSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CarouselSlider.builder(
-        itemCount: images.length,
-        itemBuilder:(context, index, realIndex) {
-          return Container(
-            width: 900,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: CachedNetworkImageProvider(images[index]),
-                fit: BoxFit.fill
-              )
+      itemCount: images.length,
+      itemBuilder: (context, index, realIndex) {
+        return Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: CachedNetworkImageProvider(images[index]),
+              fit: BoxFit.cover, // Use BoxFit.cover to make the image cover the full width
             ),
-          );
-        },
-        options: CarouselOptions(
-            autoPlayAnimationDuration: Duration(seconds: 1),
-            autoPlayCurve: Curves.linear,
-            autoPlay: true,
-            height: 100,
-            aspectRatio: 9,
-            pageSnapping: true,
-            padEnds: true
-        ),
+          ),
+        );
+      },
+      options: CarouselOptions(
+        autoPlayAnimationDuration: Duration(seconds: 1),
+        autoPlayCurve: Curves.linear,
+        autoPlay: true,
+        aspectRatio: 16 / 5, // Adjust aspectRatio based on your preference
+        pageSnapping: true,
+        padEnds: true,
+          viewportFraction: 1.0
+      ),
     );
   }
 }
-

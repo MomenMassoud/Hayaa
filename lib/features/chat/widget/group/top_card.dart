@@ -48,6 +48,7 @@ class TopCard extends StatelessWidget {
               shape: BoxShape.circle,
               image: DecorationImage(
                 image:CachedNetworkImageProvider(cardModel.userImge),
+                fit: BoxFit.cover
               ),
             ),
           ),
@@ -62,13 +63,13 @@ class TopCard extends StatelessWidget {
               )),
         ),
         Positioned(
-          top: 200,
+          top: 180,
           child: Column(
             children: [
               Text(cardModel.userName,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 16,
+                    fontSize: 12,
                     fontWeight: FontWeight.bold,
                   )),
               Row(

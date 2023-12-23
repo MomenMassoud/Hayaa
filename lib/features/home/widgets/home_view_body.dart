@@ -118,7 +118,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
     }
   }
   List<String> images = [];
-
+  List<String> countryCodes = Flags.flagsCode;
   List<RoomModel> rooms = [
     RoomModel(
         userImage: AppImages.p1, name: "Name", image: AppImages.roomImage2),
@@ -227,19 +227,47 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                     screenHight: MediaQuery.of(context).size.height,
                     rooms: rooms),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 18.0,bottom: 18),
-                child: HorizontalEventSlider(
-                    screenHight: MediaQuery.of(context).size.height,
-                    screenWidth: MediaQuery.of(context).size.width,
-                    images: images),
+              ListTile(
+                title: Text("الدول",style: TextStyle(color: Colors.pink.withOpacity(1),fontFamily: "Questv1"),),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text("Show All",style: TextStyle(color: Colors.pink.withOpacity(1),fontFamily: "Questv1")),
+                    IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward,color:Colors.pink.withOpacity(1) ,))
+                  ],
+                ) ,
               ),
+
               Container(
                 height: 80,
-                child: ListView(
+                child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  children:generateFlagsWithCode(),
-                ),
+                  itemCount: countryCodes.length,
+                  itemBuilder: (context,index){
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flag.fromString(
+                            countryCodes[index],
+                            height: 40,
+                            width: 60,
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            Flag.fromString(
+                              countryCodes[index],
+                              height: 40,
+                              width: 60,
+                            ).country,
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                )
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -247,7 +275,21 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                     rooms: rooms,
                     screenWidth: MediaQuery.of(context).size.width,
                     screenHight: MediaQuery.of(context).size.height),
-              )
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 18.0,bottom: 18),
+                child: HorizontalEventSlider(
+                    screenHight: MediaQuery.of(context).size.height,
+                    screenWidth: MediaQuery.of(context).size.width,
+                    images: images),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: VerticalRoomsListViewBuilder(
+                    rooms: rooms,
+                    screenWidth: MediaQuery.of(context).size.width,
+                    screenHight: MediaQuery.of(context).size.height),
+              ),
             ],
           ),
         ),
@@ -257,20 +299,27 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   List<Widget> generateFlagsWithCode() {
     List<String> countryCodes = Flags.flagsCode;
     return countryCodes.map((code) {
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Flag.fromString(
-            code,
-            height: 40,
-            width: 60,
-          ),
-          SizedBox(height: 5),
-          Text(
-            code,
-            style: TextStyle(fontSize: 12),
-          ),
-        ],
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flag.fromString(
+              code,
+              height: 40,
+              width: 60,
+            ),
+            SizedBox(height: 5),
+            Text(
+              Flag.fromString(
+                code,
+                height: 40,
+                width: 60,
+              ).country,
+              style: TextStyle(fontSize: 12),
+            ),
+          ],
+        ),
       );
     }).toList();
   }

@@ -151,40 +151,60 @@ class _ReplyCard extends State<ReplyCard>{
         constraints: BoxConstraints(
           maxWidth: MediaQuery.of(context).size.width-45,
         ),
-        child: Card(
-          elevation: 1,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(14)
-          ),
-          color: Colors.white,
-          margin: const EdgeInsets.symmetric(horizontal: 15,vertical: 5),
-          child: Stack(
-            children: [
-              widget.group?Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(widget.sinder,style: const TextStyle(fontSize: 16,color: Colors.orange),),
-              ):const Text(""),
-              widget.group?Padding(
-                padding: const EdgeInsets.only(left: 10,right: 80,top: 30,bottom: 20),
-                child: Text(widget.msg,style: const TextStyle(fontSize: 16),),
-              ):Padding(
-                padding: const EdgeInsets.only(left: 10,right: 80,top: 9,bottom: 20),
-                child: InkWell(
-                    onLongPress: ()async{
-
-                    },
-                    child: Text(widget.msg,style: const TextStyle(fontSize: 16),)),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadiusDirectional.only(
+                  topEnd: Radius.circular(30),
+                  bottomEnd: Radius.circular(30),
+                  bottomStart: Radius.circular(30)
               ),
-              Positioned(
-                bottom: 4,
-                right: 10,
-                child: Row(
-                  children: [
-                    Text(widget.date,style: const TextStyle(fontSize: 13,color: Colors.grey),),
-                  ],
+              color: Colors.grey.shade200
+            ),
+            child: Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 10,
+                    right: 80,
+                    top: 9,
+                    bottom: 20,
+                  ),
+                  child: InkWell(
+                    onLongPress: () {
+                      myAlert();
+                    },
+                    child: Text(
+                      widget.msg,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
                 ),
-              )
-            ],
+                Positioned(
+                  bottom: 4,
+                  right: 10,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.done_all_rounded,
+                        color:  Colors.grey ,
+                        size: 13,
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        widget.date,
+                        style: const TextStyle(fontSize: 13, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

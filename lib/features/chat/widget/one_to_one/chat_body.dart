@@ -141,199 +141,202 @@ class _ChatBody extends State<ChatBody> {
           width: MediaQuery.of(context).size.width,
           child: Stack(
             children: [
-              Container(
-                height: MediaQuery.of(context).size.height - 210,
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: _auth.currentUser!.email == null
-                      ? _firestore
-                          .collection('user')
-                          .where('email',
-                              isEqualTo: _auth.currentUser!.phoneNumber)
-                          .snapshots()
-                      : _firestore
-                          .collection('user')
-                          .where('email', isEqualTo: _auth.currentUser!.email)
-                          .snapshots(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      userModel = UserModel(
-                          "email",
-                          "name",
-                          "gende",
-                          "photo",
-                          "id",
-                          "phonenumber",
-                          "devicetoken",
-                          "daimond",
-                          "vip",
-                          "bio",
-                          "seen",
-                          "lang",
-                          "country",
-                          "type",
-                          "birthdate",
-                          "coin",
-                          "exp",
-                          "level");
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          backgroundColor: Colors.blue,
-                        ),
-                      );
-                    }
-                    final masseges = snapshot.data?.docs;
-                    for (var massege in masseges!.reversed) {
-                      userModel.bio = massege.get('bio');
-                      userModel.birthdate = massege.get('birthdate');
-                      userModel.coin = massege.get('coin');
-                      userModel.country = massege.get('country');
-                      userModel.daimond = massege.get('daimond');
-                      userModel.coin = massege.get('coin');
-                      userModel.devicetoken = massege.get('devicetoken');
-                      userModel.email = massege.get('email');
-                      userModel.exp = massege.get('exp');
-                      userModel.gender = massege.get('gender');
-                      userModel.id = massege.get('id');
-                      userModel.lang = massege.get('lang');
-                      userModel.level = massege.get('level');
-                      userModel.name = massege.get('name');
-                      userModel.phonenumber = massege.get('phonenumber');
-                      userModel.photo = massege.get('photo');
-                      userModel.seen = massege.get('seen');
-                      userModel.type = massege.get('type');
-                      userModel.vip = massege.get('vip');
-                      userModel.myfamily=massege.get('myfamily');
-                      userModel.docID = massege.id;
-                    }
-                    return StreamBuilder<QuerySnapshot>(
-                      stream: _firestore
-                          .collection('chat')
-                          .where('chatroom', isEqualTo: chatID)
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const Center(
-                            child: CircularProgressIndicator(
-                              backgroundColor: Colors.blue,
-                            ),
-                          );
-                        }
-                        List<MessageModel> massegeWidget = [];
-                        final masseges = snapshot.data?.docs;
-                        for (var massege in masseges!.reversed) {
-                          final massegeText = massege.get('msg');
-                          final massegetype = massege.get('type');
-                          final massegetime = massege.get('time');
-                          final sender = massege.get('sender');
-                          final seen = massege.get('seen');
-                          final delete1 = massege.get('delete1');
-                          final delete2 = massege.get('delete2');
-                          final MessageModel massegeWidgetdata = MessageModel(
-                              massegeText, massegetype, massegetime);
-                          if (sender == _auth.currentUser!.uid) {
-                            massegeWidgetdata.type = "source";
-                          } else {
-                            massegeWidgetdata.type = "destination";
+              Padding(
+                padding: const EdgeInsets.only(bottom: 60.0),
+                child: Container(
+                  height: MediaQuery.of(context).size.height - 160,
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: _auth.currentUser!.email == null
+                        ? _firestore
+                            .collection('user')
+                            .where('email',
+                                isEqualTo: _auth.currentUser!.phoneNumber)
+                            .snapshots()
+                        : _firestore
+                            .collection('user')
+                            .where('email', isEqualTo: _auth.currentUser!.email)
+                            .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        userModel = UserModel(
+                            "email",
+                            "name",
+                            "gende",
+                            "photo",
+                            "id",
+                            "phonenumber",
+                            "devicetoken",
+                            "daimond",
+                            "vip",
+                            "bio",
+                            "seen",
+                            "lang",
+                            "country",
+                            "type",
+                            "birthdate",
+                            "coin",
+                            "exp",
+                            "level");
+                        return const Center(
+                          child: CircularProgressIndicator(
+                            backgroundColor: Colors.blue,
+                          ),
+                        );
+                      }
+                      final masseges = snapshot.data?.docs;
+                      for (var massege in masseges!.reversed) {
+                        userModel.bio = massege.get('bio');
+                        userModel.birthdate = massege.get('birthdate');
+                        userModel.coin = massege.get('coin');
+                        userModel.country = massege.get('country');
+                        userModel.daimond = massege.get('daimond');
+                        userModel.coin = massege.get('coin');
+                        userModel.devicetoken = massege.get('devicetoken');
+                        userModel.email = massege.get('email');
+                        userModel.exp = massege.get('exp');
+                        userModel.gender = massege.get('gender');
+                        userModel.id = massege.get('id');
+                        userModel.lang = massege.get('lang');
+                        userModel.level = massege.get('level');
+                        userModel.name = massege.get('name');
+                        userModel.phonenumber = massege.get('phonenumber');
+                        userModel.photo = massege.get('photo');
+                        userModel.seen = massege.get('seen');
+                        userModel.type = massege.get('type');
+                        userModel.vip = massege.get('vip');
+                        userModel.myfamily=massege.get('myfamily');
+                        userModel.docID = massege.id;
+                      }
+                      return StreamBuilder<QuerySnapshot>(
+                        stream: _firestore
+                            .collection('chat')
+                            .where('chatroom', isEqualTo: chatID)
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                backgroundColor: Colors.blue,
+                              ),
+                            );
                           }
-                          massegeWidgetdata.delete1 = delete1;
-                          massegeWidgetdata.delete2 = delete2;
-                          massegeWidgetdata.typemsg = massegetype;
-                          massegeWidgetdata.id = massege.id;
-                          massegeWidgetdata.seen = seen;
-                          massegeWidget.add(massegeWidgetdata);
-                        }
-                        return massegeWidget.length>0?ListView.builder(
-                            itemCount: massegeWidget.length,
-                            reverse: true,
-                            itemBuilder: (context,index){
-                              if (massegeWidget[index].typemsg == "msg") {
-                                if (massegeWidget[index].type == "source") {
-                                  return OwnMassege(
+                          List<MessageModel> massegeWidget = [];
+                          final masseges = snapshot.data?.docs;
+                          for (var massege in masseges!.reversed) {
+                            final massegeText = massege.get('msg');
+                            final massegetype = massege.get('type');
+                            final massegetime = massege.get('time');
+                            final sender = massege.get('sender');
+                            final seen = massege.get('seen');
+                            final delete1 = massege.get('delete1');
+                            final delete2 = massege.get('delete2');
+                            final MessageModel massegeWidgetdata = MessageModel(
+                                massegeText, massegetype, massegetime);
+                            if (sender == _auth.currentUser!.uid) {
+                              massegeWidgetdata.type = "source";
+                            } else {
+                              massegeWidgetdata.type = "destination";
+                            }
+                            massegeWidgetdata.delete1 = delete1;
+                            massegeWidgetdata.delete2 = delete2;
+                            massegeWidgetdata.typemsg = massegetype;
+                            massegeWidgetdata.id = massege.id;
+                            massegeWidgetdata.seen = seen;
+                            massegeWidget.add(massegeWidgetdata);
+                          }
+                          return massegeWidget.length>0?ListView.builder(
+                              itemCount: massegeWidget.length,
+                              reverse: true,
+                              itemBuilder: (context,index){
+                                if (massegeWidget[index].typemsg == "msg") {
+                                  if (massegeWidget[index].type == "source") {
+                                    return OwnMassege(
+                                        massegeWidget[index].message,
+                                        massegeWidget[index].time,
+                                        massegeWidget[index].id,
+                                        false,
+                                        massegeWidget[index].seen);
+                                  } else {
+                                    return ReplyCard(
+                                        massegeWidget[index].message,
+                                        massegeWidget[index].time,
+                                        false,
+                                        "",
+                                        massegeWidget[index].id);
+                                  }
+                                }
+                                else if (massegeWidget[index].typemsg ==
+                                    "photo") {
+                                  if (massegeWidget[index].type == "source") {
+                                    return OwnFileCard(
+                                        massegeWidget[index].message,
+                                        massegeWidget[index].time,
+                                        "photo",
+                                        "",
+                                        false,
+                                        massegeWidget[index].id);
+                                  } else {
+                                    return ReplayFileCard(
+                                        massegeWidget[index].message,
+                                        massegeWidget[index].time,
+                                        "photo",
+                                        "");
+                                  }
+                                }
+                                else if (massegeWidget[index].typemsg ==
+                                    "record") {
+                                  if (massegeWidget[index].type == "source") {
+                                    return OwnAudio(
+                                        massegeWidget[index].message,
+                                        massegeWidget[index].time,
+                                        "record",
+                                        userModel.photo,
+                                        false,
+                                        massegeWidget[index].id);
+                                  } else {
+                                    return ReplayAudio(
+                                        massegeWidget[index].message,
+                                        massegeWidget[index].time,
+                                        "record",
+                                        widget.friend.photo);
+                                  }
+                                }
+                                if (massegeWidget[index].typemsg == "link") {
+                                  if (massegeWidget[index].type == "source") {
+                                    return OwnLink(
                                       massegeWidget[index].message,
                                       massegeWidget[index].time,
                                       massegeWidget[index].id,
-                                      false,
-                                      massegeWidget[index].seen);
-                                } else {
-                                  return ReplyCard(
+                                    );
+                                  } else {
+                                    return ReplayLink(
                                       massegeWidget[index].message,
                                       massegeWidget[index].time,
-                                      false,
-                                      "",
-                                      massegeWidget[index].id);
+                                      massegeWidget[index].id,
+                                    );
+                                  }
                                 }
-                              }
-                              else if (massegeWidget[index].typemsg ==
-                                  "photo") {
-                                if (massegeWidget[index].type == "source") {
-                                  return OwnFileCard(
+                                else{
+                                  if (massegeWidget[index].type == "source") {
+                                    return OwnGiftCard(
                                       massegeWidget[index].message,
-                                      massegeWidget[index].time,
-                                      "photo",
-                                      "",
-                                      false,
-                                      massegeWidget[index].id);
-                                } else {
-                                  return ReplayFileCard(
+                                      massegeWidget[index].typemsg,
+                                    );
+                                  } else {
+                                    return ReplayGiftCard(
                                       massegeWidget[index].message,
-                                      massegeWidget[index].time,
-                                      "photo",
-                                      "");
+                                      massegeWidget[index].typemsg,
+                                    );
+                                  }
                                 }
                               }
-                              else if (massegeWidget[index].typemsg ==
-                                  "record") {
-                                if (massegeWidget[index].type == "source") {
-                                  return OwnAudio(
-                                      massegeWidget[index].message,
-                                      massegeWidget[index].time,
-                                      "record",
-                                      userModel.photo,
-                                      false,
-                                      massegeWidget[index].id);
-                                } else {
-                                  return ReplayAudio(
-                                      massegeWidget[index].message,
-                                      massegeWidget[index].time,
-                                      "record",
-                                      widget.friend.photo);
-                                }
-                              }
-                              if (massegeWidget[index].typemsg == "link") {
-                                if (massegeWidget[index].type == "source") {
-                                  return OwnLink(
-                                    massegeWidget[index].message,
-                                    massegeWidget[index].time,
-                                    massegeWidget[index].id,
-                                  );
-                                } else {
-                                  return ReplayLink(
-                                    massegeWidget[index].message,
-                                    massegeWidget[index].time,
-                                    massegeWidget[index].id,
-                                  );
-                                }
-                              }
-                              else{
-                                if (massegeWidget[index].type == "source") {
-                                  return OwnGiftCard(
-                                    massegeWidget[index].message,
-                                    massegeWidget[index].typemsg,
-                                  );
-                                } else {
-                                  return ReplayGiftCard(
-                                    massegeWidget[index].message,
-                                    massegeWidget[index].typemsg,
-                                  );
-                                }
-                              }
-                            }
-                        ):Center(
-                          child: Text("لا توجد اي محادثة"),
-                        );
-                      },
-                    );
-                  },
+                          ):Center(
+                            child: Text("لا توجد اي محادثة"),
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ),
               ),
               Align(
@@ -388,7 +391,7 @@ class _ChatBody extends State<ChatBody> {
                                     icon: Icon(Icons.card_giftcard))
                               ],
                             ),
-                            contentPadding: EdgeInsets.all(8),
+                            contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
                           ),
                         ),
                       ),
@@ -763,6 +766,7 @@ class _ChatBody extends State<ChatBody> {
                                           'count':lastincome.toString()
                                         });
                                       }
+                                      Navigator.pop(context);
                                     });
 
 

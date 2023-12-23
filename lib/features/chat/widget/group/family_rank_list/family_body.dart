@@ -48,7 +48,7 @@ class _FamilyBody extends State<FamilyBody>with SingleTickerProviderStateMixin{
             controller: _tabController,
             tabs: <Widget>[
               Tab(
-                child: Text("جديد",style: TextStyle(fontFamily: "Hayah", fontSize: 20,color: Colors.white)).tr(args: ['جديد']),
+                child: Text("يومي",style: TextStyle(fontFamily: "Hayah", fontSize: 20,color: Colors.white)).tr(args: ['يومي']),
               ),
               Tab(
                 child: Text("اسبوعي",style: TextStyle(fontFamily: "Hayah", fontSize: 20,color: Colors.white)).tr(args: ['اسبوعي']),

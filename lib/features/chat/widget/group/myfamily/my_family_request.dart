@@ -46,6 +46,7 @@ class _MyFamilyRequest extends State<MyFamilyRequest>{
               final masseges = snapshot.data?.docs;
               for (var massege in masseges!.reversed){
                 UserModel us=UserModel("email", "name", "gender", "photo", "massege.id", "phonenumber",massege.id, "daimond", "vip", "bio", "seen", "lang", "country", "type", "birthdate", "coin", "exp", "level");
+                us.devicetoken=massege.id;
                 us.docID=massege.get('id');
                 users.add(us);
               }
@@ -150,6 +151,8 @@ class _MyFamilyRequest extends State<MyFamilyRequest>{
                             'type':'member'
                           }).then((value){
                             _firestore.collection('family').doc(widget.familyID).collection('req').doc(docs.devicetoken).delete();
+                          }).then((value){
+                            Navigator.pop(context);
                           });
                         });
                       }, child: Text("نعم")),

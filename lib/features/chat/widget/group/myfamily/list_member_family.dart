@@ -106,13 +106,13 @@ class _ListMemberFamily extends State<ListMemberFamily>{
                               ),
                               subtitle: Text("BIO: ${users[index].bio}  - ID: ${users[index].id}",style: TextStyle(color: Colors.white),),
                             ):
-                            _mytype=="normal"?ListTile(
+                            _mytype=="member"?ListTile(
                               title: Text("${users[index].name} - ${users[index].familytype}",style: TextStyle(color: Colors.white),),
                               leading: CircleAvatar(
                                 backgroundImage: CachedNetworkImageProvider(users[index].photo),
                               ),
                               subtitle: Text("BIO: ${users[index].bio}  - ID: ${users[index].id}",style: TextStyle(color: Colors.white),),
-                            ): _mytype=="owner"?ListTile(
+                            ):ListTile(
                               title: Text("${users[index].name} - ${users[index].familytype}",style: TextStyle(color: Colors.white),),
                               leading: CircleAvatar(
                                 backgroundImage: CachedNetworkImageProvider(users[index].photo),
@@ -130,19 +130,6 @@ class _ListMemberFamily extends State<ListMemberFamily>{
                                   });
                                 });
                               }, child: Text("طرد"))
-                            ):_mytype=="admin" && users[index].familytype=="owner"?ListTile(
-                              title: Text("${users[index].name} - ${users[index].familytype}",style: TextStyle(color: Colors.white),),
-                              leading: CircleAvatar(
-                                backgroundImage: CachedNetworkImageProvider(users[index].photo),
-                              ),
-                              subtitle: Text("BIO: ${users[index].bio}  - ID: ${users[index].id}",style: TextStyle(color: Colors.white),),
-                            ):ListTile(
-                              title: Text("${users[index].name} - ${users[index].familytype}",style: TextStyle(color: Colors.white),),
-                              leading: CircleAvatar(
-                                backgroundImage: CachedNetworkImageProvider(users[index].photo),
-                              ),
-                              subtitle: Text("BIO: ${users[index].bio}  - ID: ${users[index].id}",style: TextStyle(color: Colors.white),),
-                              trailing:ElevatedButton(onPressed: (){}, child: Text("طرد"))
                             ),
                             Divider(thickness: 0.5,)
                           ],
