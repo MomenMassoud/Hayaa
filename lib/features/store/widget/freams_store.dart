@@ -154,26 +154,29 @@ class _FrameStore extends State<FrameStore>{
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      bool always = false;
-                      if (days == "always") {
-                        always = true;
-                      }
-                      Allarm(id, imgPath, days, always, DateTime.now().toString(), pp);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.blue.shade300,
-                      onPrimary: Colors.white,
-                      elevation: 5,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0,left: 8.0),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        bool always = false;
+                        if (days == "always") {
+                          always = true;
+                        }
+                        Allarm(id, imgPath, days, always, DateTime.now().toString(), pp);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.blue.shade300,
+                        onPrimary: Colors.white,
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
                       ),
-                    ),
-                    child: Text(
-                      'Buy Now',
-                      style: TextStyle(
-                        fontSize: 10, // Set the font size of the text
+                      child: Text(
+                        'Buy Now',
+                        style: TextStyle(
+                          fontSize: 10, // Set the font size of the text
+                        ),
                       ),
                     ),
                   ),

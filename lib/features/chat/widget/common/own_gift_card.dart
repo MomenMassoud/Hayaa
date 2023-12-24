@@ -25,7 +25,11 @@ class OwnGiftCard extends StatelessWidget{
                 child: SVGASimpleImage(
                   resUrl: path,
                 ),
-              ):CachedNetworkImage(imageUrl: path),
+              ):Container(
+                height: 80,
+                  width: 80,
+                  child: CachedNetworkImage(imageUrl: path)
+              ),
             ),
           ],
         ),

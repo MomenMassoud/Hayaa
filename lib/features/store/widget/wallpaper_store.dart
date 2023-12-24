@@ -136,6 +136,7 @@ class _WallpaperStore extends State<WallpaperStore> {
                         fontFamily: 'Varela',
                         fontSize: 14.0,
                       ),
+
                     ),
                     CircleAvatar(
                       radius: 8,

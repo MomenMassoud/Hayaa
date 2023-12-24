@@ -158,7 +158,7 @@ class _AgencyAgentViewBodyState extends State<AgencyAgentViewBody> {
                                     .collection('income')
                                     .snapshots(),
                                 builder: (context, snapshot) {
-
+                                  int cou=0;
                                   if (!snapshot.hasData) {
                                     return const Center(
                                       child: CircularProgressIndicator(
@@ -166,7 +166,6 @@ class _AgencyAgentViewBodyState extends State<AgencyAgentViewBody> {
                                       ),
                                     );
                                   }
-                                  int cou=0;
                                   final masseges = snapshot.data?.docs;
                                   for (var massege in masseges!.reversed) {
                                     cou+=int.parse(massege.get('count'));
@@ -177,6 +176,7 @@ class _AgencyAgentViewBodyState extends State<AgencyAgentViewBody> {
                                   else{
                                     totalincome += cou;
                                   }
+                                  cou=0;
                                   if(index==user.length-1){
                                     return Container(
                                       height: 600,

@@ -128,12 +128,24 @@ class _HomeViewBodyState extends State<HomeViewBody> {
         userImage: AppImages.p1, name: "Name", image: AppImages.roomImage3),
     RoomModel(
         userImage: AppImages.p2, name: "Name", image: AppImages.roomImage2),
+  ];
+  List<RoomModel> rooms2 = [
+    RoomModel(
+        userImage: AppImages.p1, name: "Name", image: AppImages.roomImage2),
+    RoomModel(
+        userImage: AppImages.p3, name: "Name", image: AppImages.roomImage),
+    RoomModel(
+        userImage: AppImages.p1, name: "Name", image: AppImages.roomImage3),
+    RoomModel(
+        userImage: AppImages.p2, name: "Name", image: AppImages.roomImage2),
     RoomModel(
         userImage: AppImages.p3, name: "Name", image: AppImages.roomImage4),
     RoomModel(
         userImage: AppImages.p2, name: "Name", image: AppImages.roomImage),
     RoomModel(
         userImage: AppImages.p3, name: "Name", image: AppImages.roomImage3),
+    RoomModel(
+        userImage: AppImages.p1, name: "Name", image: AppImages.roomImage3),
   ];
   @override
   Widget build(BuildContext context) {
@@ -207,21 +219,21 @@ class _HomeViewBodyState extends State<HomeViewBody> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 18.0),
+                padding: const EdgeInsets.only(top: 5.0),
                 child: HorizontalEventSlider(
                     screenHight: MediaQuery.of(context).size.height,
                     screenWidth: MediaQuery.of(context).size.width,
                     images: images),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(top: 8.0,right: 8.0,left: 8.0),
                 child: SubScreensSection(
                   screenHight: MediaQuery.of(context).size.height,
                   screenWidth: MediaQuery.of(context).size.width,
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(top: 2.0,right: 8.0,left: 8.0),
                 child: HorezintalSection(
                     screenWidth: MediaQuery.of(context).size.width,
                     screenHight: MediaQuery.of(context).size.height,
@@ -237,15 +249,14 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                   ],
                 ) ,
               ),
-
               Container(
                 height: 80,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: countryCodes.length,
+                  itemCount:8,
                   itemBuilder: (context,index){
                     return Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(2.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -270,14 +281,14 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 )
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(top: 2.0,right: 8.0,left: 8.0,bottom: 8.0),
                 child: VerticalRoomsListViewBuilder(
                     rooms: rooms,
                     screenWidth: MediaQuery.of(context).size.width,
                     screenHight: MediaQuery.of(context).size.height),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 18.0,bottom: 18),
+                padding: const EdgeInsets.only(top: 9.0,bottom: 18),
                 child: HorizontalEventSlider(
                     screenHight: MediaQuery.of(context).size.height,
                     screenWidth: MediaQuery.of(context).size.width,
@@ -286,7 +297,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: VerticalRoomsListViewBuilder(
-                    rooms: rooms,
+                    rooms: rooms2,
                     screenWidth: MediaQuery.of(context).size.width,
                     screenHight: MediaQuery.of(context).size.height),
               ),

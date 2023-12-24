@@ -31,7 +31,8 @@ class _PostFriends extends State<PostFriends>{
           }
           final masseges = snapshot.data?.docs;
           for (var massege in masseges!.reversed){
-            final us = UserModel("email", "name", "gender", "photo", massege.get('id'), "phonenumber", "devicetoken", "daimond", "vip", "bio", "seen", "lang", "country", "type", "birthdate", "coin", "exp", "level");
+            final us = UserModel("email", "name", "gender", "photo"," massege.get('id')", "phonenumber", "devicetoken", "daimond", "vip", "bio", "seen", "lang", "country", "type", "birthdate", "coin", "exp", "level");
+            us.id=massege.get('id');
             users.add(us);
           }
           return ListView.builder(
@@ -82,78 +83,87 @@ class _PostFriends extends State<PostFriends>{
                           postModel.id = massege.id;
                           posts.add(postModel);
                         }
-                        return Container(
-                          height: 800,
-                          child: ListView.builder(
-
-                              itemCount: posts.length,
-                              itemBuilder: (context,index){
-                                return StreamBuilder<QuerySnapshot>(
-                                  stream: _firestore
-                                      .collection('post')
-                                      .doc(posts[index].id)
-                                      .collection('like')
-                                      .snapshots(),
-                                  builder: (context,snapshot){
-                                    int likeCounter=0;
-                                    if (!snapshot.hasData) {
-                                      return const Center(
-                                        child: CircularProgressIndicator(
-                                          backgroundColor: Colors.blue,
-                                        ),
-                                      );
-                                    }
-                                    final masseges = snapshot.data?.docs;
-                                    likeCounter=masseges!.length;
-                                    int i = 0;
-                                    for (var massege in masseges!.reversed){
-                                      String email = massege.get('email');
-                                      String photo = massege.get('photo');
-                                      String name = massege.get('name');
-                                      LoveModel love = LoveModel(email, name, photo);
-                                      love.id = massege.id;
-                                      if (_auth.currentUser!.uid == love.id) {
-                                        posts[index].like = true;
-                                        posts[index].indexLike = i;
+                        if(index==users.length-1){
+                          return Container(
+                            height: 2000,
+                            child: ListView.builder(
+                                itemCount: posts.length,
+                                itemBuilder: (context,indexx){
+                                  return StreamBuilder<QuerySnapshot>(
+                                    stream: _firestore
+                                        .collection('post')
+                                        .doc(posts[indexx].id)
+                                        .collection('like')
+                                        .snapshots(),
+                                    builder: (context,snapshot){
+                                      int likeCounter=0;
+                                      if (!snapshot.hasData) {
+                                        return const Center(
+                                          child: CircularProgressIndicator(
+                                            backgroundColor: Colors.blue,
+                                          ),
+                                        );
                                       }
-                                      posts[index].likes.add(love);
-                                      i++;
-                                    }
-                                    return  StreamBuilder<QuerySnapshot>(
-                                      stream: _firestore
-                                          .collection('post')
-                                          .doc(posts[index].id)
-                                          .collection('comment')
-                                          .snapshots(),
-                                      builder: (context,snapshot){
-                                        int commentCounter=0;
-                                        if (!snapshot.hasData) {
-                                          return const Center(
-                                            child: CircularProgressIndicator(
-                                              backgroundColor: Colors.blue,
-                                            ),
+                                      final masseges = snapshot.data?.docs;
+                                      likeCounter=masseges!.length;
+                                      int i = 0;
+                                      for (var massege in masseges!.reversed){
+                                        String email = massege.get('email');
+                                        String photo = massege.get('photo');
+                                        String name = massege.get('name');
+                                        LoveModel love = LoveModel(email, name, photo);
+                                        love.id = massege.id;
+                                        if (_auth.currentUser!.uid == love.id) {
+                                          posts[indexx].like = true;
+                                          posts[indexx].indexLike = i;
+                                        }
+                                        posts[indexx].likes.add(love);
+                                        i++;
+                                      }
+                                      return  StreamBuilder<QuerySnapshot>(
+                                        stream: _firestore
+                                            .collection('post')
+                                            .doc(posts[indexx].id)
+                                            .collection('comment')
+                                            .snapshots(),
+                                        builder: (context,snapshot){
+                                          int commentCounter=0;
+                                          if (!snapshot.hasData) {
+                                            return const Center(
+                                              child: CircularProgressIndicator(
+                                                backgroundColor: Colors.blue,
+                                              ),
+                                            );
+                                          }
+                                          final masseges = snapshot.data?.docs;
+                                          commentCounter=masseges!.length;
+                                          for (var massege in masseges!.reversed){
+                                            String email = massege.get('email');
+                                            String photo = massege.get('photo');
+                                            String name = massege.get('name');
+                                            String comment = massege.get('comment');
+                                            CommentModel love = CommentModel(
+                                                email, name, photo, comment);
+                                            love.id = massege.id;
+                                            posts[indexx].comments.add(love);
+                                          }
+                                          print("Post ${posts.length}");
+                                          return Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: PostCard(posts[indexx], commentCounter, likeCounter),
                                           );
-                                        }
-                                        final masseges = snapshot.data?.docs;
-                                        commentCounter=masseges!.length;
-                                        for (var massege in masseges!.reversed){
-                                          String email = massege.get('email');
-                                          String photo = massege.get('photo');
-                                          String name = massege.get('name');
-                                          String comment = massege.get('comment');
-                                          CommentModel love = CommentModel(
-                                              email, name, photo, comment);
-                                          love.id = massege.id;
-                                          posts[index].comments.add(love);
-                                        }
-                                        return PostCard(posts[index], commentCounter, likeCounter);
-                                      },
-                                    );
-                                  },
-                                );
-                              }
-                          ),
-                        );
+
+                                        },
+                                      );
+                                    },
+                                  );
+                                }
+                            ),
+                          );
+                        }
+                        else{
+                          return Container();
+                        }
                       },
                     );
                   },
