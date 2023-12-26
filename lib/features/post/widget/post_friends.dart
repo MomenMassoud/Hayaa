@@ -32,14 +32,14 @@ class _PostFriends extends State<PostFriends>{
           final masseges = snapshot.data?.docs;
           for (var massege in masseges!.reversed){
             final us = UserModel("email", "name", "gender", "photo"," massege.get('id')", "phonenumber", "devicetoken", "daimond", "vip", "bio", "seen", "lang", "country", "type", "birthdate", "coin", "exp", "level");
-            us.id=massege.get('id');
+            us.docID=massege.id;
             users.add(us);
           }
           return ListView.builder(
               itemCount: users.length,
               itemBuilder: (context,index) {
                 return StreamBuilder<QuerySnapshot>(
-                  stream: _firestore.collection('user').where('id',isEqualTo: users[index].id).snapshots(),
+                  stream: _firestore.collection('user').where('doc',isEqualTo: users[index].id).snapshots(),
                   builder: (context,snapshot){
                     if (!snapshot.hasData) {
                       return const Center(

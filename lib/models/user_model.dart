@@ -33,6 +33,7 @@ class UserModel{
   List<FamilyRankModel> familyRank=[];
   List<StoryModel> storys=[];
   int valueRank=0;
+  String myroom="";
   UserModel(
       this.email,this.name,this.gender,this.photo,this.id,this.phonenumber,this.devicetoken,this.daimond,this.vip,this.bio,this.seen,this.lang,this.country,this.type,this.birthdate,this.coin,this.exp,this.level,
       );

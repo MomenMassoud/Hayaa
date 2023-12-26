@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:hayaa_main/features/profile/widgets/visitor_profile.dart';
 import 'package:hayaa_main/models/firends_model.dart';
 
+import '../../profile/views/visitor_.view.dart';
+
 
 class SearchViewBody extends StatefulWidget{
   _SearchViewBody createState()=>_SearchViewBody();
@@ -90,14 +92,14 @@ class _SearchViewBody extends State<SearchViewBody>{
                             return ListTile(
                               onTap: (){
                                 Navigator.of(context).push(
-                                    MaterialPageRoute(builder: (context) => VisitorProfile(searchfriends[index])));
+                                    MaterialPageRoute(builder: (context) => VistorView(searchfriends[index].photo,searchfriends[index].docID)));
                               },
                               leading: CircleAvatar(backgroundImage: CachedNetworkImageProvider(searchfriends[index].photo),),
                               title: Text(searchfriends[index].name),
                               subtitle: Text(searchfriends[index].bio),
                               trailing: ElevatedButton(onPressed: ()async{
                                 await _firestore.collection('friendreq').doc().set({
-                                  'sender':myID,
+                                  'sender':_auth.currentUser!.uid,
                                   'owner':searchfriends[index].id,
                                   'msg':"User  ${searchfriends[index].name} Send you Friend Request",
                                   'type':"request",

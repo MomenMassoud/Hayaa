@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hayaa_main/core/Utils/app_images.dart';
 import 'package:hayaa_main/features/chat/widget/group/family_rank_list/search_family.dart';
 import 'package:hayaa_main/models/family_model.dart';
+import '../myfamily/my_family_body.dart';
 import 'create_family_body.dart';
 
 class ViewAllFamilyBody extends StatefulWidget{
@@ -80,13 +81,28 @@ class _ViewAllFamilyBody extends State<ViewAllFamilyBody>{
                         ),
                         trailing: ElevatedButton(
                           onPressed: ()async{
-                            await _firestore.collection('family').doc(familys[index].doc).collection('req').doc().set({
-                              'id':_auth.currentUser!.uid,
-                              'name':_auth.currentUser!.displayName,
-                              'photo':_auth.currentUser!.photoURL.toString()
-                            }).then((value){
-                              Navigator.pop(context);
-                            });
+                            if(familys[index].join=="close"){
+                              await _firestore.collection('family').doc(familys[index].doc).collection('req').doc(_auth.currentUser!.uid).set({
+                                'id':_auth.currentUser!.uid,
+                                'name':_auth.currentUser!.displayName,
+                                'photo':_auth.currentUser!.photoURL.toString()
+                              }).then((value){
+                                Navigator.pop(context);
+                              });
+                            }
+                            else{
+                              await _firestore.collection('user').doc(_auth.currentUser!.uid).update({
+                                'myfamily':familys[index].doc,
+                              }).then((value){
+                                _firestore.collection('family').doc(familys[index].doc).collection('user').doc().set({
+                                  'type':'member',
+                                  'user':_auth.currentUser!.uid,
+                                }).then((value){
+                                  Navigator.pop(context);
+                                  Navigator.pushNamed(context, MyFamilyBody.id);
+                                });
+                              });
+                            }
                           },
                           child: Text("Join",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
                         )

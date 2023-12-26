@@ -75,14 +75,13 @@ class _SearchFamily extends State<SearchFamily>{
                           subtitle: Text(familys[index].bio,style: TextStyle(color: Colors.white),),
                           trailing: ElevatedButton(onPressed: ()async{
                             if(familys[index].join=="close"){
-                              await _firestore.collection('family').doc(familys[index].doc).collection('req').doc().set({
+                              await _firestore.collection('family').doc(familys[index].doc).collection('req').doc(_auth.currentUser!.uid).set({
                                 'id':_auth.currentUser!.uid,
                                 'name':_auth.currentUser!.displayName,
                                 'photo':_auth.currentUser!.photoURL.toString()
                               }).then((value){
                                 Navigator.pop(context);
                               });
-
                             }
                             else{
                               await _firestore.collection('user').doc(_auth.currentUser!.uid).update({

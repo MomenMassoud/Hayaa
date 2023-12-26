@@ -82,7 +82,7 @@ class _ChatBody extends State<ChatBody> {
     }
     await _firestore
         .collection('chat')
-        .where('chatid', isEqualTo: chatID)
+        .where('chatroom', isEqualTo: chatID)
         .get()
         .then((value) {
       if (value.docs.isEmpty) {
@@ -92,7 +92,8 @@ class _ChatBody extends State<ChatBody> {
           'lastmsg': '',
           'type': 'msg',
           'time': '',
-          'chatid': chatID
+          'chatroom': chatID,
+          'clock':FieldValue.serverTimestamp(),
         }).then((value) {
           _firestore.collection('contacts').doc('${widget.friend.docID}${_auth.currentUser!.uid}').set({
             'owner': widget.friend.docID,
@@ -100,7 +101,8 @@ class _ChatBody extends State<ChatBody> {
             'lastmsg': '',
             'type': 'msg',
             'time': '',
-            'chatid': chatID
+            'chatroom': chatID,
+            'clock':FieldValue.serverTimestamp(),
           });
         });
       }
@@ -519,6 +521,7 @@ class _ChatBody extends State<ChatBody> {
         "lastmsg": message,
         'time': DateTime.now().toString().substring(10, 16),
         'type': "msg",
+        'clock':FieldValue.serverTimestamp(),
       };
       docRef.update(updates);
       idUser = "$targetId$sourceId";
@@ -527,6 +530,7 @@ class _ChatBody extends State<ChatBody> {
         "lastmsg": message,
         'time': DateTime.now().toString().substring(10, 16),
         'type': "msg",
+        'clock':FieldValue.serverTimestamp(),
       };
       docRef2.update(updates2);
 
@@ -548,6 +552,7 @@ class _ChatBody extends State<ChatBody> {
         "lastmsg": message,
         'time': DateTime.now().toString().substring(10, 16),
         'type': "msg",
+        'clock':FieldValue.serverTimestamp(),
       };
       docRef.update(updates);
       idUser = "$targetId$sourceId";
@@ -556,6 +561,7 @@ class _ChatBody extends State<ChatBody> {
         "lastmsg": message,
         'time': DateTime.now().toString().substring(10, 16),
         'type': "msg",
+        'clock':FieldValue.serverTimestamp(),
       };
       docRef2.update(updates2);
       print(message);
@@ -604,6 +610,7 @@ class _ChatBody extends State<ChatBody> {
       "lastmsg": "photo",
       'time': DateTime.now().toString().substring(10, 16),
       'typeLast': "msg",
+      'clock':FieldValue.serverTimestamp(),
     };
     docRef.update(updates);
     idUser = "$targetId$sourceId";
@@ -612,6 +619,7 @@ class _ChatBody extends State<ChatBody> {
       "lastmsg": "photo",
       'time': DateTime.now().toString().substring(10, 16),
       'typeLast': "msg",
+      'clock':FieldValue.serverTimestamp(),
     };
     docRef2.update(updates2);
     setState(() {
@@ -702,6 +710,7 @@ class _ChatBody extends State<ChatBody> {
                                     "lastmsg": "gift",
                                     'time': DateTime.now().toString().substring(10, 16),
                                     'type': "msg",
+                                    'clock':FieldValue.serverTimestamp(),
                                   };
                                   docRef.update(updates);
                                   idUser = "${widget.friend.docID}${_auth.currentUser!.uid}";
@@ -710,6 +719,7 @@ class _ChatBody extends State<ChatBody> {
                                     "lastmsg": "gift",
                                     'time': DateTime.now().toString().substring(10, 16),
                                     'type': "msg",
+                                    'clock':FieldValue.serverTimestamp(),
                                   };
                                   docRef2.update(updates2);
                                 }).then((value){

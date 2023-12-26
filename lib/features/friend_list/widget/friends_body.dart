@@ -66,7 +66,7 @@ class _FriendsBody extends State<FriendsBody> {
           userModel.name = massege.get('name');
           userModel.phonenumber = massege.get('phonenumber');
           userModel.photo = massege.get('photo');
-          userModel.seen = massege.get('seen');
+          userModel.seen = massege.get('seen').toString();
           userModel.type = massege.get('type');
           userModel.vip = massege.get('vip');
           userModel.docID = massege.id;
@@ -88,13 +88,13 @@ class _FriendsBody extends State<FriendsBody> {
             }
             final masseges = snapshot.data?.docs;
             for (var massege in masseges!.reversed) {
-              FriendID.add(massege.get('id'));
+              FriendID.add(massege.id);
             }
             return ListView.builder(
                 itemCount: FriendID.length,
                 itemBuilder: (context, index) {
                   return StreamBuilder<QuerySnapshot>(
-                      stream: _firestore.collection('user').where('id',isEqualTo: FriendID[index]).snapshots(),
+                      stream: _firestore.collection('user').where('doc',isEqualTo: FriendID[index]).snapshots(),
                       builder: (context,snapshot){
                         if (!snapshot.hasData) {
                           return const Center(

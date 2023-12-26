@@ -86,6 +86,9 @@ class _MyFamilyRequest extends State<MyFamilyRequest>{
                         users[index].docID=massege.id;
                         users[index].myfamily=massege.get('myfamily');
                       }
+                      if(users[index].myfamily!=""){
+                        _firestore.collection('family').doc(widget.familyID).collection('req').doc(users[index].docID).delete();
+                      }
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
@@ -150,7 +153,7 @@ class _MyFamilyRequest extends State<MyFamilyRequest>{
                             'user':docs.docID,
                             'type':'member'
                           }).then((value){
-                            _firestore.collection('family').doc(widget.familyID).collection('req').doc(docs.devicetoken).delete();
+                            _firestore.collection('family').doc(widget.familyID).collection('req').doc(docs.docID).delete();
                           }).then((value){
                             Navigator.pop(context);
                           });

@@ -124,7 +124,7 @@ class _MessagesViewBody extends State<MessagesViewBody>{
               friendreqCount=masseges!.length;
               for (var massege in masseges!.reversed){}
               return StreamBuilder<QuerySnapshot>(
-                stream:_firestore.collection('contacts').where('owner',isEqualTo: _auth.currentUser!.uid).snapshots(),
+                stream:_firestore.collection('contacts').orderBy('clock').where('owner',isEqualTo: _auth.currentUser!.uid).snapshots(),
                 builder: (context,snapshot){
                   List<FriendsCardModel> friendIDs=[];
                   if (!snapshot.hasData) {

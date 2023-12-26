@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
+import 'package:hayaa_main/features/rooms/view/room_view.dart';
 import '../../../core/Utils/app_colors.dart';
 import '../../../core/Utils/app_images.dart';
 import '../../../models/user_model.dart';
@@ -76,6 +77,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
         userModel.seen = snap.docs[0].get('seen');
         userModel.type = snap.docs[0].get('type');
         userModel.vip = snap.docs[0].get('vip');
+        userModel.myroom=snap.docs[0].get('room');
       }
     } else {
       await for (var snap in _firestore
@@ -100,6 +102,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
         userModel.seen = snap.docs[0].get('seen');
         userModel.type = snap.docs[0].get('type');
         userModel.vip = snap.docs[0].get('vip');
+        userModel.myroom=snap.docs[0].get('room');
       }
     }
     setState(() {
@@ -162,9 +165,19 @@ class _HomeViewBodyState extends State<HomeViewBody> {
         ),
         actions: [
           IconButton(
-              onPressed: () {}, icon: const Icon(Icons.search)),
+              onPressed: () {}, icon: const Icon(Icons.search,color: Colors.white,)),
           IconButton(
-              onPressed: () {}, icon: const Icon(Icons.add_circle_outline)),
+              onPressed: () {
+                if(userModel.myroom==""){
+                  CreateRoom();
+                }
+                else{
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => RoomView(userModel.myroom,true,userModel.name,_auth.currentUser!.uid,),));
+                }
+              }, icon:userModel.myroom==""?Icon(Icons.add_home_outlined,color: Colors.white,):
+              Icon(Icons.home_filled,color: Colors.white,)
+          ),
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.25,
           ),
@@ -333,5 +346,48 @@ class _HomeViewBodyState extends State<HomeViewBody> {
         ),
       );
     }).toList();
+  }
+  void CreateRoom() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: Text("تنبيه"),
+              content: Container(
+                height: 120,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("هل تود انشاء غرفتك"),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButton(onPressed: ()async{
+                          String roomID="${DateTime.now().toString()}-${_auth.currentUser!.uid}";
+                          _firestore.collection('room').doc(roomID).set({
+                            'id':userModel.id,
+                            'doc':roomID,
+                            'owner':_auth.currentUser!.uid
+                          }).then((value){
+                           _firestore.collection('user').doc(_auth.currentUser!.uid).update({
+                             'room':roomID
+                           }).then((value){
+                             setState(() {
+                               userModel.myroom=roomID;
+                             });
+                             Navigator.pop(context);
+                           });
+                          });
+                        }, child: Text("نعم")),
+                        ElevatedButton(onPressed: (){
+                          Navigator.pop(context);
+                        }, child: Text("لا"))
+                      ],
+                    )
+                  ],
+                ),
+              )
+          );
+        });
   }
 }

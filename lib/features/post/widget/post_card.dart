@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hayaa_main/features/chat/widget/common/view_photo.dart';
 import 'package:hayaa_main/features/post/widget/view_coment_body.dart';
+import 'package:hayaa_main/features/profile/views/visitor_.view.dart';
 import 'package:hayaa_main/models/post_model.dart';
 
 class PostCard extends StatefulWidget{
@@ -24,17 +25,23 @@ class _PostCard extends State<PostCard>{
       padding: const EdgeInsets.only(top: 8.0,right: 8.0,left: 8.0),
       child: Column(
         children: [
-          Row(
-            children: [
-              CircleAvatar(
-                backgroundImage: CachedNetworkImageProvider(widget.post.Owner_photo),
-                radius: 20,
-              ),
-              SizedBox(width: 10,),
-              Text(widget.post.ownerName,style: TextStyle(fontSize: 18),),
-              SizedBox(width: 100,),
-              Text("${widget.post.Day}/${widget.post.Month}/${widget.post.Year}")
-            ],
+          InkWell(
+            onTap: (){
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => VistorView(widget.post.Owner_photo,widget.post.owner)));
+            },
+            child: Row(
+              children: [
+                CircleAvatar(
+                  backgroundImage: CachedNetworkImageProvider(widget.post.Owner_photo),
+                  radius: 20,
+                ),
+                SizedBox(width: 10,),
+                Text(widget.post.ownerName,style: TextStyle(fontSize: 18),),
+                SizedBox(width: 100,),
+                Text("${widget.post.Day}/${widget.post.Month}/${widget.post.Year}")
+              ],
+            ),
           ),
           SizedBox(height: 20,),
           Row(

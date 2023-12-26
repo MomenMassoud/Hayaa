@@ -74,7 +74,9 @@ class _FriendRequest extends State<FriendReuest> {
                     ElevatedButton(onPressed: (){
                       AcceptReuest(request[index]);
                     }, child: Text("قبول")),
-                    ElevatedButton(onPressed: (){}, child: Text("رفض"))
+                    ElevatedButton(onPressed: ()async{
+                      _firestore.collection('friendreq').doc(request[index].doc).delete();
+                    }, child: Text("رفض"))
                   ],
                 ),
               );
@@ -89,7 +91,7 @@ class _FriendRequest extends State<FriendReuest> {
     await _firestore.collection('user').doc(docID).collection('friends').doc(req.Sender).set({
       'id':req.Sender
     }).then((value){
-      _firestore.collection('user').where('id',isEqualTo: req.Sender).get().then((value){
+      _firestore.collection('user').where('doc',isEqualTo: req.Sender).get().then((value){
         friend=value.docs[0].id;
       }).then((value){
         _firestore.collection('user').doc(friend).collection('friends').doc(docID).set({
