@@ -172,8 +172,13 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                   CreateRoom();
                 }
                 else{
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => RoomView(userModel.myroom,true,userModel.name,_auth.currentUser!.uid,),));
+                  _firestore.collection('room').doc(userModel.myroom).collection('user').doc(_auth.currentUser!.uid).set({
+                    'id':userModel.id,
+                    'doc':_auth.currentUser!.uid
+                  }).then((value){
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => RoomView(userModel.myroom,true,userModel.name,_auth.currentUser!.uid,),));
+                  });
                 }
               }, icon:userModel.myroom==""?Icon(Icons.add_home_outlined,color: Colors.white,):
               Icon(Icons.home_filled,color: Colors.white,)
