@@ -71,36 +71,108 @@ class _RoomViewBody extends State<RoomViewBody> {
                       userID: widget.username,
                       userName: widget.userid,
                       roomID: "111222333",
-                      config: (widget.isHost
+                      config: widget.isHost
                           ? ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
-                          : ZegoUIKitPrebuiltLiveAudioRoomConfig.audience())
+                          : ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
                         ..background = background()
-                        ..seatConfig.avatarBuilder = (BuildContext context, Size size,
-                            ZegoUIKitUser? user, Map extraInfo) {
-                          return Stack(
-                            children: [
-                              Container(
-                                width: size.width*2,
-                                child: CircleAvatar(
-                                  maxRadius: size.width+100,
-                                  backgroundImage: CachedNetworkImageProvider(framePhoto),
-                                  backgroundColor: Colors.transparent,
-                                ),
-                              ),
-                              // Display the second image on the right
-                              Center(
-                                child: Container(
-                                  width: size.width-20-3.5,
+                        ..takeSeatIndexWhenJoining =
+                        widget.isHost ? getHostSeatIndex() : -1
+                        ..hostSeatIndexes = [0]
+                        ..useSpeakerWhenJoining=true
+                        ..seatConfig=ZegoLiveAudioRoomSeatConfig(
+                          backgroundBuilder: (context, size, user, extraInfo) {
+                            return Container(color: Colors.transparent,);
+                          },
+                          closeIcon: Image.network("https://firebasestorage.googleapis.com/v0/b/hayaa-161f5.appspot.com/o/rooms%2Flock_5794524.png?alt=media&token=a613f54d-477a-42c9-98a6-fa65dac2a49e"),
+                          openIcon: Image.network("https://firebasestorage.googleapis.com/v0/b/hayaa-161f5.appspot.com/o/rooms%2Fsofa_6458474.png?alt=media&token=dff6124f-805c-4386-bd95-394c4fa611f7")
+                        )
+                        ..seatConfig.avatarBuilder=(context, size, user, extraInfo) {
+                          if(user!.id==_auth.currentUser!.uid){
+                            return Stack(
+                              children: [
+                                Container(
+                                  width: size.width*2,
                                   child: CircleAvatar(
-                                    backgroundImage: CachedNetworkImageProvider(_auth.currentUser!.photoURL.toString() ),
+                                    maxRadius: size.width+100,
+                                    backgroundImage: CachedNetworkImageProvider(framePhoto),
                                     backgroundColor: Colors.transparent,
                                   ),
                                 ),
-                              ),
-                            ],
-                          );
+                                // Display the second image on the right
+                                Center(
+                                  child: Container(
+                                    width: size.width-20-3.5,
+                                    child: CircleAvatar(
+                                      backgroundImage: CachedNetworkImageProvider(_auth.currentUser!.photoURL.toString() ),
+                                      backgroundColor: Colors.transparent,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
+                          else{
+                            return StreamBuilder<QuerySnapshot>(
+                              stream: _firestore.collection('user').where('doc',isEqualTo: user!.id).snapshots(),
+                              builder: (context,snapshot){
+                                String userPhoto="";
+                                String userFrame="";
+                                if (!snapshot.hasData) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(
+                                      backgroundColor: Colors.blue,
+                                    ),
+                                  );
+                                }
+                                final masseges = snapshot.data?.docs;
+                                for (var massege in masseges!.reversed){
+                                  userPhoto=massege.get('photo');
+                                  userFrame=massege.get('myframe');
+                                }
+                                return StreamBuilder<QuerySnapshot>(
+                                    stream:_firestore.collection('store').where('id',isEqualTo: userFrame).snapshots(),
+                                    builder: (context,snapshot){
+                                      String userFramePhoto="";
+                                      if (!snapshot.hasData) {
+                                        return const Center(
+                                          child: CircularProgressIndicator(
+                                            backgroundColor: Colors.blue,
+                                          ),
+                                        );
+                                      }
+                                      final masseges = snapshot.data?.docs;
+                                      for (var massege in masseges!.reversed){
+                                        userFramePhoto=massege.get('photo');
+                                      }
+                                      return Stack(
+                                        children: [
+                                          Container(
+                                            width: size.width*2,
+                                            child: CircleAvatar(
+                                              maxRadius: size.width+100,
+                                              backgroundImage: CachedNetworkImageProvider(userFramePhoto),
+                                              backgroundColor: Colors.transparent,
+                                            ),
+                                          ),
+                                          // Display the second image on the right
+                                          Center(
+                                            child: Container(
+                                              width: size.width-20-3.5,
+                                              child: CircleAvatar(
+                                                backgroundImage: CachedNetworkImageProvider(userPhoto),
+                                                backgroundColor: Colors.transparent,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                }
+                                );
+                              },
+                            );
+                          }
                         }
-                        ..hostSeatIndexes = [0]
+                        ..innerText.memberListTitle = 'Members'
                       ..inRoomMessageConfig=ZegoInRoomMessageConfig(
                         height: 166,
                         showAvatar: false,
@@ -113,13 +185,15 @@ class _RoomViewBody extends State<RoomViewBody> {
                         ]
                         ..bottomMenuBarConfig.audienceButtons = const [
                           ZegoMenuBarButtonName.showMemberListButton,
+                          ZegoMenuBarButtonName.closeSeatButton,
+                          ZegoMenuBarButtonName.applyToTakeSeatButton
                         ]
-                        // ..seatConfig = (ZegoLiveAudioRoomSeatConfig()
-                        //   ..backgroundBuilder = backgroundBuilder
-                        //   ..foregroundBuilder = foregroundBuilder),
-                        ..onSeatClicked = (int index, ZegoUIKitUser? user) {
-                          showDemoBottomSheet(context);
-                        }
+                        // ..onSeatClicked = (int index, ZegoUIKitUser? user) {
+                        //   if (widget.isHost && user != null) {
+                        //     controller.leaveSeat();
+                        //     showEvictionConfirmationDialog(context, index, user);
+                        //   }
+                        // }
                         ..bottomMenuBarConfig.audienceExtendButtons = [
                           connectButton(),
                         ]
@@ -143,19 +217,20 @@ class _RoomViewBody extends State<RoomViewBody> {
                             }
                           }
                         }
-                        ..innerText.memberListTitle = 'Members'
                         ..onSeatTakingRequestFailed = () {
                           isRequestingNotifier.value = false;
                         }
                         ..onSeatTakingRequestRejected = () {
                           isRequestingNotifier.value = false;
                         }
+                        ..onSeatTakingRequested = (ZegoUIKitUser audience) {
+                          debugPrint('on seat taking requested, audience:$audience');
+                        }
+                        ..onInviteAudienceToTakeSeatFailed = () {
+                          debugPrint('on invite audience to take seat failed');
+                        }
                         ..bottomMenuBarConfig = ZegoBottomMenuBarConfig(
                           maxCount: 5,
-                          hostButtons: [
-                            ZegoMenuBarButtonName.toggleMicrophoneButton,
-                            ZegoMenuBarButtonName.showMemberListButton,
-                          ],
                           hostExtendButtons: [
                             for (int i = 0; i < customIcons.length; i++)
                               ElevatedButton(
@@ -172,10 +247,10 @@ class _RoomViewBody extends State<RoomViewBody> {
                             ZegoMenuBarButtonName.toggleMicrophoneButton,
                             ZegoMenuBarButtonName.showMemberListButton,
                           ],
-                        )
-                        ..onMemberListMoreButtonPressed = (ZegoUIKitUser user) {
-                          showDemoBottomSheet(context);
-                        },
+                        ),
+                        // ..onMemberListMoreButtonPressed = (ZegoUIKitUser user) {
+                        //   showDemoBottomSheet(context);
+                        // },
                       controller: controller,
 
                   ));
@@ -183,6 +258,40 @@ class _RoomViewBody extends State<RoomViewBody> {
         );
       },
     );
+  }
+
+  void showEvictionConfirmationDialog(BuildContext context, int seatIndex, ZegoUIKitUser user) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Evict User'),
+          content: Text('Do you want to evict ${user.name} from the seat?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Call the method to evict the user from the seat
+                evictUserFromSeat(seatIndex, user);
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Evict'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void evictUserFromSeat(int seatIndex, ZegoUIKitUser user) {
+    // Check if the seat is occupied by the specified user
+    controller.removeSpeakerFromSeat(user!.id);
+    print("Target ============${user.id}");
   }
   Widget connectButton() {
     return ValueListenableBuilder<bool>(
@@ -214,6 +323,13 @@ class _RoomViewBody extends State<RoomViewBody> {
             : Container();
       },
     );
+  }
+  int getHostSeatIndex() {
+    if (widget.layoutMode == LayoutMode.hostCenter) {
+      return 4;
+    }
+
+    return 0;
   }
   void showDemoBottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -332,9 +448,7 @@ class _RoomViewBody extends State<RoomViewBody> {
           decoration: BoxDecoration(
             image: DecorationImage(
               fit: BoxFit.fill,
-              image: Image
-                  .asset('lib/core/Utils/assets/images/vip4.jpeg')
-                  .image,
+              image:CachedNetworkImageProvider("https://firebasestorage.googleapis.com/v0/b/hayaa-161f5.appspot.com/o/rooms%2Fclose-up-microphone-pop-filter-studio.jpg?alt=media&token=c9014900-dba7-4e7c-80c4-8d9fc6055462")
             ),
           ),
         ),

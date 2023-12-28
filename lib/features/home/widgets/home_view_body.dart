@@ -168,18 +168,22 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               onPressed: () {}, icon: const Icon(Icons.search,color: Colors.white,)),
           IconButton(
               onPressed: () {
-                if(userModel.myroom==""){
-                  CreateRoom();
-                }
-                else{
-                  _firestore.collection('room').doc(userModel.myroom).collection('user').doc(_auth.currentUser!.uid).set({
-                    'id':userModel.id,
-                    'doc':_auth.currentUser!.uid
-                  }).then((value){
+                // if(userModel.myroom==""){
+                //   CreateRoom();
+                // }
+                // else{
+                //   _firestore.collection('room').doc(userModel.myroom).collection('user').doc(_auth.currentUser!.uid).set({
+                //     'id':userModel.id,
+                //     'doc':_auth.currentUser!.uid
+                //   }).then((value){
+                //     Navigator.of(context).push(
+                //         MaterialPageRoute(builder: (context) => RoomView(userModel.myroom,true,userModel.name,_auth.currentUser!.uid,),));
+                //   });
+                // }
                     Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => RoomView(userModel.myroom,true,userModel.name,_auth.currentUser!.uid,),));
-                  });
-                }
+                        MaterialPageRoute(builder: (context) => RoomView("2023-12-28 15:16:07.683239-tJlADfx1AwY3eVxB0E9N4ANKFbx1",true,userModel.name,_auth.currentUser!.uid,),));
+
+
               }, icon:userModel.myroom==""?Icon(Icons.add_home_outlined,color: Colors.white,):
               Icon(Icons.home_filled,color: Colors.white,)
           ),
