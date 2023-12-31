@@ -138,7 +138,7 @@ class _AgencyAgentViewBodyState extends State<AgencyAgentViewBody> {
                                 user[index].phonenumber =
                                     massege.get('phonenumber');
                                 user[index].photo = massege.get('photo');
-                                user[index].seen = massege.get('seen');
+                                user[index].seen = massege.get('seen').toString();
                                 user[index].type = massege.get('type');
                                 user[index].vip = massege.get('vip');
                                 user[index].docID = massege.id;

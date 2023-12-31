@@ -19,6 +19,7 @@ class RoomViewBody extends StatefulWidget{
 }
 
 class _RoomViewBody extends State<RoomViewBody> {
+  bool openchat=true;
   List<int> lockedSeats = []; // List to store locked seat indexes
   List<String> userSeats=[];
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -27,7 +28,79 @@ class _RoomViewBody extends State<RoomViewBody> {
   final isSeatClosedNotifier = ValueNotifier<bool>(false);
   final isRequestingNotifier = ValueNotifier<bool>(false);
   final controller = ZegoLiveAudioRoomController();
-  List<IconData> customIcons = [Icons.cookie, Icons.phone, Icons.speaker, Icons.air, Icons.blender, Icons.file_copy, Icons.place, Icons.phone_android, Icons.phone_iphone];
+  List<String> musicPath=[];
+  List<String> musicname=[];
+  DateTime? seatOccupiedTime;
+  bool viewMusic=false;
+  String viewID="";
+  String bio="";
+  String layoutSeats="";
+  String wallpaper="https://firebasestorage.googleapis.com/v0/b/hayaa-161f5.appspot.com/o/rooms%2Fclose-up-microphone-pop-filter-studio.jpg?alt=media&token=c9014900-dba7-4e7c-80c4-8d9fc6055462";
+  List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
+  List<TextEditingController> _controllers = List.generate(6, (index) => TextEditingController());
+  String pass="";
+  String giftMedia="";
+  String carMedia="";
+  String cartype="";
+  String gifttype="";
+  String myType="";
+  @override
+  void initState() {
+    super.initState();
+    getMyCar();
+    getWallpaper();
+    UserBlock();
+  }
+  void getMyCar()async{
+    await for(var snap in _firestore.collection('user').doc(_auth.currentUser!.uid).snapshots()){
+      setState(() {
+        myType=snap.get('type');
+      });
+      await for(var snapp in _firestore.collection('store').doc(snap.get('mycar')).snapshots()){
+        setState(() {
+          carMedia=snapp.get('photo');
+           cartype=snapp.get('type');
+          _firestore.collection('room').doc(widget.roomID).update({
+            'car':carMedia,
+            'cartype':cartype,
+          });
+          Future.delayed(const Duration(seconds: 4)).then((value){
+            setState(() {
+              carMedia="";
+            });
+            _firestore.collection('room').doc(widget.roomID).update({
+              'car':'',
+              'cartype':''
+            }).then((value){
+              controller.message.send('Join to Room');
+            });
+          });
+        });
+      }
+    }
+  }
+  void getWallpaper()async{
+    await for(var snap in _firestore.collection('room').doc(widget.roomID).snapshots()){
+      setState(() {
+        wallpaper=snap.get('wallpaper');
+        viewID=snap.get('id');
+        bio=snap.get('bio');
+        layoutSeats=snap.get('seat');
+        pass=snap.get('password');
+        giftMedia=snap.get('gift');
+        carMedia=snap.get('car');
+      });
+    }
+  }
+  void UserBlock()async{
+    if(!widget.isHost){
+      await for(var snap in _firestore.collection('room').doc(widget.roomID).collection('block').where('id',isEqualTo: _auth.currentUser!.uid).snapshots()){
+        if(snap.size!=0){
+          controller.leave(context,showConfirmation: false);
+        }
+      }
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -174,12 +247,20 @@ class _RoomViewBody extends State<RoomViewBody> {
                             );
                           }
                         }
-                        ..innerText.memberListTitle = 'Members'
                       ..inRoomMessageConfig=ZegoInRoomMessageConfig(
                         height: 166,
                         showAvatar: false,
                       )
-                        ..layoutConfig.rowConfigs = [
+                        ..layoutConfig.rowConfigs =layoutSeats=='9'? [
+                          ZegoLiveAudioRoomLayoutRowConfig(count: 1, alignment: ZegoLiveAudioRoomLayoutAlignment.center),
+                          ZegoLiveAudioRoomLayoutRowConfig(count: 4, alignment: ZegoLiveAudioRoomLayoutAlignment.spaceAround),
+                          ZegoLiveAudioRoomLayoutRowConfig(count: 4, alignment: ZegoLiveAudioRoomLayoutAlignment.spaceAround),
+                        ]: layoutSeats=='11'?[
+                          ZegoLiveAudioRoomLayoutRowConfig(count: 1, alignment: ZegoLiveAudioRoomLayoutAlignment.center),
+                          ZegoLiveAudioRoomLayoutRowConfig(count: 2, alignment: ZegoLiveAudioRoomLayoutAlignment.spaceAround),
+                          ZegoLiveAudioRoomLayoutRowConfig(count: 4, alignment: ZegoLiveAudioRoomLayoutAlignment.spaceAround),
+                          ZegoLiveAudioRoomLayoutRowConfig(count: 4, alignment: ZegoLiveAudioRoomLayoutAlignment.spaceAround),
+                        ]:[
                           ZegoLiveAudioRoomLayoutRowConfig(count: 1, alignment: ZegoLiveAudioRoomLayoutAlignment.center),
                           ZegoLiveAudioRoomLayoutRowConfig(count: 4, alignment: ZegoLiveAudioRoomLayoutAlignment.spaceAround),
                           ZegoLiveAudioRoomLayoutRowConfig(count: 4, alignment: ZegoLiveAudioRoomLayoutAlignment.spaceAround),
@@ -187,13 +268,10 @@ class _RoomViewBody extends State<RoomViewBody> {
                         ]
                         ..bottomMenuBarConfig.audienceButtons = const [
                           ZegoMenuBarButtonName.showMemberListButton,
-                          ZegoMenuBarButtonName.closeSeatButton,
                           ZegoMenuBarButtonName.applyToTakeSeatButton
                         ]
-                        ..bottomMenuBarConfig.audienceExtendButtons = [
-                          connectButton(),
-                        ]
                       ..onSeatClicked=(index, user) {
+                        print("Value ${isSeatOpen(index)}");
                         if(widget.isHost){
                           if(isSeatOpen(index) && user==null){
                             openSeat(index);
@@ -203,6 +281,7 @@ class _RoomViewBody extends State<RoomViewBody> {
                              closeSeat(index);
                            }
                            else{
+                             controller.message.send('Remove ${user.name} from Seat');
                              controller.removeSpeakerFromSeat(user!.id);
                            }
                           }
@@ -241,41 +320,141 @@ class _RoomViewBody extends State<RoomViewBody> {
                           debugPrint(
                             'on seats changed, taken seats: $takenSeats, untaken seats: $untakenSeats',
                           );
-                          // Update usersInSeats list with user IDs in taken seats
-                          userSeats.clear();
-                          // Iterate through taken seats and print user information
+                          setState(() {
+                            userSeats.clear();
+                          });
                           takenSeats.forEach((seatIndex, user) {
-                            debugPrint('Seat $seatIndex is taken by user: $user');
                             setState(() {
                               userSeats.add(user.id);
                             });
+                            debugPrint('Seat $seatIndex is taken by user: $user');
+                            if (user.id==_auth.currentUser!.uid && myType=="host") {
+                              print("Start Time ===================");
+                              seatOccupiedTime = DateTime.now();
+                            }
+
                             // Do whatever you need with the updated list of users in seats
                             debugPrint('Users currently in seats: $userSeats');
                           });
-
+                          if (userSeats.contains(_auth.currentUser!.uid)==false) {
+                            print("user lefttttttttttttttttttttt");
+                            if (seatOccupiedTime != null) {
+                              DateTime now = DateTime.now();
+                              Duration timeSpent = now.difference(seatOccupiedTime!);
+                              print('User spent ${timeSpent.inMinutes} minutes in the seat.');
+                              // Reset the seatOccupiedTime
+                              seatOccupiedTime = null;
+                              String myagent="";
+                              _firestore.collection('user').doc(_auth.currentUser!.uid).get().then((value){
+                                myagent=value.get('myagent');
+                              }).then((value){
+                                int lastincome=0;
+                                String docs="${DateTime.now().month.toString()}-${DateTime.now().day.toString()}";
+                                _firestore.collection('agency').doc(myagent).collection('users').doc(_auth.currentUser!.uid).collection('income').doc(docs).get().then((value){
+                                  lastincome=int.parse(value.get('hosttime'))+timeSpent.inMinutes;
+                                }).whenComplete((){
+                                  if(lastincome==0){
+                                    _firestore.collection('agency').doc(myagent).collection('users').doc(_auth.currentUser!.uid).collection('income').doc(docs).set({
+                                      'date':DateTime.now().toString(),
+                                      'hosttime': timeSpent.inMinutes.toString(),
+                                      'numberradio':timeSpent.inMinutes>=60?'1':'0',
+                                    });
+                                  }
+                                  else{
+                                    _firestore.collection('agency').doc(myagent).collection('users').doc(_auth.currentUser!.uid).collection('income').doc(docs).update({
+                                      'hosttime':lastincome.toString(),
+                                      'numberradio':lastincome>=60?'1':'0',
+                                    });
+                                  }
+                                });
+                              });
+                            }
+                          }
                         }
                         ..bottomMenuBarConfig = ZegoBottomMenuBarConfig(
-                          maxCount: 5,
+                          maxCount: 6,
                           audienceExtendButtons: [
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                CircleAvatar(
-                                    backgroundColor: Colors.white,
-                                    child: IconButton(onPressed: (){
-                                      Navigator.pop(context);
-                                      showModalBottomSheet(
-                                          backgroundColor:
-                                          Colors.transparent,
-                                          context: context,
-                                          builder: (builder) =>
-                                              bottomSheet());
-                                    }, icon: Icon(Icons.card_giftcard,color: Colors.black,))),
-                                Text("Send Gift",style: TextStyle(color: Colors.white),)
-                              ],
-                            ),
+                            CircleAvatar(
+                                backgroundColor: Colors.white,
+                                child: IconButton(onPressed: (){
+                                  showModalBottomSheet(
+                                      backgroundColor:
+                                      Colors.transparent,
+                                      context: context,
+                                      builder: (builder) =>
+                                          bottomSheet());
+                                }, icon: Icon(Icons.card_giftcard,color: Colors.black,))),
                           ],
                           speakerExtendButtons: [
+                            CircleAvatar(
+                                backgroundColor: Colors.white,
+                                child: IconButton(onPressed: (){
+                                  showModalBottomSheet(
+                                      backgroundColor:
+                                      Colors.transparent,
+                                      context: context,
+                                      builder: (builder) =>
+                                          bottomSheet());
+                                }, icon: Icon(Icons.card_giftcard,color: Colors.black,))),
+                          ],
+                          hostExtendButtons: [
+
+                            CircleAvatar(
+                                backgroundColor: Colors.white,
+                                child: IconButton(onPressed: (){
+                                  showModalBottomSheet(
+                                      backgroundColor:
+                                      Colors.transparent,
+                                      context: context,
+                                      builder: (builder) =>
+                                          bottomSheet());
+                                }, icon: Icon(Icons.card_giftcard,color: Colors.black,))),
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    child:pass==""? IconButton(onPressed: (){
+                                      Navigator.pop(context);
+                                      SetPassword();
+                                    }, icon: Icon(Icons.password,color: Colors.black,)):IconButton(onPressed: ()async{
+                                      _firestore.collection('room').doc(widget.roomID).update({
+                                        'password':''
+                                      }).then((value){
+                                        controller.message.send('Remove Password from Room');
+                                        setState(() {
+                                          pass="";
+                                        });
+                                        Navigator.pop(context);
+                                      });
+                                    }, icon: Icon(Icons.remove_circle_outline))
+                                ),
+                                pass==""?Text("Set Password To Room",style: TextStyle(color: Colors.white,fontSize: 8),):Text("Remove Password To Room",style: TextStyle(color: Colors.white,fontSize: 8),)
+                              ],
+                            ),
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    child: IconButton(onPressed: (){
+                                      controller?.media.pickPureAudioFile().then((value){
+                                        Navigator.pop(context);
+                                        musicPath.add(value[0].path.toString());
+                                        musicname.add(value[0].name);
+                                        showModalBottomSheet(
+                                            backgroundColor:
+                                            Colors.transparent,
+                                            context: context,
+                                            builder: (builder) =>
+                                                MyMusic());
+                                      });
+
+
+                                    }, icon: Icon(Icons.music_note,color: Colors.black,))),
+                                Text("Play Music",style: TextStyle(color: Colors.white,fontSize: 8),)
+                              ],
+                            ),
                             Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -288,37 +467,38 @@ class _RoomViewBody extends State<RoomViewBody> {
                                           Colors.transparent,
                                           context: context,
                                           builder: (builder) =>
-                                              bottomSheet());
-                                    }, icon: Icon(Icons.card_giftcard,color: Colors.black,))),
-                                Text("Send Gift",style: TextStyle(color: Colors.white),)
+                                              MyWallpaper());
+                                    }, icon: Icon(Icons.photo,color: Colors.black,))),
+                                Text("Change Room Wallpaper",style: TextStyle(color: Colors.white,fontSize: 8),)
                               ],
                             ),
-                          ],
-                          hostExtendButtons: [
                             Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    child: IconButton(onPressed: (){
+                                      ShowNumberSeat();
+                                    }, icon: Icon(Icons.layers,color: Colors.black,))),
+                                Text("Change Seat Number in Room",style: TextStyle(color: Colors.white,fontSize: 8),)
+                              ],
+                            ),
+                            controller.media.getCurrentProgress()!=0? Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 CircleAvatar(
                                   backgroundColor: Colors.white,
-                                    child: IconButton(onPressed: (){
-                                      Navigator.pop(context);
-                                      showModalBottomSheet(
-                                          backgroundColor:
-                                          Colors.transparent,
-                                          context: context,
-                                          builder: (builder) =>
-                                              bottomSheet());
-                                    }, icon: Icon(Icons.card_giftcard,color: Colors.black,))),
-                                Text("Send Gift",style: TextStyle(color: Colors.white),)
+                                  child: IconButton(onPressed: ()async{
+                                    print("done");
+                                    await controller.media.stop().whenComplete((){
+                                      print("done");
+                                    });
+                                    await controller.media.pause();
+                                  }, icon: Icon(Icons.music_off_sharp)),
+                                ),
+                                Text("Stop Media",style: TextStyle(color: Colors.white,fontSize: 8),)
                               ],
-                            ),
-                            CircleAvatar(
-                                backgroundColor: Colors.white,
-                                child: IconButton(onPressed: (){}, icon: Icon(Icons.password,color: Colors.black,))),
-                            CircleAvatar(
-                                backgroundColor: Colors.white,
-                                child: IconButton(onPressed: (){}, icon: Icon(Icons.music_note,color: Colors.black,))),
-
+                            ):Container(),
                           ],
                           speakerButtons: [
                             ZegoMenuBarButtonName.toggleMicrophoneButton,
@@ -335,7 +515,7 @@ class _RoomViewBody extends State<RoomViewBody> {
   }
   // Function to check if a seat is open
   bool isSeatOpen(int seatIndex) {
-    return !lockedSeats.contains(seatIndex);
+    return lockedSeats.contains(seatIndex);
   }
 
   // Function to open a seat
@@ -344,6 +524,7 @@ class _RoomViewBody extends State<RoomViewBody> {
       // Implement logic to open the seat
       setState(() {
         lockedSeats.remove(seatIndex);
+        print("Opennnnnnnnnnn");
       });
       controller.openSeats(targetIndex: seatIndex); // You may need to implement this method in your ZegoLiveAudioRoomController
       debugPrint('Host opened seat $seatIndex');
@@ -358,44 +539,11 @@ class _RoomViewBody extends State<RoomViewBody> {
         lockedSeats.add(seatIndex);
       });
       controller.closeSeats(targetIndex: seatIndex); // You may need to implement this method in your ZegoLiveAudioRoomController
+      controller.message.send("Close Seat${seatIndex+1}");
       debugPrint('Host closed seat $seatIndex');
     }
   }
 
-
-  void showEvictionConfirmationDialog(BuildContext context, int seatIndex, ZegoUIKitUser user) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Evict User'),
-          content: Text('Do you want to evict ${user.name} from the seat?'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                // Call the method to evict the user from the seat
-                evictUserFromSeat(seatIndex, user);
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: Text('Evict'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void evictUserFromSeat(int seatIndex, ZegoUIKitUser user) {
-    // Check if the seat is occupied by the specified user
-    controller.removeSpeakerFromSeat(user!.id);
-    print("Target ============${user.id}");
-  }
   Widget connectButton() {
     return ValueListenableBuilder<bool>(
       valueListenable: isSeatClosedNotifier,
@@ -434,48 +582,7 @@ class _RoomViewBody extends State<RoomViewBody> {
 
     return 0;
   }
-  void showDemoBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      backgroundColor: const Color(0xff111014),
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(32.0),
-          topRight: Radius.circular(32.0),
-        ),
-      ),
-      isDismissible: true,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return AnimatedPadding(
-          padding: MediaQuery.of(context).viewInsets,
-          duration: const Duration(milliseconds: 50),
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: 3,
-              itemBuilder: (BuildContext context, int index) {
-                return SizedBox(
-                  height: 40,
-                  child: Center(
-                    child: Text(
-                      'Menu $index',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        );
-      },
-    );
-  }
+
   bool isAttributeHost(Map<String, String>? userInRoomAttributes) {
     return (userInRoomAttributes?[attributeKeyRole] ?? "") ==
         ZegoLiveAudioRoomRole.host.index.toString();
@@ -500,48 +607,7 @@ class _RoomViewBody extends State<RoomViewBody> {
       ),
     );
   }
-  Widget foregroundBuilder(
-      BuildContext context, Size size, ZegoUIKitUser? user, Map extraInfo) {
-    var userName = user?.name.isEmpty ?? true
-        ? Container()
-        : Positioned(
-      bottom: 0,
-      left: 0,
-      right: 0,
-      child: Text(
-        user?.name ?? "",
-        overflow: TextOverflow.ellipsis,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          backgroundColor: Colors.black.withOpacity(0.1),
-          fontSize: 9,
-          fontWeight: FontWeight.w600,
-          decoration: TextDecoration.none,
-        ),
-      ),
-    );
 
-    if (!isAttributeHost(user!.inRoomAttributes as Map<String, String>?)) {
-      return userName;
-    }
-
-    var hostIconSize = Size(size.width / 3, size.height / 3);
-    var hostIcon = Positioned(
-      bottom: 3,
-      right: 0,
-      child: Container(
-        width: hostIconSize.width,
-        height: hostIconSize.height,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: CachedNetworkImageProvider(_auth.currentUser!.photoURL.toString())
-          ),
-        ),
-      ),
-    );
-
-    return Stack(children: [userName, hostIcon]);
-  }
 
   Widget background() {
     /// how to replace background view
@@ -551,27 +617,32 @@ class _RoomViewBody extends State<RoomViewBody> {
           decoration: BoxDecoration(
             image: DecorationImage(
               fit: BoxFit.fill,
-              image:CachedNetworkImageProvider("https://firebasestorage.googleapis.com/v0/b/hayaa-161f5.appspot.com/o/rooms%2Fclose-up-microphone-pop-filter-studio.jpg?alt=media&token=c9014900-dba7-4e7c-80c4-8d9fc6055462")
+              image:CachedNetworkImageProvider(wallpaper)
             ),
           ),
         ),
          Positioned(
             top: 10,
             left: 10,
-            child: Text(
-              widget.isHost?_auth.currentUser!.displayName.toString():'Live Audio Room',
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
+            child: InkWell(
+              onTap: (){
+                UpdateBio();
+              },
+              child: Text(
+                bio,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             )),
         Positioned(
           top: 10 + 20,
           left: 10,
           child: Text(
-            widget.isHost?'ID : ${_auth.currentUser!.uid}':'ID: ${widget.roomID}',
+            "ID : ${viewID}",
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               color: Colors.white,
@@ -579,8 +650,197 @@ class _RoomViewBody extends State<RoomViewBody> {
               fontWeight: FontWeight.w500,
             ),
           ),
-        )
+        ),
+        giftMedia!=""?Center(
+          child:gifttype!="svga"? CachedNetworkImage(
+            imageUrl: giftMedia,
+          ):SVGASimpleImage(
+            resUrl: giftMedia,
+          ),
+        ):Container(),
+        carMedia!=""?Center(
+          child:cartype!="svga"? CachedNetworkImage(
+            imageUrl: carMedia,
+          ):SVGASimpleImage(
+            resUrl: carMedia,
+          ),
+        ):Container(),
+
       ],
+    );
+  }
+  void SetPassword() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: Text("تعين كلمة سر"),
+              content: Container(
+                child: SizedBox(
+                  height: 478,
+                  width: MediaQuery.of(context).size.width,
+                  child: Card(
+                    color: Colors.white,
+                    child: Padding(
+                        padding:  EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children:  List.generate(
+                                6,
+                                    (index) => SizedBox(
+                                  width: 40.0,
+                                  child: TextField(
+                                    controller: _controllers[index],
+                                    focusNode: _focusNodes[index],
+                                    textAlign: TextAlign.center,
+                                    maxLength: 1,
+                                    onChanged: (value) {
+                                      if (value.isNotEmpty && index < 5) {
+                                        _focusNodes[index + 1].requestFocus();
+                                      } else if (value.isEmpty && index > 0) {
+                                        _focusNodes[index - 1].requestFocus();
+                                      }
+                                    },
+                                    decoration: InputDecoration(
+                                      counterText: '',
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(width: 2.0),
+                                        borderRadius: BorderRadius.circular(8.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 16.0),
+                            ElevatedButton(
+                              onPressed: ()async {
+                                String passs = _controllers.map((controller) => controller.text).join();
+                                _firestore.collection('room').doc(widget.roomID).update({
+                                  'password':passs,
+                                }).then((value){
+                                  setState(() {
+                                    pass=passs;
+                                    for(int i=0;i<_controllers.length;i++){
+                                      _controllers[i].clear();
+                                    }
+                                  });
+                                  controller.message.send('Set Password to Room');
+                                  Navigator.pop(context);
+                                });
+                              },
+                              child: Text('Save Password'),
+                            ),
+                          ],
+                        )
+                    ),
+                  ),
+                )
+              )
+          );
+        });
+  }
+  Widget MyWallpaper() {
+    return SizedBox(
+      height: 278,
+      width: MediaQuery.of(context).size.width,
+      child: Card(
+        color: Colors.black,
+        margin:  EdgeInsets.all(18),
+        child: Padding(
+            padding:  EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            child: StreamBuilder<QuerySnapshot>(
+              stream: _firestore.collection('user').doc(_auth.currentUser!.uid).collection('mylook').where('cat',isEqualTo: 'wallpaper').snapshots(),
+              builder: (context,snapshot){
+                List<String> wallpapersDoc=[];
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.blue,
+                    ),
+                  );
+                }
+                final masseges = snapshot.data?.docs;
+                for (var massege in masseges!.reversed){
+                  wallpapersDoc.add(massege.get('id'));
+                }
+                return GridView.builder(
+                    itemCount: wallpapersDoc.length,
+                    scrollDirection: Axis.horizontal,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                    itemBuilder: (context,index){
+                      return  StreamBuilder<QuerySnapshot>(
+                        stream: _firestore.collection("store").where('id',isEqualTo: wallpapersDoc[index]).snapshots(),
+                        builder: (context,snapshot){
+                          String wallpaperPhoto="";
+                          if (!snapshot.hasData) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                backgroundColor: Colors.blue,
+                              ),
+                            );
+                          }
+                          final masseges = snapshot.data?.docs;
+                          for (var massege in masseges!.reversed){
+                            wallpaperPhoto=massege.get('photo');
+                          }
+                          return InkWell(
+                            onTap: ()async{
+                              await _firestore.collection('room').doc(widget.roomID).update({
+                                'wallpaper':wallpaperPhoto
+                              }).then((value){
+                                controller.message.send('Change Wallpaper of Room');
+                                setState(() {
+                                  wallpaper=wallpaperPhoto;
+                                });
+                              });
+                            },
+                            child: CircleAvatar(
+                              radius: 30,
+                              child: CachedNetworkImage(imageUrl:wallpaperPhoto),
+                              backgroundColor: Colors.transparent,
+                            ),
+                          );
+                        },
+                      );
+                }
+                );
+              },
+            )
+        ),
+      ),
+    );
+  }
+  Widget MyMusic() {
+    return SizedBox(
+      height: 278,
+      width: MediaQuery.of(context).size.width,
+      child: Card(
+        color: Colors.black,
+        margin:  EdgeInsets.all(18),
+        child: Padding(
+            padding:  EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            child: ListView.builder(
+              itemCount: musicPath.length,
+              itemBuilder: (context,index){
+                return ListTile(
+                  title: Text(musicname[index],style: TextStyle(color: Colors.white),),
+                  trailing: IconButton(onPressed: (){
+                    setState(() {
+                      viewMusic=true;
+                    });
+                    controller.media.play(filePathOrURL: musicPath[index]);
+                    controller.message.send('Play music ${musicPath[index]}');
+                    Navigator.pop(context);
+                  }, icon: Icon(Icons.play_arrow,color: Colors.green,)),
+                );
+              },
+            )
+        ),
+      ),
     );
   }
   Widget bottomSheet() {
@@ -809,7 +1069,25 @@ class _RoomViewBody extends State<RoomViewBody> {
                                     }).then((value){
                                       Navigator.pop(context);
                                       controller.message.send("Send ${gift.Name} to User ${name}");
+                                      _firestore.collection('room').doc(widget.roomID).update({
+                                        'gift':gift.photo,
+                                        'gifttype':gift.type
+                                      });
+                                      setState(() {
+                                        giftMedia=gift.photo;
+                                        gifttype=gift.type;
+                                      });
                                       SendDone();
+                                      Future.delayed(const Duration(seconds: 4)).then((value){
+                                        _firestore.collection('room').doc(widget.roomID).update({
+                                          'gift':"",
+                                          'gifttype':""
+                                        });
+                                        setState(() {
+                                          giftMedia="";
+                                          gifttype="";
+                                        });
+                                      });
                                     });
                                   });
                                 });
@@ -856,6 +1134,80 @@ class _RoomViewBody extends State<RoomViewBody> {
                 child: Center(
                   child:  Text("لا تملك العملات الكافية"),
                 ),
+              )
+          );
+        });
+  }
+  void UpdateBio() {
+    TextEditingController controllerBio=TextEditingController();
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: Text("تحديث عنوان الغرفة"),
+              content: Container(
+                height: 220,
+                child:Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      decoration: InputDecoration(
+                        hintText: 'ادخل عنوان الغرفة الجديد',
+                      ),
+                      controller: controllerBio,
+                    ),
+                    ElevatedButton(onPressed: (){}, child: Text("تحديث"))
+                  ],
+                )
+              )
+          );
+        });
+  }
+  void ShowNumberSeat() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: Text("تحدديد عدد المايكات"),
+              content: Container(
+                height: 220,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(onPressed: ()async{
+                      _firestore.collection('room').doc(widget.roomID).update({
+                        'seat':'9'
+                      }).then((value){
+                        setState(() {
+                          layoutSeats='9';
+                          Navigator.pop(context);
+                        });
+                      });
+                    }, child: Text('9')),
+                    SizedBox(height: 10,),
+                    ElevatedButton(onPressed: ()async{
+                      _firestore.collection('room').doc(widget.roomID).update({
+                        'seat':'11'
+                      }).then((value){
+                        setState(() {
+                          layoutSeats='11';
+                          Navigator.pop(context);
+                        });
+                      });
+                    }, child: Text('11')),
+                    SizedBox(height: 10,),
+                    ElevatedButton(onPressed: ()async{
+                      _firestore.collection('room').doc(widget.roomID).update({
+                        'seat':'13'
+                      }).then((value){
+                        setState(() {
+                          layoutSeats='13';
+                          Navigator.pop(context);
+                        });
+                      });
+                    }, child: Text('13')),
+                  ],
+                )
               )
           );
         });

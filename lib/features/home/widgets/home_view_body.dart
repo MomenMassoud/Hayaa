@@ -182,9 +182,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 // }
 
                     Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => RoomView("2023-12-28 15:16:07.683239-tJlADfx1AwY3eVxB0E9N4ANKFbx1",true,userModel.name,_auth.currentUser!.uid,),));
-
-
+                        MaterialPageRoute(builder: (context) => RoomView("2023-12-28 15:16:07.683239-tJlADfx1AwY3eVxB0E9N4ANKFbx1",false,userModel.name,_auth.currentUser!.uid,),));
               }, icon:userModel.myroom==""?Icon(Icons.add_home_outlined,color: Colors.white,):
               Icon(Icons.home_filled,color: Colors.white,)
           ),
