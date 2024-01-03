@@ -120,6 +120,8 @@ flutter:
     - lib/core/Utils/assets/images/post/
     - lib/core/Utils/assets/images/Vip/
     - lib/core/Utils/assets/images/vip_icon/
+    - lib/core/Utils/assets/images/vip_badges/
+    - lib/core/Utils/assets/images/wealth&charm badges/
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

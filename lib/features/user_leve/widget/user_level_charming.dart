@@ -4,7 +4,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
-
 import '../../../core/Utils/app_images.dart';
 import '../../../models/user_model.dart';
 
@@ -112,11 +111,20 @@ class _UserLevelCharming extends State<UserLevelCharming>{
                       ),
                       child: Stack(
                         children: [
-                          SVGASimpleImage(
-                            resUrl: "https://firebasestorage.googleapis.com/v0/b/hayaa-161f5.appspot.com/o/gifts%2F30977485Eid%20al-Fitr3.svga?alt=media&token=a149e1da-da01-45dc-b434-a62c9789a9d8",
+                          Image.asset(
+                             int.parse(userModel.level2)>=1 && int.parse(userModel.level2)<20?AppImages.charm1to19Main:
+                             int.parse(userModel.level2)>=20 &&int.parse(userModel.level2)<40?AppImages.charm20to39Main:
+                             int.parse(userModel.level2)>=40 && int.parse(userModel.level2)<50?AppImages.charm40to49Main:
+                             int.parse(userModel.level2)>=50 && int.parse(userModel.level2)<60?AppImages.charm50to59Main:
+                             int.parse(userModel.level2)>=60 && int.parse(userModel.level2)<70?AppImages.charm60to69Main:
+                             int.parse(userModel.level2)>=70 && int.parse(userModel.level2)<80?AppImages.charm70to79Main:
+                             int.parse(userModel.level2)>=80 && int.parse(userModel.level2)<90?AppImages.charm80to89Main:
+                             int.parse(userModel.level2)>=90&&int.parse(userModel.level2)<100?AppImages.charm90to99Main:
+                             int.parse(userModel.level2)>=100 && int.parse(userModel.level2)<126?AppImages.charm100to125Main:
+                                 AppImages.charm126to150Main
                           ),
                           Center(
-                            child: Text("Level ${userModel.level2}",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                            child: Text("${userModel.level2}",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                           )
                         ],
                       ),

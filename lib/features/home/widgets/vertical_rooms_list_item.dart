@@ -1,34 +1,73 @@
 import 'dart:developer';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../../models/room_model.dart';
+import '../../rooms/view/room_view.dart';
 import '../models/room_model.dart';
 
 class VerticalRoomsListItem extends StatelessWidget {
-  const VerticalRoomsListItem({
+   VerticalRoomsListItem({
     super.key,
     required this.screenHight,
     required this.screenWidth,
     required this.roomModel,
     required this.index,
   });
-
+   final FirebaseAuth _auth=FirebaseAuth.instance;
   final double screenHight;
   final double screenWidth;
-  final RoomModel roomModel;
+  final RoomModels roomModel;
   final int index;
-
+  final TextEditingController _controller=TextEditingController();
   @override
   Widget build(BuildContext context) {
+    void Allarm() {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+                title: Text("ملحوظة"),
+                content: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      decoration: InputDecoration(
+                        hintText: "ادخل كلمة السر:",
+                      ),
+                      controller: _controller,
+                    ),
+                    SizedBox(height: 70,),
+                    ElevatedButton(onPressed: (){
+                      if(roomModel.password==_controller.text){
+                        Navigator.pop(context);
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => RoomView(roomModel.doc,false,_auth.currentUser!.displayName.toString(),_auth.currentUser!.uid,),));
+                      }
+                    }, child: Text("تعديل")),
+                  ],
+                )
+            );
+          });
+    }
     return Padding(
       padding: const EdgeInsets.all(6),
       child: GestureDetector(
         onTap: () {
-          log("${index}tapped");
+         if(roomModel.password==""){
+           Navigator.of(context).push(
+               MaterialPageRoute(builder: (context) => RoomView(roomModel.doc,false,_auth.currentUser!.displayName.toString(),_auth.currentUser!.uid,),));
+         }
+         else{
+
+         }
         },
         child: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage(roomModel.image!), fit: BoxFit.cover),
+                image: CachedNetworkImageProvider(roomModel.photo), fit: BoxFit.cover),
             color: Colors.amber,
             borderRadius: const BorderRadius.all(
               Radius.circular(10),
@@ -39,5 +78,6 @@ class VerticalRoomsListItem extends StatelessWidget {
         ),
       ),
     );
+
   }
 }

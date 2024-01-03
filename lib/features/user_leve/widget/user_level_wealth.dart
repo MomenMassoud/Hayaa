@@ -109,11 +109,20 @@ class _UserLevelWealth extends State<UserLevelWealth> {
                         ),
                         child: Stack(
                           children: [
-                            SVGASimpleImage(
-                              resUrl: "https://firebasestorage.googleapis.com/v0/b/hayaa-161f5.appspot.com/o/gifts%2F30977485Eid%20al-Fitr3.svga?alt=media&token=a149e1da-da01-45dc-b434-a62c9789a9d8",
+                            Image.asset(
+                                int.parse(userModel.level)>=1 && int.parse(userModel.level)<20?AppImages.wealth1to19Main:
+                                int.parse(userModel.level)>=20 &&int.parse(userModel.level)<40?AppImages.wealth20to39Main:
+                                int.parse(userModel.level)>=40 && int.parse(userModel.level)<50?AppImages.wealth40to49Main:
+                                int.parse(userModel.level)>=50 && int.parse(userModel.level)<60?AppImages.wealth50to59Main:
+                                int.parse(userModel.level)>=60 && int.parse(userModel.level)<70?AppImages.wealth60to69Main:
+                                int.parse(userModel.level)>=70 && int.parse(userModel.level)<80?AppImages.wealth70to79Main:
+                                int.parse(userModel.level)>=80 && int.parse(userModel.level)<90?AppImages.wealth80to89Main:
+                                int.parse(userModel.level)>=90&&int.parse(userModel.level)<100?AppImages.wealth90to99Main:
+                                int.parse(userModel.level)>=100 && int.parse(userModel.level)<126?AppImages.wealth100to125Main:
+                                AppImages.wealth126to150Main
                             ),
                             Center(
-                              child: Text("Level ${userModel.level}",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                              child: Text("${userModel.level}",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                             )
                           ],
                         ),

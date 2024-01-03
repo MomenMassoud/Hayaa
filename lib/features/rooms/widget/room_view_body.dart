@@ -7,6 +7,7 @@ import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_aud
 import '../../../core/Utils/app_images.dart';
 import '../../../models/gift_model.dart';
 import 'constant.dart';
+import 'package:zego_uikit/zego_uikit.dart';
 
 class RoomViewBody extends StatefulWidget{
   final String roomID;
@@ -47,9 +48,15 @@ class _RoomViewBody extends State<RoomViewBody> {
   @override
   void initState() {
     super.initState();
+    setUserInRoom();
     getMyCar();
     getWallpaper();
     UserBlock();
+  }
+  void setUserInRoom()async{
+    _firestore.collection('room').doc(widget.roomID).collection('user').doc(_auth.currentUser!.uid).set({
+      'id':_auth.currentUser!.uid
+    });
   }
   void getMyCar()async{
     await for(var snap in _firestore.collection('user').doc(_auth.currentUser!.uid).snapshots()){
@@ -145,15 +152,46 @@ class _RoomViewBody extends State<RoomViewBody> {
                       // Fill in the appSign that you get from ZEGOCLOUD Admin Console.
                       userID: widget.username,
                       userName: widget.userid,
-                      roomID: "111222333",
+                      roomID: viewID,
                       config: widget.isHost
                           ? ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
                           : ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
+                      ..onLeaveConfirmation=(context)async {
+                        return await showDialog(
+                            context: context,
+                            builder: (BuildContext context){
+                              return AlertDialog(
+                                backgroundColor: Colors.blue[900]!.withOpacity(0.9),
+                                title: const Text("Leave Confirm",
+                                    style: TextStyle(color: Colors.white70)),
+                                content: const Text(
+                                    "Are you sure Leave from room",
+                                    style: TextStyle(color: Colors.white70)),
+                                actions: [
+                                  ElevatedButton(
+                                    child: const Text("Cancel",
+                                        style: TextStyle(color: Colors.white70)),
+                                    onPressed: () => Navigator.of(context).pop(false),
+                                  ),
+                                  ElevatedButton(
+                                    child: const Text("Exit"),
+                                    onPressed: () async{
+                                      _firestore.collection('room').doc(widget.roomID).collection('user').doc(_auth.currentUser!.uid).delete().then((value){
+                                        Navigator.of(context).pop(true);
+                                      });
+                                      },
+                                  ),
+                                ],
+                              );
+                            }
+                        );
+                      }
                         ..background = background()
                         ..takeSeatIndexWhenJoining =
                         widget.isHost ? getHostSeatIndex() : -1
                         ..hostSeatIndexes = [0]
                         ..useSpeakerWhenJoining=true
+                        ..onMemberListMoreButtonPressed=onMemberListMoreButtonPressed
                         ..seatConfig=ZegoLiveAudioRoomSeatConfig(
                           backgroundBuilder: (context, size, user, extraInfo) {
                             return Container(color: Colors.transparent,);
@@ -1087,6 +1125,13 @@ class _RoomViewBody extends State<RoomViewBody> {
                                           giftMedia="";
                                           gifttype="";
                                         });
+                                      }).then((value){
+                                        String docGift="${DateTime.now().toString()}-${_auth.currentUser!.uid}";
+                                        _firestore.collection('room').doc(widget.roomID).collection('gift').doc(docGift).set({
+                                          'giftdoc':gift.docID,
+                                          'sender':_auth.currentUser!.uid,
+                                          'recever':userSeats[index]
+                                        });
                                       });
                                     });
                                   });
@@ -1211,5 +1256,110 @@ class _RoomViewBody extends State<RoomViewBody> {
               )
           );
         });
+  }
+  void onMemberListMoreButtonPressed(ZegoUIKitUser user) {
+    showModalBottomSheet(
+      backgroundColor: const Color(0xff111014),
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(32.0),
+          topRight: Radius.circular(32.0),
+        ),
+      ),
+      isDismissible: true,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        const textStyle = TextStyle(
+          color: Colors.white,
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+        );
+        final listMenu =widget.isHost
+            ? [
+          GestureDetector(
+            onTap: () async {
+              Navigator.of(context).pop();
+              ZegoUIKit().removeUserFromRoom(
+                [user.id],
+              ).then((result) {
+                _firestore.collection("room").doc(widget.roomID).collection('user').doc(user.id).delete().then((value){
+                  controller.message.send('Kikout ${user.name} from room');
+                });
+              });
+            },
+            child: Text(
+              'Kick Out ${user.name}',
+              style: textStyle,
+            ),
+          ),
+          GestureDetector(
+            onTap: () async {
+              Navigator.of(context).pop();
+              _firestore.collection('room').doc(widget.roomID).collection('block').doc(user.id).set({
+                'id':user.id
+              }).then((value){
+                ZegoUIKit().removeUserFromRoom(
+                  [user.id],
+                ).then((result) {
+                  _firestore.collection("room").doc(widget.roomID).collection('user').doc(user.id).delete().then((value){
+                    controller.message.send('Block ${user.name} in room');
+                  });
+                });
+              });
+            },
+            child: Text(
+              'Block ${user.name}',
+              style: textStyle,
+            ),
+          ),
+          GestureDetector(
+            onTap: () async {
+              Navigator.of(context).pop();
+
+              controller
+                  ?.inviteAudienceToTakeSeat(user.id)
+                  .then((result) {
+                debugPrint('invite audience to take seat result:$result');
+              });
+            },
+            child: Text(
+              'Invite ${user.name} to take seat',
+              style: textStyle,
+            ),
+          ),
+          GestureDetector(
+            onTap: () async {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              'Cancel',
+              style: textStyle,
+            ),
+          ),
+        ]
+            : [];
+        return AnimatedPadding(
+          padding: MediaQuery.of(context).viewInsets,
+          duration: const Duration(milliseconds: 50),
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              vertical: 0,
+              horizontal: 10,
+            ),
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: listMenu.length,
+              itemBuilder: (BuildContext context, int index) {
+                return SizedBox(
+                  height: 60,
+                  child: Center(child: listMenu[index]),
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hayaa_main/features/profile/widgets/visitor_profile.dart';
 import 'package:hayaa_main/models/firends_model.dart';
 
+import '../../../core/Utils/app_images.dart';
 import '../../profile/views/visitor_.view.dart';
 
 
@@ -76,8 +77,8 @@ class _SearchViewBody extends State<SearchViewBody>{
                   else{
                     FriendsModel friend=FriendsModel(
                         massege.get('email'), massege.get('id'), massege.id,massege.get('photo'), massege.get('name'),
-                        massege.get('phonenumber'), massege.get('gender'));
-                    friend.bio=massege.get('bio');
+                        massege.get('vip'), massege.get('level2'));
+                    friend.bio=massege.get('level');
                     searchfriends.add(friend);
                   }
                 }
@@ -96,7 +97,56 @@ class _SearchViewBody extends State<SearchViewBody>{
                               },
                               leading: CircleAvatar(backgroundImage: CachedNetworkImageProvider(searchfriends[index].photo),),
                               title: Text(searchfriends[index].name),
-                              subtitle: Text(searchfriends[index].bio),
+                              subtitle: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                Stack(
+                                  children: [
+                                    Image.asset(
+                                        int.parse(searchfriends[index].bio)>=1 && int.parse(searchfriends[index].bio)<20?AppImages.wealth1to19:
+                                        int.parse(searchfriends[index].bio)>=20 &&int.parse(searchfriends[index].bio)<40?AppImages.wealth20to39:
+                                        int.parse(searchfriends[index].bio)>=40 && int.parse(searchfriends[index].bio)<50?AppImages.wealth40to49:
+                                        int.parse(searchfriends[index].bio)>=50 && int.parse(searchfriends[index].bio)<60?AppImages.wealth50to59:
+                                        int.parse(searchfriends[index].bio)>=60 && int.parse(searchfriends[index].bio)<70?AppImages.wealth60to69:
+                                        int.parse(searchfriends[index].bio)>=70 && int.parse(searchfriends[index].bio)<80?AppImages.wealth70to79:
+                                        int.parse(searchfriends[index].bio)>=80 && int.parse(searchfriends[index].bio)<90?AppImages.wealth80to89:
+                                        int.parse(searchfriends[index].bio)>=90&&int.parse(searchfriends[index].bio)<100?AppImages.wealth90to99:
+                                        int.parse(searchfriends[index].bio)>=100 && int.parse(searchfriends[index].bio)<126?AppImages.wealth100to125:
+                                        AppImages.wealth126to150
+                                    ),
+                                    Center(child: Text(searchfriends[index].bio),)
+                                  ],
+                                ),
+                                  Stack(
+                                    children: [
+                                      Image.asset(
+                                          int.parse(searchfriends[index].gender)>=1 && int.parse(searchfriends[index].gender)<20?AppImages.charm1to19:
+                                          int.parse(searchfriends[index].gender)>=20 &&int.parse(searchfriends[index].gender)<40?AppImages.charm20to39:
+                                          int.parse(searchfriends[index].gender)>=40 && int.parse(searchfriends[index].gender)<50?AppImages.charm40to49:
+                                          int.parse(searchfriends[index].gender)>=50 && int.parse(searchfriends[index].gender)<60?AppImages.charm50to59:
+                                          int.parse(searchfriends[index].gender)>=60 && int.parse(searchfriends[index].gender)<70?AppImages.charm60to69:
+                                          int.parse(searchfriends[index].gender)>=70 && int.parse(searchfriends[index].gender)<80?AppImages.charm70to79:
+                                          int.parse(searchfriends[index].gender)>=80 && int.parse(searchfriends[index].gender)<90?AppImages.charm80to89:
+                                          int.parse(searchfriends[index].gender)>=90&&int.parse(searchfriends[index].gender)<100?AppImages.charm90to99:
+                                          int.parse(searchfriends[index].gender)>=100 && int.parse(searchfriends[index].gender)<126?AppImages.charm100to125:
+                                          AppImages.charm126to150
+                                      ),
+                                      Center(child: Text(searchfriends[index].gender),)
+                                    ],
+                                  ),
+                                  int.parse(searchfriends[index].phonenumber)!=0?Stack(
+                                    children: [
+                                      Image.asset(
+                                          int.parse(searchfriends[index].phonenumber)==1?AppImages.VIP1Badge:
+                                          int.parse(searchfriends[index].phonenumber)==2 ?AppImages.VIP2Badge:
+                                          int.parse(searchfriends[index].phonenumber)==3 ?AppImages.VIP3Badge:
+                                          AppImages.VIP4Badge
+                                      ),
+                                      Center(child: Text(searchfriends[index].phonenumber),)
+                                    ],
+                                  ):Container(),
+                                ],
+                              ),
                               trailing: ElevatedButton(onPressed: ()async{
                                 await _firestore.collection('friendreq').doc().set({
                                   'sender':_auth.currentUser!.uid,

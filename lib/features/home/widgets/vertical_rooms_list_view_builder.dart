@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hayaa_main/features/home/widgets/vertical_rooms_list_item.dart';
 
+import '../../../models/room_model.dart';
 import '../models/room_model.dart';
 
 class VerticalRoomsListViewBuilder extends StatelessWidget {
@@ -11,7 +12,7 @@ class VerticalRoomsListViewBuilder extends StatelessWidget {
     required this.screenHight,
   });
 
-  final List<RoomModel> rooms;
+  final List<RoomModels> rooms;
   final double screenWidth;
   final double screenHight;
 

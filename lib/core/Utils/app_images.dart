@@ -6,7 +6,6 @@ abstract class AppImages {
       "lib/core/Utils/assets/images/group-friends-posing-together.png";
   static const String fbLogo = "lib/core/Utils/assets/images/fbLogo.png";
   static const String phoneLogo = "lib/core/Utils/assets/images/phoneLogo.png";
-
   static const String googlePLogo =
       "lib/core/Utils/assets/images/googleLogo.png";
   static const String gold_coin = "lib/core/Utils/assets/images/gold_coin.jpg";
@@ -93,4 +92,100 @@ abstract class AppImages {
       "lib/core/Utils/assets/images/golden_dollar.png";
   static const String goldenDiamond =
       "lib/core/Utils/assets/images/golden_diamond.png";
+  static const String VIP1 =
+      "lib/core/Utils/assets/images/vip_badges/VIP 1.png";
+  static const String VIP2 =
+      "lib/core/Utils/assets/images/vip_badges/VIP 2.png";
+  static const String VIP3 =
+      "lib/core/Utils/assets/images/vip_badges/VIP 3.png";
+  static const String VIP4 =
+      "lib/core/Utils/assets/images/vip_badges/VIP4.png";
+  static const String VIP1Badge =
+      "lib/core/Utils/assets/images/vip_badges/VIP1.png";
+  static const String VIP2Badge =
+      "lib/core/Utils/assets/images/vip_badges/VIP2.png";
+  static const String VIP3Badge =
+      "lib/core/Utils/assets/images/vip_badges/VIP3.png";
+  static const String VIP4Badge =
+      "lib/core/Utils/assets/images/vip_badges/VIP4 (1).png";
+  static const String charm1to19 =
+      "lib/core/Utils/assets/images/wealth&charm badges/charm 1-19.png";
+  static const String charm20to39 =
+      "lib/core/Utils/assets/images/wealth&charm badges/charm 20-39.png";
+  static const String charm40to49 =
+      "lib/core/Utils/assets/images/wealth&charm badges/charm 40-49.png";
+  static const String charm50to59 =
+      "lib/core/Utils/assets/images/wealth&charm badges/charm 50-69.png";
+  static const String charm60to69 =
+      "lib/core/Utils/assets/images/wealth&charm badges/charm 60-69.png";
+  static const String charm70to79 =
+      "lib/core/Utils/assets/images/wealth&charm badges/charm 70-79.png";
+  static const String charm80to89 =
+      "lib/core/Utils/assets/images/wealth&charm badges/charm 80-89.png";
+  static const String charm90to99 =
+      "lib/core/Utils/assets/images/wealth&charm badges/charm 90-99.png";
+  static const String charm100to125 =
+      "lib/core/Utils/assets/images/wealth&charm badges/charm 100-125.png";
+  static const String charm126to150 =
+      "lib/core/Utils/assets/images/wealth&charm badges/charm 126-150.png";
+  static const String charm1to19Main=
+      "lib/core/Utils/assets/images/wealth&charm badges/charm main 1-19.png";
+  static const String charm20to39Main =
+      "lib/core/Utils/assets/images/wealth&charm badges/charm main 20-39.png";
+  static const String charm40to49Main =
+      "lib/core/Utils/assets/images/wealth&charm badges/charm main 40-49.png";
+  static const String charm50to59Main =
+      "lib/core/Utils/assets/images/wealth&charm badges/charm main 50-69.png";
+  static const String charm60to69Main =
+      "lib/core/Utils/assets/images/wealth&charm badges/charm main 60-69.png";
+  static const String charm70to79Main =
+      "lib/core/Utils/assets/images/wealth&charm badges/charm main 70-79.png";
+  static const String charm80to89Main =
+      "lib/core/Utils/assets/images/wealth&charm badges/charm main 80-89.png";
+  static const String charm90to99Main =
+      "lib/core/Utils/assets/images/wealth&charm badges/charm main 90-99.png";
+  static const String charm100to125Main =
+      "lib/core/Utils/assets/images/wealth&charm badges/charm main 100-125.png";
+  static const String charm126to150Main =
+      "lib/core/Utils/assets/images/wealth&charm badges/charm main 126-150.png";
+  static const String wealth1to19 =
+      "lib/core/Utils/assets/images/wealth&charm badges/wealth1-19.png";
+  static const String wealth20to39 =
+      "lib/core/Utils/assets/images/wealth&charm badges/wealth20-39.png";
+  static const String wealth40to49 =
+      "lib/core/Utils/assets/images/wealth&charm badges/wealth40-49.png";
+  static const String wealth50to59 =
+      "lib/core/Utils/assets/images/wealth&charm badges/wealth50-59.png";
+  static const String wealth60to69 =
+      "lib/core/Utils/assets/images/wealth&charm badges/wealth60-69.png";
+  static const String wealth70to79 =
+      "lib/core/Utils/assets/images/wealth&charm badges/wealth70-79.png";
+  static const String wealth80to89 =
+      "lib/core/Utils/assets/images/wealth&charm badges/wealth80-89.png";
+  static const String wealth90to99 =
+      "lib/core/Utils/assets/images/wealth&charm badges/wealth90-99.png";
+  static const String wealth100to125 =
+      "lib/core/Utils/assets/images/wealth&charm badges/wealth100-125.png";
+  static const String wealth126to150 =
+      "lib/core/Utils/assets/images/wealth&charm badges/wealth126-150.png";
+  static const String wealth1to19Main =
+      "lib/core/Utils/assets/images/wealth&charm badges/wealth main 1-19.png";
+  static const String wealth20to39Main =
+      "lib/core/Utils/assets/images/wealth&charm badges/wealth main 20-39.png";
+  static const String wealth40to49Main =
+      "lib/core/Utils/assets/images/wealth&charm badges/wealth main 40-49.png";
+  static const String wealth50to59Main =
+      "lib/core/Utils/assets/images/wealth&charm badges/wealth main 50-59.png";
+  static const String wealth60to69Main =
+      "lib/core/Utils/assets/images/wealth&charm badges/wealth main 60-69.png";
+  static const String wealth70to79Main =
+      "lib/core/Utils/assets/images/wealth&charm badges/wealth main 70-79.png";
+  static const String wealth80to89Main =
+      "lib/core/Utils/assets/images/wealth&charm badges/wealth main 80-89.png";
+  static const String wealth90to99Main =
+      "lib/core/Utils/assets/images/wealth&charm badges/wealth main 90-99.png";
+  static const String wealth100to125Main =
+      "lib/core/Utils/assets/images/wealth&charm badges/wealth main 100-125.png";
+  static const String wealth126to150Main =
+      "lib/core/Utils/assets/images/wealth&charm badges/wealth main 126-150.png";
 }

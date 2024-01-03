@@ -6,7 +6,7 @@ import '../../../models/my_gift_model.dart';
 import 'id_info.dart';
 import 'user_info.dart';
 
-class VisitorViewBody extends StatelessWidget {
+class VisitorViewBody extends StatefulWidget {
    VisitorViewBody({
     super.key,
     required this.controller,
@@ -23,6 +23,46 @@ class VisitorViewBody extends StatelessWidget {
    final FirebaseAuth _auth=FirebaseAuth.instance;
    final FirebaseFirestore _firestore=FirebaseFirestore.instance;
    String name="";
+  _VistorViewBody createState()=>_VistorViewBody();
+}
+class _VistorViewBody extends State<VisitorViewBody>{
+  bool Isfollow=false;
+  bool IsFirend=false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    GetFollowCheck();
+    GetFriendCheck();
+  }
+  void GetFollowCheck()async{
+    widget._firestore.collection('user').doc(widget._auth.currentUser!.uid).collection('following').where('id',isEqualTo: widget.doc).get().then((value){
+      if(value.size==0){
+        setState(() {
+          Isfollow=true;
+        });
+      }
+      else{
+        setState(() {
+          Isfollow=false;
+        });
+      }
+    });
+  }
+  void GetFriendCheck()async{
+    widget._firestore.collection('user').doc(widget._auth.currentUser!.uid).collection('friends').where('id',isEqualTo: widget.doc).get().then((value){
+      if(value.size==0){
+        setState(() {
+          IsFirend=true;
+        });
+      }
+      else{
+        setState(() {
+          IsFirend=false;
+        });
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     final List<Tab> myTabs = [
@@ -35,12 +75,13 @@ class VisitorViewBody extends StatelessWidget {
     final double screenHight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: StreamBuilder<QuerySnapshot>(
-        stream: _firestore.collection('user').where('doc',isEqualTo: doc).snapshots(),
+        stream: widget._firestore.collection('user').where('doc',isEqualTo: widget.doc).snapshots(),
         builder: (context,snapshot){
           String id="";
           String country="";
           String gender="";
           String seen="";
+          String bio="";
           if (!snapshot.hasData) {
             return const Center(
               child: CircularProgressIndicator(
@@ -54,10 +95,11 @@ class VisitorViewBody extends StatelessWidget {
             country=massege.get('country');
             gender=massege.get('gender');
             seen=massege.get('seen').toString();
-            name=massege.get('name');
+            widget.name=massege.get('name');
+            bio=massege.get('bio');
           }
           return StreamBuilder<QuerySnapshot>(
-            stream: _firestore.collection('user').doc(doc).collection('Mygifts').snapshots(),
+            stream: widget._firestore.collection('user').doc(widget.doc).collection('Mygifts').snapshots(),
             builder: (context,snapshot){
               List<MyGiftModel> mygift=[];
               if (!snapshot.hasData) {
@@ -78,7 +120,7 @@ class VisitorViewBody extends StatelessWidget {
                 }
                 if(c==0){
                   mygift.add(
-                    MyGiftModel(massege.get('id'), 1)
+                      MyGiftModel(massege.get('id'), 1)
                   );
                 }
               }
@@ -86,7 +128,7 @@ class VisitorViewBody extends StatelessWidget {
                 children: [
                   Expanded(
                     child: ListView(
-                      controller: controller,
+                      controller: widget.controller,
                       children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,7 +145,7 @@ class VisitorViewBody extends StatelessWidget {
                                   shape: BoxShape.circle,
                                   border: Border.all(width: 2, color: Colors.white),
                                   image:  DecorationImage(
-                                      image:CachedNetworkImageProvider(photo)
+                                      image:CachedNetworkImageProvider(widget.photo)
                                   ),
                                 ),
                               ),
@@ -114,7 +156,7 @@ class VisitorViewBody extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 15),
                               child: Text(
-                                name,
+                                widget.name,
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: screenWidth * 0.06,
@@ -128,7 +170,7 @@ class VisitorViewBody extends StatelessWidget {
                             const SizedBox(
                               height: 10,
                             ),
-                             Padding(
+                            Padding(
                               padding: EdgeInsets.symmetric(horizontal: 15),
                               child: IdInfoo(seen,id),
                             ),
@@ -153,8 +195,8 @@ class VisitorViewBody extends StatelessWidget {
                                       const SizedBox(
                                         height: 20,
                                       ),
-                                      const Text(
-                                        "User's Bio ",
+                                      Text(
+                                        bio,
                                         style: TextStyle(color: Colors.blueGrey),
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -194,7 +236,7 @@ class VisitorViewBody extends StatelessWidget {
                                                                   Colors.blueGrey,
                                                                 ))
                                                           ],
-                                                        )
+                                                        ),
                                                       ],
                                                     ),
                                                   ),
@@ -249,7 +291,21 @@ class VisitorViewBody extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              if(Isfollow){
+                                Isfollow=false;
+                                widget._firestore.collection('user').doc(widget._auth.currentUser!.uid).collection('following').doc(widget.doc).delete();
+                              }
+                              else{
+                                Isfollow=true;
+                                widget._firestore.collection('user').doc(widget._auth.currentUser!.uid).collection('following').doc(widget.doc).set({
+                                  'id':widget.doc
+                                });
+                              }
+                              setState(() {
+                                Isfollow;
+                              });
+                            },
                             child: Container(
                               width: screenWidth * 0.4,
                               height: screenHight * 0.07,
@@ -275,7 +331,21 @@ class VisitorViewBody extends StatelessWidget {
                             ),
                           ),
                           InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              if(IsFirend){
+                                IsFirend=false;
+                                widget._firestore.collection('user').doc(widget._auth.currentUser!.uid).collection('friends').doc(widget.doc).delete();
+                              }
+                              else{
+                                IsFirend=true;
+                                widget._firestore.collection('user').doc(widget._auth.currentUser!.uid).collection('friends').doc(widget.doc).set({
+                                  'id':widget.doc
+                                });
+                              }
+                              setState(() {
+                                IsFirend;
+                              });
+                            },
                             child: Container(
                               width: screenWidth * 0.4,
                               height: screenHight * 0.07,
@@ -285,18 +355,18 @@ class VisitorViewBody extends StatelessWidget {
                                   Radius.circular(10),
                                 ),
                               ),
-                              child: const Row(
+                              child:  Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(
-                                    Icons.group_add_rounded,
+                                    IsFirend?Icons.person_add_disabled_sharp:Icons.group_add_rounded,
                                     color: Colors.white,
                                   ),
                                   SizedBox(
                                     width: 5,
                                   ),
                                   Text(
-                                    "Add Friends",
+                                    IsFirend?"Remove Friend": "Add Friends",
                                     style: TextStyle(color: Colors.white),
                                   )
                                 ],
@@ -313,9 +383,9 @@ class VisitorViewBody extends StatelessWidget {
       ),
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor: appBarColor,
+        backgroundColor: widget.appBarColor,
         title: Text(
-          name,
+          widget. name,
           style: TextStyle(color: Colors.black),
         ),
         actions: [
@@ -323,7 +393,7 @@ class VisitorViewBody extends StatelessWidget {
             onPressed: () {},
             icon: Icon(
               Icons.more_horiz,
-              color: icons,
+              color: widget.icons,
             ),
           ),
         ],
@@ -333,7 +403,7 @@ class VisitorViewBody extends StatelessWidget {
           },
           icon: Icon(
             Icons.arrow_back,
-            color: icons,
+            color: widget.icons,
           ),
         ),
       ),

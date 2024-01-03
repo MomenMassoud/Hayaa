@@ -64,13 +64,13 @@ class _Games extends State<Games>{
             padding: const EdgeInsets.all(8.0),
             child: Text("غرفة الالعاب",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),).tr(args: ['غرفة الالعاب']),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: VerticalRoomsListViewBuilder(
-                rooms: rooms,
-                screenWidth: screenWidth,
-                screenHight: screenHight),
-          )
+          // Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: VerticalRoomsListViewBuilder(
+          //       rooms: rooms,
+          //       screenWidth: screenWidth,
+          //       screenHight: screenHight),
+          // )
         ],
       )
     );
