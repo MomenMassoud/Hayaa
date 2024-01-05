@@ -776,10 +776,15 @@ class _ChatBody extends State<ChatBody> {
                                           'count':lastincome.toString()
                                         });
                                       }
-                                      Navigator.pop(context);
+                                    }).then((value){
+                                      _firestore.collection('user').doc(_auth.currentUser!.uid).collection('sendgift').doc().set({
+                                        'giftid':gifts[index].docID,
+                                        'target':widget.friend.docID
+                                      }).then((value){
+                                        Navigator.pop(context);
+                                        SendDone();
+                                      });
                                     });
-
-
                                   }
                                 });
                               });

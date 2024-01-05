@@ -127,7 +127,7 @@ class _CreateRoomBody extends State<CreateRoomBody>{
                 ),
                 GradiantButton(
                     screenWidth: screenWidth,
-                    buttonLabel: "Create Agency ",
+                    buttonLabel: "Create Room",
                     onPressed: () async{
                       if(imageFile==null){
                         AllarmError("برجاء اختيار صورة للغرفة");

@@ -1,4 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../widgets/visitor_view_body.dart';
 
@@ -14,11 +16,13 @@ class _VistorViewState extends State<VistorView> {
   final ScrollController _scrollController = ScrollController();
   Color _appBarColor = Colors.transparent;
   Color icons = Colors.white;
+  final FirebaseAuth _auth=FirebaseAuth.instance;
+  final FirebaseFirestore _firestore=FirebaseFirestore.instance;
 
   @override
   void initState() {
     super.initState();
-
+    SetVistorDoc();
     _scrollController.addListener(() {
       if (_scrollController.offset > 0) {
         setState(() {
@@ -31,6 +35,11 @@ class _VistorViewState extends State<VistorView> {
           _appBarColor = Colors.transparent;
         });
       }
+    });
+  }
+  void SetVistorDoc()async{
+    await _firestore.collection('user').doc(widget.doc).collection('visitor').doc(_auth.currentUser!.uid).set({
+      'id':_auth.currentUser!.uid
     });
   }
 

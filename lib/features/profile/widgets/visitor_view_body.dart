@@ -294,12 +294,18 @@ class _VistorViewBody extends State<VisitorViewBody>{
                             onTap: () {
                               if(Isfollow){
                                 Isfollow=false;
-                                widget._firestore.collection('user').doc(widget._auth.currentUser!.uid).collection('following').doc(widget.doc).delete();
+                                widget._firestore.collection('user').doc(widget._auth.currentUser!.uid).collection('following').doc(widget.doc).delete().then((value){
+                                  widget._firestore.collection('user').doc(widget.doc).collection('fans').doc(widget._auth.currentUser!.uid).delete();
+                                });
                               }
                               else{
                                 Isfollow=true;
                                 widget._firestore.collection('user').doc(widget._auth.currentUser!.uid).collection('following').doc(widget.doc).set({
                                   'id':widget.doc
+                                }).then((value){
+                                  widget._firestore.collection('user').doc(widget.doc).collection('fans').doc(widget._auth.currentUser!.uid).set({
+                                    'id':widget._auth.currentUser!.uid
+                                  });
                                 });
                               }
                               setState(() {
@@ -315,7 +321,7 @@ class _VistorViewBody extends State<VisitorViewBody>{
                                   Radius.circular(10),
                                 ),
                               ),
-                              child: const Row(
+                              child:  Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(
@@ -323,7 +329,7 @@ class _VistorViewBody extends State<VisitorViewBody>{
                                     color: Colors.white,
                                   ),
                                   Text(
-                                    "Follow",
+                                    Isfollow?"UnFollow": "Follow",
                                     style: TextStyle(color: Colors.white),
                                   )
                                 ],

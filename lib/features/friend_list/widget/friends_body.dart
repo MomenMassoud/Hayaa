@@ -7,6 +7,7 @@ import 'package:hayaa_main/features/chat/widget/one_to_one/chat_body.dart';
 import 'package:hayaa_main/features/profile/widgets/visitor_profile.dart';
 import 'package:hayaa_main/models/firends_model.dart';
 import '../../../models/user_model.dart';
+import '../../profile/views/visitor_.view.dart';
 
 class FriendsBody extends StatefulWidget {
   _FriendsBody createState() => _FriendsBody();
@@ -117,14 +118,25 @@ class _FriendsBody extends State<FriendsBody> {
                           friendsModels.add(ff);
                         }
                         return Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding:  EdgeInsets.all(8.0),
                           child: ListTile(
                             title: Text(friendsModels[index].name),
-                            leading: CircleAvatar(
-                              backgroundImage: CachedNetworkImageProvider(
-                                  friendsModels[index].photo),
+                            leading: InkWell(
+                              onTap: (){
+                                Navigator.of(context).push(
+                                    MaterialPageRoute(builder: (context) => VistorView(friendsModels[index].photo,friendsModels[index].docID)));
+                              },
+                              child: CircleAvatar(
+                                backgroundImage: CachedNetworkImageProvider(
+                                    friendsModels[index].photo),
+                              ),
                             ),
-                            subtitle: Text(friendsModels[index].bio),
+                            subtitle: InkWell(
+                              onTap: (){
+                                Navigator.of(context).push(
+                                    MaterialPageRoute(builder: (context) => VistorView(friendsModels[index].photo,friendsModels[index].docID)));
+                              },
+                                child: Text(friendsModels[index].bio)),
                             trailing: InkWell(
                               onTap: (){
                                 Navigator.pop(context);

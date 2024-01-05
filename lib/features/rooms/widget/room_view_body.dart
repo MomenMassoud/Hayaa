@@ -169,8 +169,7 @@ class _RoomViewBody extends State<RoomViewBody> {
                                     style: TextStyle(color: Colors.white70)),
                                 actions: [
                                   ElevatedButton(
-                                    child: const Text("Cancel",
-                                        style: TextStyle(color: Colors.white70)),
+                                    child: const Text("Cancel",),
                                     onPressed: () => Navigator.of(context).pop(false),
                                   ),
                                   ElevatedButton(
@@ -655,7 +654,7 @@ class _RoomViewBody extends State<RoomViewBody> {
           decoration: BoxDecoration(
             image: DecorationImage(
               fit: BoxFit.fill,
-              image:CachedNetworkImageProvider(wallpaper)
+              image:CachedNetworkImageProvider(wallpaper==""?"https://firebasestorage.googleapis.com/v0/b/hayaa-161f5.appspot.com/o/rooms%2Fclose-up-microphone-pop-filter-studio.jpg?alt=media&token=c9014900-dba7-4e7c-80c4-8d9fc6055462":wallpaper)
             ),
           ),
         ),
@@ -1131,6 +1130,11 @@ class _RoomViewBody extends State<RoomViewBody> {
                                           'giftdoc':gift.docID,
                                           'sender':_auth.currentUser!.uid,
                                           'recever':userSeats[index]
+                                        }).then((value){
+                                          _firestore.collection('user').doc(_auth.currentUser!.uid).collection('sendgift').doc().set({
+                                            'giftid':gift.docID,
+                                            'target':userSeats[index]
+                                          });
                                         });
                                       });
                                     });
