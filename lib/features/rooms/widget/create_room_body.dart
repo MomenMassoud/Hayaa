@@ -198,16 +198,16 @@ class _CreateRoomBody extends State<CreateRoomBody>{
                             'wallpaper':'',
                             'id':myID,
                             'country':mycountry,
-                            'block':'false'
+                            'block':'false',
+                            'photo':urlDownload
                           }).then((value){
                             _firestore.collection('user').doc(_auth.currentUser!.uid).update({
                               'room':docRoom,
                             }).then((value){
                               setState(() {
                                 _showspinner = false;
-                                Navigator.pop(context);
-                                Navigator.pop(context);
                               });
+                              Navigator.pop(context);
                             });
                           });
                         });

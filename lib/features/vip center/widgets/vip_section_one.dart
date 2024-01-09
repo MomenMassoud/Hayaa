@@ -1,4 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hayaa_main/core/Utils/app_images.dart';
+import 'package:hayaa_main/features/vip%20center/widgets/send_vip.dart';
 import '../models/feature_model.dart';
 import 'feature_item.dart';
 
@@ -13,64 +17,72 @@ class VipSectionOne extends StatefulWidget {
 }
 
 class _VipSectionOneState extends State<VipSectionOne> {
+  final FirebaseFirestore _firestore=FirebaseFirestore.instance;
+  final FirebaseAuth _auth=FirebaseAuth.instance;
   List<FeatureModel> featurs = [
     FeatureModel(
-        featureIcon: "lib/core/Utils/assets/images/vip_icon/1.png",
-        featureLable: "مؤثرات الدخول",
+        featureIcon: AppImages.Wearingmedal ,
+        featureLable: "Wearing medal ",
         active: true),
     FeatureModel(
-        featureIcon: "lib/core/Utils/assets/images/vip_icon/2.png",
-        featureLable: "براويز مميزة ",
+        featureIcon: AppImages.Titlemedal ,
+        featureLable: "Title medal ",
         active: true),
     FeatureModel(
-        featureIcon: "lib/core/Utils/assets/images/vip_icon/3.png",
-        featureLable: "ايقونة ",
+        featureIcon: AppImages.Roomentereffect ,
+        featureLable: "Room enter effect  ",
         active: true),
     FeatureModel(
-        featureIcon: "lib/core/Utils/assets/images/vip_icon/4.png",
-        featureLable: "مؤثرات الدخول",
+        featureIcon: AppImages.Flyingcomments,
+        featureLable: "Flying comments ",
         active: true),
     FeatureModel(
-        featureIcon: "lib/core/Utils/assets/images/vip_icon/5.png",
-        featureLable: "مؤثرات الدخول",
+        featureIcon: AppImages.Colorednickname,
+        featureLable: "Colored nickname ",
         active: true),
     FeatureModel(
-        featureIcon: "lib/core/Utils/assets/images/vip_icon/6.png",
-        featureLable: "مؤثرات الدخول",
+        featureIcon: AppImages.Toponlinerankinglist,
+        featureLable: "Top Medal",
         active: true),
     FeatureModel(
-        featureIcon: "lib/core/Utils/assets/images/vip_icon/1.png",
-        featureLable: "مؤثرات الدخول",
+        featureIcon: AppImages.Upgradelevelfast ,
+        featureLable: "Upgrade level fast ",
         active: true),
     FeatureModel(
-        featureIcon: "lib/core/Utils/assets/images/vip_icon/2.png",
-        featureLable: "مؤثرات الدخول",
+        featureIcon: AppImages.platformwidenotification ,
+        featureLable: "platform-wide notification ",
         active: true),
     FeatureModel(
-        featureIcon: "lib/core/Utils/assets/images/vip_icon/3.png",
-        featureLable: "مؤثرات الدخول",
+        featureIcon: AppImages.Exclusivenobletitlecard ,
+        featureLable: "Exclusive noble title card ",
         active: false),
     FeatureModel(
-        featureIcon: "lib/core/Utils/assets/images/vip_icon/4.png",
-        featureLable: "مؤثرات الدخول",
+        featureIcon: AppImages.specialchatbubble,
+        featureLable: "special chat bubble",
         active: false),
     FeatureModel(
-        featureIcon: "lib/core/Utils/assets/images/vip_icon/5.png",
-        featureLable: "مؤثرات الدخول",
+        featureIcon: AppImages.exclusiverideandmic ,
+        featureLable: "exclusive ride and mic ",
         active: false),
     FeatureModel(
-        featureIcon: "lib/core/Utils/assets/images/vip_icon/6.png",
-        featureLable: "مؤثرات الدخول",
-        active: false),
-    FeatureModel(
-        featureIcon: "lib/core/Utils/assets/images/vip_icon/3.png",
-        featureLable: "مؤثرات الدخول",
-        active: false),
-    FeatureModel(
-        featureIcon: "lib/core/Utils/assets/images/vip_icon/4.png",
-        featureLable: "مؤثرات الدخول",
+        featureIcon: AppImages.Exclusivegifts ,
+        featureLable: "Exclusive gifts ",
         active: false),
   ];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getVipPrice();
+  }
+  String coin="";
+  void getVipPrice()async{
+    await for(var snap in _firestore.collection('vip').where('id',isEqualTo: 'vip1').snapshots()){
+      setState(() {
+        coin=snap.docs[0].get('coin');
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -84,7 +96,7 @@ class _VipSectionOneState extends State<VipSectionOne> {
             child: SizedBox(
                 width: screenWidth * 0.5,
                 height: screenWidth * 0.5,
-                child: const Image(image: AssetImage("lib/core/Utils/assets/images/1b.png"))),
+                child: const Image(image: AssetImage(AppImages.VIP1))),
           ),
         ),
         Expanded(
@@ -136,7 +148,37 @@ class _VipSectionOneState extends State<VipSectionOne> {
                                     MaterialStateProperty.all<Color>(
                                         Colors.amberAccent),
                               ),
-                              onPressed: () {},
+                              onPressed: () async{
+                                DateTime now=DateTime.now();
+                                int month=now.month+1;
+                                int mycoin=0;
+                                DateTime end=DateTime(now.year,month,now.day,now.hour,now.minute,now.second,now.millisecond,now.microsecond);
+                                _firestore.collection('user').doc(_auth.currentUser!.uid).get().then((value){
+                                   mycoin=int.parse(value.get('coin'));
+                                }).then((value){
+                                  if(mycoin>=int.parse(coin)){
+                                    int newcoin=mycoin-int.parse(coin);
+                                    _firestore.collection("user").doc(_auth.currentUser!.uid).update({
+                                      'vip':'1',
+                                      'vip_end':end.toString(),
+                                      'coin':newcoin.toString()
+                                    }).then((value){
+                                      Allarm();
+                                      _firestore.collection('user').doc(_auth.currentUser!.uid).collection('payment').doc().set({
+                                        'date':DateTime.now().toString(),
+                                        'type':'coin',
+                                        'pay':'out',
+                                        'value':coin,
+                                        'bio':'vip1'
+                                      });
+                                    });
+                                  }
+                                  else{
+                                    AllarmError();
+                                  }
+                                });
+
+                              },
                               child: Text(
                                 "شراء",
                                 style: TextStyle(
@@ -163,17 +205,22 @@ class _VipSectionOneState extends State<VipSectionOne> {
                                     MaterialStateProperty.all<Color>(
                                         Colors.transparent),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => SendVip('1', int.parse(coin))));
+                              },
                               child: const Text(
                                 "ارسال",
                                 style: TextStyle(color: Colors.amberAccent),
                               )),
                         ),
                         const Spacer(),
-                        const Padding(
+                         Padding(
                           padding: EdgeInsets.all(8.0),
                           child: Text(
-                            " 5000 ذهب ",
+                            "$coin Coin",
                             style: TextStyle(
                                 color: Colors.amberAccent, fontSize: 20),
                           ),
@@ -188,6 +235,38 @@ class _VipSectionOneState extends State<VipSectionOne> {
         )
       ],
     );
+  }
+  void Allarm() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title:Text("مبرك"),
+              content:Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text("تم الحصول هذه Vip")
+                ],
+              )
+          );
+        });
+  }
+  void AllarmError() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title:Text("ناسف"),
+              content:Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text("لا تملك عملات كافية")
+                ],
+              )
+          );
+        });
   }
 }
 

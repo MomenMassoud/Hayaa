@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'activity_tab.dart';
+import 'badges_done.dart';
 
 class BadgesCenterViewBody extends StatefulWidget {
   const BadgesCenterViewBody({
@@ -11,21 +14,52 @@ class BadgesCenterViewBody extends StatefulWidget {
 }
 
 class _BadgesCenterViewBodyState extends State<BadgesCenterViewBody> {
+  final FirebaseFirestore _firestore=FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore2=FirebaseFirestore.instance;
+  final FirebaseAuth _auth=FirebaseAuth.instance;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getMyBadges();
+  }
+  void getMyBadges()async{
+    List<String> docs=[];
+    List<int> counts=[];
+    List<bool> dones=[];
+   await _firestore.collection('badges').get().then((value){
+     for(int i=0;i<value.size;i++){
+       docs.add(value.docs[i].id);
+       counts.add(int.parse(value.docs[i].get('count')));
+     }
+   }).then((value){
+     _firestore.collection('user').doc(_auth.currentUser!.uid).collection('sendgift').get().then((value){
+       for(int i=0;i<docs.length;i++){
+         int c=0;
+         for(int j=0;j<value.size;j++){
+           if(docs[i]==value.docs[j].get('giftid')){
+             c++;
+           }
+         }
+         if(c==counts[i]){
+           SetBadge(docs[i]);
+         }
+       }
+     });
+   });
+  }
+  void SetBadge(String id)async{
+    await _firestore.collection('user').doc(_auth.currentUser!.uid).collection('mybadges').doc(id).set({
+      'id':id
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         body: TabBarView(children: [
-          Container(
-            color: Colors.black,
-            child: const Center(
-                child: Text(
-              "الانجازات",
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-            )),
-          ),
+          BadgesDone(),
           const ActivityTab(),
         ]),
         backgroundColor: Colors.transparent,

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hayaa_main/features/vip%20center/widgets/vip_section_foure.dart';
+import 'package:hayaa_main/features/vip%20center/widgets/vip_section_three.dart';
+import 'package:hayaa_main/features/vip%20center/widgets/vip_section_two.dart';
 
 import 'vip_section_one.dart';
 
@@ -14,9 +17,9 @@ class VipCenterViewBody extends StatelessWidget {
       child: Scaffold(
         body: TabBarView(children: [
           const VipSectionOne(),
-          const VipSectionOne(),
-          const VipSectionOne(),
-          const VipSectionOne(),
+          const VipSectionTwo(),
+          const VipSectionThree(),
+          const VipSectionFoure(),
         ]),
         backgroundColor: Colors.transparent,
         appBar: AppBar(

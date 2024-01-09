@@ -184,7 +184,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 else{
                   _firestore.collection('room').doc(userModel.myroom).collection('user').doc(_auth.currentUser!.uid).set({
                     'id':userModel.id,
-                    'doc':_auth.currentUser!.uid
+                    'type':'owner'
                   }).then((value){
                     Navigator.of(context).push(
                         MaterialPageRoute(builder: (context) => RoomView(userModel.myroom,true,userModel.name,_auth.currentUser!.uid,),));
@@ -242,9 +242,8 @@ class _HomeViewBodyState extends State<HomeViewBody> {
         ],
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: _firestore.collection('event').snapshots(),
+        stream: _firestore.collection('user').where('doc',isEqualTo: _auth.currentUser!.uid).snapshots(),
         builder: (context,snapshot){
-          List<String> img=[];
           if (!snapshot.hasData) {
             return Center(
               child: CircularProgressIndicator(
@@ -254,12 +253,12 @@ class _HomeViewBodyState extends State<HomeViewBody> {
           }
           final masseges = snapshot.data?.docs;
           for (var massege in masseges!.reversed){
-            img.add(massege.get('photo'));
+            userModel.myroom=massege.get('room');
           }
           return StreamBuilder<QuerySnapshot>(
-            stream: _firestore.collection('room').where('owner',isNotEqualTo: _auth.currentUser!.uid).snapshots(),
+            stream: _firestore.collection('event').snapshots(),
             builder: (context,snapshot){
-              List<RoomModels> roomss=[];
+              List<String> img=[];
               if (!snapshot.hasData) {
                 return Center(
                   child: CircularProgressIndicator(
@@ -269,103 +268,120 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               }
               final masseges = snapshot.data?.docs;
               for (var massege in masseges!.reversed){
-                roomss.add(
-                  RoomModels(massege.get('id'), massege.id, massege.get('gift'), massege.get('gifttype'),
-                      massege.get('cartype'), massege.get('wallpaper'), massege.get('password'),
-                      massege.get('owner'), massege.get('bio'), massege.get('car'), massege.get('seat'),massege.get('photo'))
-                );
+                img.add(massege.get('photo'));
               }
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 18.0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5.0),
-                        child: HorizontalEventSlider(
-                            screenHight: MediaQuery.of(context).size.height,
-                            screenWidth: MediaQuery.of(context).size.width,
-                            images: img),
+              return StreamBuilder<QuerySnapshot>(
+                stream: _firestore.collection('room').where('owner',isNotEqualTo: _auth.currentUser!.uid).snapshots(),
+                builder: (context,snapshot){
+                  List<RoomModels> roomss=[];
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        backgroundColor: Colors.blue,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0,right: 8.0,left: 8.0),
-                        child: SubScreensSection(
-                          screenHight: MediaQuery.of(context).size.height,
-                          screenWidth: MediaQuery.of(context).size.width,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 2.0,right: 8.0,left: 8.0),
-                        child: HorezintalSection(
-                            screenWidth: MediaQuery.of(context).size.width,
-                            screenHight: MediaQuery.of(context).size.height,
-                            rooms: rooms),
-                      ),
-                      ListTile(
-                        title: Text("الدول",style: TextStyle(color: Colors.pink.withOpacity(1),fontFamily: "Questv1"),),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text("Show All",style: TextStyle(color: Colors.pink.withOpacity(1),fontFamily: "Questv1")),
-                            IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward,color:Colors.pink.withOpacity(1) ,))
-                          ],
-                        ) ,
-                      ),
-                      Container(
-                          height: 80,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount:8,
-                            itemBuilder: (context,index){
-                              return Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Flag.fromString(
-                                      countryCodes[index],
-                                      height: 40,
-                                      width: 60,
+                    );
+                  }
+                  final masseges = snapshot.data?.docs;
+                  for (var massege in masseges!.reversed){
+                    roomss.add(
+                        RoomModels(massege.get('id'), massege.id, massege.get('gift'), massege.get('gifttype'),
+                            massege.get('cartype'), massege.get('wallpaper'), massege.get('password'),
+                            massege.get('owner'), massege.get('bio'), massege.get('car'), massege.get('seat'),massege.get('photo'))
+                    );
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 18.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5.0),
+                            child: HorizontalEventSlider(
+                                screenHight: MediaQuery.of(context).size.height,
+                                screenWidth: MediaQuery.of(context).size.width,
+                                images: img),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0,right: 8.0,left: 8.0),
+                            child: SubScreensSection(
+                              screenHight: MediaQuery.of(context).size.height,
+                              screenWidth: MediaQuery.of(context).size.width,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 2.0,right: 8.0,left: 8.0),
+                            child: HorezintalSection(
+                                screenWidth: MediaQuery.of(context).size.width,
+                                screenHight: MediaQuery.of(context).size.height,
+                                rooms: rooms),
+                          ),
+                          ListTile(
+                            title: Text("الدول",style: TextStyle(color: Colors.pink.withOpacity(1),fontFamily: "Questv1"),),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text("Show All",style: TextStyle(color: Colors.pink.withOpacity(1),fontFamily: "Questv1")),
+                                IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward,color:Colors.pink.withOpacity(1) ,))
+                              ],
+                            ) ,
+                          ),
+                          Container(
+                              height: 80,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount:8,
+                                itemBuilder: (context,index){
+                                  return Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Flag.fromString(
+                                          countryCodes[index],
+                                          height: 40,
+                                          width: 60,
+                                        ),
+                                        SizedBox(height: 5),
+                                        Text(
+                                          Flag.fromString(
+                                            countryCodes[index],
+                                            height: 40,
+                                            width: 60,
+                                          ).country,
+                                          style: TextStyle(fontSize: 12),
+                                        ),
+                                      ],
                                     ),
-                                    SizedBox(height: 5),
-                                    Text(
-                                      Flag.fromString(
-                                        countryCodes[index],
-                                        height: 40,
-                                        width: 60,
-                                      ).country,
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          )
+                                  );
+                                },
+                              )
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 2.0,right: 8.0,left: 8.0,bottom: 8.0),
+                            child: VerticalRoomsListViewBuilder(
+                                rooms: roomss,
+                                screenWidth: MediaQuery.of(context).size.width,
+                                screenHight: MediaQuery.of(context).size.height),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 9.0,bottom: 18),
+                            child: HorizontalEventSlider(
+                                screenHight: MediaQuery.of(context).size.height,
+                                screenWidth: MediaQuery.of(context).size.width,
+                                images: img),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: VerticalRoomsListViewBuilder(
+                                rooms: roomss,
+                                screenWidth: MediaQuery.of(context).size.width,
+                                screenHight: MediaQuery.of(context).size.height),
+                          ),
+                        ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 2.0,right: 8.0,left: 8.0,bottom: 8.0),
-                        child: VerticalRoomsListViewBuilder(
-                            rooms: roomss,
-                            screenWidth: MediaQuery.of(context).size.width,
-                            screenHight: MediaQuery.of(context).size.height),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 9.0,bottom: 18),
-                        child: HorizontalEventSlider(
-                            screenHight: MediaQuery.of(context).size.height,
-                            screenWidth: MediaQuery.of(context).size.width,
-                            images: img),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: VerticalRoomsListViewBuilder(
-                            rooms: roomss,
-                            screenWidth: MediaQuery.of(context).size.width,
-                            screenHight: MediaQuery.of(context).size.height),
-                      ),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               );
             },
           );

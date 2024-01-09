@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:svgaplayer_flutter/player.dart';
 import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_audio_room.dart';
 import '../../../core/Utils/app_images.dart';
@@ -45,6 +46,8 @@ class _RoomViewBody extends State<RoomViewBody> {
   String cartype="";
   String gifttype="";
   String myType="";
+  String MytypeInRoom="";
+  String lock="lib/core/Utils/assets/images/icon/lock_8497362.png";
   @override
   void initState() {
     super.initState();
@@ -54,9 +57,11 @@ class _RoomViewBody extends State<RoomViewBody> {
     UserBlock();
   }
   void setUserInRoom()async{
-    _firestore.collection('room').doc(widget.roomID).collection('user').doc(_auth.currentUser!.uid).set({
-      'id':_auth.currentUser!.uid
-    });
+    await for(var snap in _firestore.collection('room').doc(widget.roomID).collection('user').doc(_auth.currentUser!.uid).snapshots()){
+      setState(() {
+        MytypeInRoom=snap.get('type');
+      });
+    }
   }
   void getMyCar()async{
     await for(var snap in _firestore.collection('user').doc(_auth.currentUser!.uid).snapshots()){
@@ -195,7 +200,10 @@ class _RoomViewBody extends State<RoomViewBody> {
                           backgroundBuilder: (context, size, user, extraInfo) {
                             return Container(color: Colors.transparent,);
                           },
-                          closeIcon: Image.network("https://firebasestorage.googleapis.com/v0/b/hayaa-161f5.appspot.com/o/rooms%2Flock_5794524.png?alt=media&token=a613f54d-477a-42c9-98a6-fa65dac2a49e"),
+                            foregroundBuilder: (context, size, user, extraInfo) {
+                              return Container(color: Colors.transparent,);
+                            },
+                            closeIcon: Image.asset(lock),
                           openIcon: Image.network("https://firebasestorage.googleapis.com/v0/b/hayaa-161f5.appspot.com/o/rooms%2Fsofa_6458474.png?alt=media&token=dff6124f-805c-4386-bd95-394c4fa611f7")
                         )
                         ..seatConfig.avatarBuilder=(context, size, user, extraInfo) {
@@ -317,10 +325,34 @@ class _RoomViewBody extends State<RoomViewBody> {
                            if(user==null){
                              closeSeat(index);
                            }
-                           else{
-                             controller.message.send('Remove ${user.name} from Seat');
-                             controller.removeSpeakerFromSeat(user!.id);
+                           if(user!.id!=_auth.currentUser!.uid){
+                             ChangeMemberValue(user.id,user.name);
                            }
+                          }
+                        }
+                        else{
+                          if(MytypeInRoom=="admin"){
+                            if(isSeatOpen(index) && user==null){
+                              openSeat(index);
+                            }
+                            else{
+                              if(user==null){
+                                closeSeat(index);
+                              }
+                              else{
+                                if(user!.id!=_auth.currentUser!.uid){
+                                  ChangeMemberValue(user.id,user.name);
+                                }
+                                else{
+                                  RemoveMe();
+                                }
+                              }
+                            }
+                          }
+                          else{
+                            if(user!.id==_auth.currentUser!.uid){
+                              RemoveMe();
+                            }
                           }
                         }
                       }
@@ -392,6 +424,7 @@ class _RoomViewBody extends State<RoomViewBody> {
                                 }).whenComplete((){
                                   if(lastincome==0){
                                     _firestore.collection('agency').doc(myagent).collection('users').doc(_auth.currentUser!.uid).collection('income').doc(docs).set({
+                                      'count':'0',
                                       'date':DateTime.now().toString(),
                                       'hosttime': timeSpent.inMinutes.toString(),
                                       'numberradio':timeSpent.inMinutes>=60?'1':'0',
@@ -433,28 +466,53 @@ class _RoomViewBody extends State<RoomViewBody> {
                                       builder: (builder) =>
                                           bottomSheet());
                                 }, icon: Icon(Icons.card_giftcard,color: Colors.black,))),
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    backgroundImage: AssetImage(AppImages.music),
+                                    child: InkWell(onTap: (){
+                                      controller?.media.pickPureAudioFile().then((value){
+                                        Navigator.pop(context);
+                                        musicPath.add(value[0].path.toString());
+                                        musicname.add(value[0].name);
+                                        showModalBottomSheet(
+                                            backgroundColor:
+                                            Colors.transparent,
+                                            context: context,
+                                            builder: (builder) =>
+                                                MyMusic());
+                                      });
+
+
+                                    }, child:Container())),
+                                Text("Play Music",style: TextStyle(color: Colors.white,fontSize: 8),)
+                              ],
+                            ),
                           ],
                           hostExtendButtons: [
 
                             CircleAvatar(
                                 backgroundColor: Colors.white,
-                                child: IconButton(onPressed: (){
+                                backgroundImage: AssetImage(AppImages.gift),
+                                child: InkWell(onTap: (){
                                   showModalBottomSheet(
                                       backgroundColor:
                                       Colors.transparent,
                                       context: context,
                                       builder: (builder) =>
                                           bottomSheet());
-                                }, icon: Icon(Icons.card_giftcard,color: Colors.black,))),
+                                }, child: Container())),
                             Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 CircleAvatar(
                                     backgroundColor: Colors.white,
-                                    child:pass==""? IconButton(onPressed: (){
+                                    child:pass==""? InkWell(onTap: (){
                                       Navigator.pop(context);
                                       SetPassword();
-                                    }, icon: Icon(Icons.password,color: Colors.black,)):IconButton(onPressed: ()async{
+                                    }, child: Icon(Icons.password,color: Colors.black,)):IconButton(onPressed: ()async{
                                       _firestore.collection('room').doc(widget.roomID).update({
                                         'password':''
                                       }).then((value){
@@ -474,7 +532,8 @@ class _RoomViewBody extends State<RoomViewBody> {
                               children: [
                                 CircleAvatar(
                                     backgroundColor: Colors.white,
-                                    child: IconButton(onPressed: (){
+                                    backgroundImage: AssetImage(AppImages.music),
+                                    child: InkWell(onTap: (){
                                       controller?.media.pickPureAudioFile().then((value){
                                         Navigator.pop(context);
                                         musicPath.add(value[0].path.toString());
@@ -488,7 +547,7 @@ class _RoomViewBody extends State<RoomViewBody> {
                                       });
 
 
-                                    }, icon: Icon(Icons.music_note,color: Colors.black,))),
+                                    }, child:Container())),
                                 Text("Play Music",style: TextStyle(color: Colors.white,fontSize: 8),)
                               ],
                             ),
@@ -497,7 +556,9 @@ class _RoomViewBody extends State<RoomViewBody> {
                               children: [
                                 CircleAvatar(
                                     backgroundColor: Colors.white,
-                                    child: IconButton(onPressed: (){
+                                    backgroundImage: AssetImage(AppImages.wallpaper),
+                                    child: InkWell(
+                                        onTap: (){
                                       Navigator.pop(context);
                                       showModalBottomSheet(
                                           backgroundColor:
@@ -505,7 +566,8 @@ class _RoomViewBody extends State<RoomViewBody> {
                                           context: context,
                                           builder: (builder) =>
                                               MyWallpaper());
-                                    }, icon: Icon(Icons.photo,color: Colors.black,))),
+                                    }, child: Container())
+                                ),
                                 Text("Change Room Wallpaper",style: TextStyle(color: Colors.white,fontSize: 8),)
                               ],
                             ),
@@ -513,10 +575,12 @@ class _RoomViewBody extends State<RoomViewBody> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 CircleAvatar(
+                                  backgroundImage: AssetImage(AppImages.layout),
                                     backgroundColor: Colors.white,
-                                    child: IconButton(onPressed: (){
+                                    child: InkWell(
+                                        onTap: (){
                                       ShowNumberSeat();
-                                    }, icon: Icon(Icons.layers,color: Colors.black,))),
+                                    }, child: Container())),
                                 Text("Change Seat Number in Room",style: TextStyle(color: Colors.white,fontSize: 8),)
                               ],
                             ),
@@ -525,7 +589,8 @@ class _RoomViewBody extends State<RoomViewBody> {
                               children: [
                                 CircleAvatar(
                                   backgroundColor: Colors.white,
-                                  child: IconButton(onPressed: ()async{
+                                  child: IconButton(
+                                      onPressed: ()async{
                                     print("done");
                                     await controller.media.stop().whenComplete((){
                                       print("done");
@@ -936,7 +1001,7 @@ class _RoomViewBody extends State<RoomViewBody> {
                                   child: CachedNetworkImage(imageUrl: gifts[index].photo),
                                   backgroundColor: Colors.transparent,
                                 ),
-                                Text(gifts[index].Name),
+                                Text(gifts[index].Name,style: TextStyle(color: Colors.white),),
                                 Row(
                                   children: [
                                     CircleAvatar(
@@ -1208,6 +1273,107 @@ class _RoomViewBody extends State<RoomViewBody> {
                     ElevatedButton(onPressed: (){}, child: Text("تحديث"))
                   ],
                 )
+              )
+          );
+        });
+  }
+  void ChangeMemberValue(String id,String name) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              content: Container(
+                  height: 220,
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: _firestore.collection('room').doc(widget.roomID).collection('user').snapshots(),
+                    builder: (context,snapshot){
+                      String TpUser="";
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: CircularProgressIndicator(
+                            backgroundColor: Colors.blue,
+                          ),
+                        );
+                      }
+                      final masseges = snapshot.data?.docs;
+                      for (var massege in masseges!.reversed){
+                        if(massege.get('id')==id){
+                          TpUser=massege.get('type');
+                        }
+                      }
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          MytypeInRoom=="owner"?ElevatedButton(onPressed: ()async{
+                            if(TpUser=="admin"){
+                              await _firestore.collection('room').doc(widget.roomID).collection('user').doc(id).update({
+                                'type':'admin'
+                              }).then((value){
+                                controller.message.send("Make ${name} as Co-Host");
+                                Navigator.pop(context);
+                              });
+                            }
+                            else{
+                              await _firestore.collection('room').doc(widget.roomID).collection('user').doc(id).update({
+                                'type':'normal'
+                              }).then((value){
+                                controller.message.send("Make ${name} as User");
+                                Navigator.pop(context);
+                              });
+                            }
+                          },
+                              child: TpUser=="normal"?Text("Make a Host"):Text("Make A Normal")
+                          ):Container(),
+                          SizedBox(height: 10,),
+                          ElevatedButton(onPressed: (){
+                            controller.turnMicrophoneOn(false,userID: id);
+                            Navigator.pop(context);
+                          },
+                              child: Text("Mute This Member")),
+                          SizedBox(height: 10,),
+                          ElevatedButton(onPressed: ()async{
+                            await _firestore.collection("room").doc(widget.roomID).collection('user').doc(id).delete().then((value){
+                              controller.message.send('Kikout ${name} from room');
+                              Navigator.pop(context);
+                            });
+                          },
+                              child: Text("Kick out")),
+                          SizedBox(height: 10,),
+                          ElevatedButton(onPressed: ()async{
+                            Navigator.of(context).pop();
+                            _firestore.collection('room').doc(widget.roomID).collection('block').doc(id).set({
+                              'id':id
+                            }).then((value){
+                              ZegoUIKit().removeUserFromRoom(
+                                [id],
+                              ).then((result) {
+                                _firestore.collection("room").doc(widget.roomID).collection('user').doc(id).delete().then((value){
+                                  controller.message.send('Block ${name} in room');
+                                });
+                              });
+                            });
+                          },
+                              child: Text("Block")),
+                          SizedBox(height: 10,),
+                        ],
+                      );
+                    },
+                  )
+              )
+          );
+        });
+  }
+  void RemoveMe() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: Text("Remove From Seat"),
+              content: Container(
+                  height: 220,
+                  child: ElevatedButton(onPressed: (){
+                    controller.removeSpeakerFromSeat(_auth.currentUser!.uid);
+                  }, child: Text("UnTake Seat"))
               )
           );
         });

@@ -188,4 +188,54 @@ abstract class AppImages {
       "lib/core/Utils/assets/images/wealth&charm badges/wealth main 100-125.png";
   static const String wealth126to150Main =
       "lib/core/Utils/assets/images/wealth&charm badges/wealth main 126-150.png";
+  static const String gift =
+      "lib/core/Utils/assets/images/icon/gift.jpg";
+  static const String music =
+      "lib/core/Utils/assets/images/icon/music.jpg";
+  static const String password =
+      "lib/core/Utils/assets/images/icon/password.jpg";
+  static const String wallpaper =
+      "lib/core/Utils/assets/images/icon/wallpaper.jpg";
+  static const String layout =
+      "lib/core/Utils/assets/images/icon/layout.jpg";
+  static const String Colorednickname =
+      "lib/core/Utils/assets/images/Vip/vip1/Colored nickname .png";
+  static const String Exclusivegifts  =
+      "lib/core/Utils/assets/images/Vip/vip1/Exclusive gifts .png";
+  static const String Exclusivenobletitlecard   =
+      "lib/core/Utils/assets/images/Vip/vip1/Exclusive noble title card .png";
+  static const String exclusiverideandmic    =
+      "lib/core/Utils/assets/images/Vip/vip1/exclusive ride and mic .png";
+  static const String Flyingcomments     =
+      "lib/core/Utils/assets/images/Vip/vip1/Flying comments .png";
+  static const String platformwidenotification      =
+      "lib/core/Utils/assets/images/Vip/vip1/platform-wide notification .png";
+  static const String Roomentereffect       =
+      "lib/core/Utils/assets/images/Vip/vip1/Room enter effect .png";
+  static const String specialchatbubble       =
+      "lib/core/Utils/assets/images/Vip/vip1/special chat bubble.png";
+  static const String Titlemedal        =
+      "lib/core/Utils/assets/images/Vip/vip1/Title medal .png";
+  static const String Toponlinerankinglist      =
+      "lib/core/Utils/assets/images/Vip/vip1/Top online ranking list.png";
+  static const String Upgradelevelfast       =
+      "lib/core/Utils/assets/images/Vip/vip1/Upgrade level fast .png";
+  static const String Wearingmedal        =
+      "lib/core/Utils/assets/images/Vip/vip1/Wearing medal .png";
+  static const String Profilethemeandspecialprofilepagelook=
+      "lib/core/Utils/assets/images/Vip/vip2/Profile theme and special profile page look .png";
+  static const String Sendpicsinthepublicscreen =
+      "lib/core/Utils/assets/images/Vip/vip2/Send pics in the public screen .png";
+  static const String Storediscounts  =
+      "lib/core/Utils/assets/images/Vip/vip2/Store discounts .png";
+  static const String Preventbeingkickedoutfromtheroom   =
+      "lib/core/Utils/assets/images/Vip/vip3/Prevent being kicked out from the room .png";
+  static const String Preventbeingtextbanned   =
+      "lib/core/Utils/assets/images/Vip/vip3/Prevent being text banned .png";
+  static const String Hideidentityonlists   =
+      "lib/core/Utils/assets/images/Vip/vip4/Hide identity on lists .png";
+  static const String Hidethecountryandtheage    =
+      "lib/core/Utils/assets/images/Vip/vip4/Hide the country and the age .png";
+  static const String Sneakingintorooms    =
+      "lib/core/Utils/assets/images/Vip/vip4/Sneaking into rooms .png";
 }

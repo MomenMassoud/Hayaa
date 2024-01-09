@@ -73,6 +73,7 @@ dependencies:
   flutter_screenutil: ^5.9.0
   import_sorter: ^4.6.0
   dart_code_metrics: ^5.7.6
+  flutter_svg: ^2.0.9
 
 flutter_icons:
   android: true
@@ -122,6 +123,11 @@ flutter:
     - lib/core/Utils/assets/images/vip_icon/
     - lib/core/Utils/assets/images/vip_badges/
     - lib/core/Utils/assets/images/wealth&charm badges/
+    - lib/core/Utils/assets/images/icon/
+    - lib/core/Utils/assets/images/Vip/vip1/
+    - lib/core/Utils/assets/images/Vip/vip2/
+    - lib/core/Utils/assets/images/Vip/vip3/
+    - lib/core/Utils/assets/images/Vip/vip4/
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

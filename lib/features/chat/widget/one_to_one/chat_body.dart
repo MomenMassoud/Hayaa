@@ -203,7 +203,7 @@ class _ChatBody extends State<ChatBody> {
                         userModel.name = massege.get('name');
                         userModel.phonenumber = massege.get('phonenumber');
                         userModel.photo = massege.get('photo');
-                        userModel.seen = massege.get('seen');
+                        userModel.seen = massege.get('seen').toString();
                         userModel.type = massege.get('type');
                         userModel.vip = massege.get('vip');
                         userModel.myfamily=massege.get('myfamily');

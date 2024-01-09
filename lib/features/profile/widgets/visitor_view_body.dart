@@ -220,7 +220,45 @@ class _VistorViewBody extends State<VisitorViewBody>{
                                                         Row(
                                                           children: [
                                                             const Text("Gift"),
-                                                            const Spacer(),
+                                                             Container(
+                                                               height: 150,
+                                                               child: StreamBuilder<QuerySnapshot>(
+                                                                 stream: widget._firestore.collection('gifts').snapshots(),
+                                                                 builder: (context,snapshot){
+                                                                   List<String> photos=[];
+                                                                   if (!snapshot.hasData) {
+                                                                     return Center(
+                                                                       child: CircularProgressIndicator(
+                                                                         backgroundColor: Colors.blue,
+                                                                       ),
+                                                                     );
+                                                                   }
+                                                                   final masseges = snapshot.data?.docs;
+                                                                   int c=0;
+                                                                   for (var massege in masseges!.reversed){
+                                                                     if(mygift[c].doc==massege.id){
+                                                                       photos.add(massege.get('photo'));
+                                                                     }
+                                                                   }
+                                                                   return GridView.builder(
+                                                                     itemCount: mygift.length,
+                                                                     gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 2),
+                                                                     itemBuilder: (context,index){
+                                                                       return Column(
+                                                                         mainAxisSize: MainAxisSize.min,
+                                                                         children: [
+                                                                           CircleAvatar(
+                                                                             backgroundColor: Colors.transparent,
+                                                                             backgroundImage: CachedNetworkImageProvider(photos[index]),
+                                                                           ),
+                                                                           Text("X${mygift[index].count}")
+                                                                         ],
+                                                                       );
+                                                                     },
+                                                                   );
+                                                                 },
+                                                               ),
+                                                             ),
                                                             const Text(
                                                               "See All",
                                                               style: TextStyle(
