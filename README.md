@@ -1,4 +1,4 @@
-# iconnect2
+# hayaa app
 
 A new Flutter project.
 
