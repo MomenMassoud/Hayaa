@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_sound_lite/public/flutter_sound_recorder.dart';
 import 'package:permission_handler/permission_handler.dart';
+import '../core/Utils/supabase_helper.dart';
 
 class Recorder {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -36,12 +36,8 @@ class Recorder {
     stateRecorder=false;
   }
   void _SetCloudGroup(File image)async{
-    final path = "chat_group/record/$FileName.mp3";
     final file = File(image.path);
-    final ref = FirebaseStorage.instance.ref().child(path);
-    final uploadTask = ref.putFile(file);
-    final snapshot = await uploadTask.whenComplete(() {});
-    final urlDownload = await snapshot.ref.getDownloadURL();
+    final urlDownload = await SupabaseHelper.uploadImage(file);
     print("Download Link : $urlDownload");
     final id = DateTime.now().toString();
     String idd = "$id-$useremail";
@@ -75,12 +71,8 @@ class Recorder {
     });
   }
   void _SetCloudRecord(File image)async{
-    final path = "chat/records/$FileName.mp3";
     final file = File(image.path);
-    final ref = FirebaseStorage.instance.ref().child(path);
-    final uploadTask = ref.putFile(file);
-    final snapshot = await uploadTask.whenComplete(() {});
-    final urlDownload = await snapshot.ref.getDownloadURL();
+    final urlDownload = await SupabaseHelper.uploadImage(file);
     print("Download Link : $urlDownload");
     final id = DateTime.now().toString();
     String idd = "$id-$useremail";

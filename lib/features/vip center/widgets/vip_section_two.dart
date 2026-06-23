@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -82,19 +83,25 @@ class _VipSectionTwo extends State<VipSectionTwo> {
         featureLable: "Send pics in the public screen ",
         active: false),
   ];
+  StreamSubscription? _vipSub;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getVipPrice();
   }
+  @override
+  void dispose() {
+    _vipSub?.cancel();
+    super.dispose();
+  }
   String coin="";
-  void getVipPrice()async{
-    await for(var snap in _firestore.collection('vip').where('id',isEqualTo: 'vip2').snapshots()){
+  void getVipPrice(){
+    _vipSub = _firestore.collection('vip').where('id',isEqualTo: 'vip2').snapshots().listen((snap){
+      if(!mounted || snap.docs.isEmpty) return;
       setState(() {
         coin=snap.docs[0].get('coin');
       });
-    }
+    });
   }
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,53 +28,57 @@ class _MyFamilyBody extends State<MyFamilyBody> {
   int total=0;
   int level=0;
   late FamilyModel familyModel;
+  StreamSubscription? _userSub;
+  StreamSubscription? _countSub;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getFamilyName();
-    getLevelFamily();
   }
-  void getLevelFamily()async{
-
-
+  @override
+  void dispose() {
+    _userSub?.cancel();
+    _countSub?.cancel();
+    super.dispose();
   }
 
-  void getFamilyName() async {
-    await for (var snap in _firestore
+  void getFamilyName() {
+    _userSub = _firestore
         .collection('user')
         .doc(_auth.currentUser!.uid)
-        .snapshots()) {
-      setState(() {
-        familyID = snap.get('myfamily');
-      });
-      await for(var snap in _firestore.collection('family').doc(familyID).collection('count').snapshots()){
-        for(int i=0;i<snap.size;i++){
-          total+=int.parse(snap.docs[i].get('coin'));
-          print(total);
+        .snapshots()
+        .listen((snap) {
+      if (!mounted) return;
+      final fid = snap.data()?['myfamily'] ?? '';
+      setState(() => familyID = fid);
+      _countSub?.cancel();
+      if (fid.isEmpty) return;
+      _countSub = _firestore
+          .collection('family')
+          .doc(fid)
+          .collection('count')
+          .snapshots()
+          .listen((csnap) {
+        if (!mounted) return;
+        // Recompute from scratch each emission to avoid accumulation bug.
+        int sum = 0;
+        for (int i = 0; i < csnap.size; i++) {
+          sum += int.tryParse(csnap.docs[i].get('coin').toString()) ?? 0;
         }
-        int j=0;
-        while(j==0){
-          if(total>=1000){
-            total=total-1000;
-            level+=1;
-          }
-          else{
-            break;
-          }
+        int lvl = 0;
+        while (sum >= 1000) {
+          sum -= 1000;
+          lvl += 1;
         }
-        print('level $level');
-        _firestore.collection('family').doc(familyID).update({
-          'level':level.toString()
-        }).then((value){
-          setState(() {
-            level;
-            total;
-          });
+        _firestore.collection('family').doc(fid).update({
+          'level': lvl.toString(),
         });
-      }
-    }
-
+        setState(() {
+          total = sum;
+          level = lvl;
+        });
+      });
+    });
   }
 
   @override

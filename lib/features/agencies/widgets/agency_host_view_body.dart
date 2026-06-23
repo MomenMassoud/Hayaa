@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,19 +18,24 @@ class _AgencyHostViewBody extends State<AgencyHostViewBody>{
   final FirebaseAuth _auth =FirebaseAuth.instance;
   String myagency="";
   int myDaiomond=0;
+  StreamSubscription? _daimondSub;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    print(DateTime.now());
     getMyDaimond();
   }
-  void getMyDaimond()async{
-    await for(var snap in _firestore.collection('user').doc(_auth.currentUser!.uid).snapshots()){
+  @override
+  void dispose() {
+    _daimondSub?.cancel();
+    super.dispose();
+  }
+  void getMyDaimond(){
+    _daimondSub = _firestore.collection('user').doc(_auth.currentUser!.uid).snapshots().listen((snap){
+      if(!mounted) return;
       setState(() {
-        myDaiomond=int.parse(snap.get('daimond'));
+        myDaiomond=int.tryParse(snap.data()?['daimond']?.toString() ?? '0') ?? 0;
       });
-    }
+    });
   }
   @override
   Widget build(BuildContext context) {

@@ -46,11 +46,11 @@ class VerticalRoomsListItem extends StatelessWidget {
                       if(roomModel.password==_controller.text){
                        _firestore.collection('room').doc(roomModel.doc).collection('user').doc(_auth.currentUser!.uid).set({
                          'id':_auth.currentUser!.uid,
-                         'type':'normal'
+                         'type': roomModel.owner == _auth.currentUser!.uid ? 'owner' : 'normal',
                        }).then((value){
                          Navigator.pop(context);
                          Navigator.of(context).push(
-                             MaterialPageRoute(builder: (context) => RoomView(roomModel.doc,false,_auth.currentUser!.displayName.toString(),_auth.currentUser!.uid,),));
+                             MaterialPageRoute(builder: (context) => RoomView(roomModel.doc,roomModel.owner==_auth.currentUser!.uid,_auth.currentUser!.displayName.toString(),_auth.currentUser!.uid,),));
                        });
                       }
                     }, child: Text("ادخال")),
@@ -66,10 +66,10 @@ class VerticalRoomsListItem extends StatelessWidget {
          if(roomModel.password==""){
            _firestore.collection('room').doc(roomModel.doc).collection('user').doc(_auth.currentUser!.uid).set({
              'id':_auth.currentUser!.uid,
-             'type':'normal'
+             'type': roomModel.owner == _auth.currentUser!.uid ? 'owner' : 'normal',
            }).then((value){
              Navigator.of(context).push(
-                 MaterialPageRoute(builder: (context) => RoomView(roomModel.doc,false,_auth.currentUser!.displayName.toString(),_auth.currentUser!.uid,),));
+                 MaterialPageRoute(builder: (context) => RoomView(roomModel.doc,roomModel.owner==_auth.currentUser!.uid,_auth.currentUser!.displayName.toString(),_auth.currentUser!.uid,),));
            });
          }
          else{

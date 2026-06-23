@@ -30,103 +30,58 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   UserModel userModel = UserModel(
-      "email",
-      "name",
-      "gende",
-      "photo",
-      "id",
-      "phonenumber",
-      "devicetoken",
-      "daimond",
-      "vip",
-      "bio",
-      "seen",
-      "lang",
-      "country",
-      "type",
-      "birthdate",
-      "coin",
-      "exp",
-      "level");
+      "email", "name", "gende", "photo", "id", "phonenumber", "devicetoken",
+      "daimond", "vip", "bio", "seen", "lang", "country", "type", "birthdate",
+      "coin", "exp", "level");
+
+  StreamSubscription? _userSub;
 
   @override
   void initState() {
     super.initState();
-    start();
-    getEvent();
+    _listenUser();
   }
 
-  void start() async {
-    if (_auth.currentUser!.email == null) {
-      await for (var snap in _firestore
-          .collection('user')
-          .where('phonenumber', isEqualTo: _auth.currentUser!.phoneNumber)
-          .snapshots()) {
-        userModel.bio = snap.docs[0].get('bio');
-        userModel.birthdate = snap.docs[0].get('birthdate');
-        userModel.coin = snap.docs[0].get('coin');
-        userModel.country = snap.docs[0].get('country');
-        userModel.daimond = snap.docs[0].get('daimond');
-        userModel.devicetoken = snap.docs[0].get('devicetoken');
-        userModel.email = snap.docs[0].get('email');
-        userModel.exp = snap.docs[0].get('exp');
-        userModel.gender = snap.docs[0].get('gender');
-        userModel.id = snap.docs[0].get('id');
-        userModel.lang = snap.docs[0].get('lang');
-        userModel.level = snap.docs[0].get('level');
-        userModel.name = snap.docs[0].get('name');
-        userModel.phonenumber = snap.docs[0].get('phonenumber');
-        userModel.photo = snap.docs[0].get('photo');
-        userModel.seen = snap.docs[0].get('seen');
-        userModel.type = snap.docs[0].get('type');
-        userModel.vip = snap.docs[0].get('vip');
-        setState(() {
-          userModel.myroom=snap.docs[0].get('room');
-        });
-      }
-    } else {
-      await for (var snap in _firestore
-          .collection('user')
-          .where('email', isEqualTo: _auth.currentUser!.email)
-          .snapshots()) {
-        userModel.bio = snap.docs[0].get('bio');
-        userModel.birthdate = snap.docs[0].get('birthdate');
-        userModel.coin = snap.docs[0].get('coin');
-        userModel.country = snap.docs[0].get('country');
-        userModel.daimond = snap.docs[0].get('daimond');
-        userModel.devicetoken = snap.docs[0].get('devicetoken');
-        userModel.email = snap.docs[0].get('email');
-        userModel.exp = snap.docs[0].get('exp');
-        userModel.gender = snap.docs[0].get('gender');
-        userModel.id = snap.docs[0].get('id');
-        userModel.lang = snap.docs[0].get('lang');
-        userModel.level = snap.docs[0].get('level');
-        userModel.name = snap.docs[0].get('name');
-        userModel.phonenumber = snap.docs[0].get('phonenumber');
-        userModel.photo = snap.docs[0].get('photo');
-        userModel.seen = snap.docs[0].get('seen');
-        userModel.type = snap.docs[0].get('type');
-        userModel.vip = snap.docs[0].get('vip');
-        setState(() {
-          userModel.myroom=snap.docs[0].get('room');
-        });
-      }
-    }
-    setState(() {
-      userModel;
+  @override
+  void dispose() {
+    _userSub?.cancel();
+    super.dispose();
+  }
+
+  void _listenUser() {
+    final user = _auth.currentUser;
+    if (user == null) return;
+    final query = user.email != null
+        ? _firestore.collection('user').where('email', isEqualTo: user.email)
+        : _firestore.collection('user').where('phonenumber', isEqualTo: user.phoneNumber);
+
+    _userSub = query.snapshots().listen((snap) {
+      if (snap.docs.isEmpty || !mounted) return;
+      final d = snap.docs[0];
+      setState(() {
+        userModel.bio = d.get('bio') ?? '';
+        userModel.birthdate = d.get('birthdate') ?? '';
+        userModel.coin = d.get('coin') ?? '0';
+        userModel.country = d.get('country') ?? '';
+        userModel.daimond = d.get('daimond') ?? '0';
+        userModel.devicetoken = d.get('devicetoken') ?? '';
+        userModel.email = d.get('email') ?? '';
+        userModel.exp = d.get('exp') ?? '0';
+        userModel.gender = d.get('gender') ?? '';
+        userModel.id = d.get('id') ?? '';
+        userModel.lang = d.get('lang') ?? 'ar';
+        userModel.level = d.get('level') ?? '1';
+        userModel.name = d.get('name') ?? '';
+        userModel.phonenumber = d.get('phonenumber') ?? '';
+        userModel.photo = d.get('photo') ?? '';
+        userModel.seen = d.get('seen')?.toString() ?? '';
+        userModel.type = d.get('type') ?? '';
+        userModel.vip = d.get('vip') ?? '0';
+        userModel.myroom = d.get('room') ?? '';
+      });
     });
   }
-  void getEvent()async{
-    await for(var snap in _firestore.collection('event').snapshots()){
-      for(int i=0;i<snap.size;i++){
-        setState(() {
-          images.add(
-              snap.docs[i].get('photo')
-          );
-        });
-      }
-    }
-  }
+  // images list kept for legacy widget compatibility
   List<String> images = [];
   List<String> countryCodes = Flags.flagsCode;
   List<RoomModel> rooms = [

@@ -172,7 +172,7 @@ class _SignupViewBody extends State<SignupViewBody>{
                                  Text(strDate),
                                  ElevatedButton(
                                      style: ElevatedButton.styleFrom(
-                                       primary: Color(0xFFD3AE89),
+                                       backgroundColor: Color(0xFFD3AE89),
                                      ),
                                      onPressed: () {
                                        showDatePicker(

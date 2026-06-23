@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,20 +15,29 @@ class _MyAvatar extends State<MyAvatar>{
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String mycar="";
+  StreamSubscription? _mycarSub;
+  StreamSubscription? _deadSub;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     checkDead();
     getMycar();
   }
-  void getMycar()async{
-    await for(var snap in _firestore.collection('user').doc(_auth.currentUser!.uid).snapshots()){
-      mycar=snap.get('myframe');
-    }
+  @override
+  void dispose() {
+    _mycarSub?.cancel();
+    _deadSub?.cancel();
+    super.dispose();
   }
-  void checkDead()async{
-    await for(var snap in _firestore.collection('user').doc(_auth.currentUser!.uid).collection('mylook').where('cat',isEqualTo: 'frame').snapshots()){
+  void getMycar(){
+    _mycarSub = _firestore.collection('user').doc(_auth.currentUser!.uid).snapshots().listen((snap){
+      if(!mounted) return;
+      mycar=snap.data()?['myframe'] ?? '';
+    });
+  }
+  void checkDead(){
+    _deadSub = _firestore.collection('user').doc(_auth.currentUser!.uid).collection('mylook').where('cat',isEqualTo: 'frame').snapshots().listen((snap){
+      if(snap.docs.isEmpty) return;
       DateTime BuyTime = DateTime.parse(snap.docs[0].get('time'));
       int day=int.parse(snap.docs[0].get('dead'));
       String id=snap.docs[0].get('id');
@@ -35,11 +45,9 @@ class _MyAvatar extends State<MyAvatar>{
       DateTime now=DateTime.now();
       BuyTime =DateTime(BuyTime.year,BuyTime.month,day,BuyTime.hour,BuyTime.minute,BuyTime.second,BuyTime.millisecond,BuyTime.microsecond);
       if(now.isAfter(BuyTime)){
-        _firestore.collection('user').doc(_auth.currentUser!.uid).collection('mylook').doc(id).delete().then((value){
-          print("Expire");
-        });
+        _firestore.collection('user').doc(_auth.currentUser!.uid).collection('mylook').doc(id).delete();
       }
-    }
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -177,8 +185,8 @@ class _MyAvatar extends State<MyAvatar>{
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: mycar==ss.docID?Colors.red:Colors.grey,
-                      onPrimary: Colors.white,
+                      backgroundColor: mycar==ss.docID?Colors.red:Colors.grey,
+                      foregroundColor: Colors.white,
                       elevation: 5,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),

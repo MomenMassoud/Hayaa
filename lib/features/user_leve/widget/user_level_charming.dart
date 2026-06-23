@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -17,22 +18,29 @@ class _UserLevelCharming extends State<UserLevelCharming>{
   final FirebaseAuth _auth=FirebaseAuth.instance;
   int level=0;
   int exp=0;
+  StreamSubscription? _levelSub;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setUserLevel();
   }
-  void setUserLevel()async{
-    await for (var snap in _firestore
+  @override
+  void dispose() {
+    _levelSub?.cancel();
+    super.dispose();
+  }
+  void setUserLevel(){
+    _levelSub = _firestore
         .collection('user')
         .doc(_auth.currentUser!.uid)
-        .snapshots()) {
-      double convert=double.parse(snap.get('exp2'));
+        .snapshots()
+        .listen((snap) {
+      if(!mounted || !snap.exists) return;
+      final data = snap.data() ?? {};
+      double convert=double.tryParse(data['exp2']?.toString() ?? '0') ?? 0;
       exp=convert.toInt();
-      level=int.parse(snap.get('level2'));
-      int i=0;
-      while(i==0){
+      level=int.tryParse(data['level2']?.toString() ?? '0') ?? 0;
+      while(true){
         if(exp>=1000){
           level=level+1;
           exp=exp-1000;
@@ -45,11 +53,8 @@ class _UserLevelCharming extends State<UserLevelCharming>{
         'exp2':exp.toString(),
         'level2':level.toString(),
       });
-      setState(() {
-        exp;
-        level;
-      });
-    }
+      setState(() {});
+    });
   }
   @override
   Widget build(BuildContext context) {

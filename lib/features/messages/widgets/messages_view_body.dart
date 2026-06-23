@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -24,18 +25,24 @@ class _MessagesViewBody extends State<MessagesViewBody>{
   final FirebaseFirestore _firestore=FirebaseFirestore.instance;
   int count=0;
   int InviteCount=0;
+  StreamSubscription? _inviteSub;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getInviteCount();
   }
-  getInviteCount()async{
-    await for(var snap in _firestore.collection('user').doc(_auth.currentUser!.uid).collection('invite').snapshots()){
+  @override
+  void dispose() {
+    _inviteSub?.cancel();
+    super.dispose();
+  }
+  getInviteCount(){
+    _inviteSub = _firestore.collection('user').doc(_auth.currentUser!.uid).collection('invite').snapshots().listen((snap){
+      if(!mounted) return;
       setState(() {
         InviteCount=snap.size;
       });
-    }
+    });
   }
   @override
   Widget build(BuildContext context) {

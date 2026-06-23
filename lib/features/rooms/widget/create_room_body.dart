@@ -4,12 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../../../core/Utils/app_images.dart';
+import '../../../core/Utils/supabase_helper.dart';
 import '../../agencies/widgets/custom_image_picker.dart';
 import '../../agencies/widgets/seperated_text.dart';
 import '../../auth/choice between registration and login/widgets/gradiant_button.dart';
@@ -23,7 +23,6 @@ class CreateRoomBody extends StatefulWidget{
 class _CreateRoomBody extends State<CreateRoomBody>{
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseStorage _storage = FirebaseStorage.instance;
   File? imageFile;
   bool showPickedFile = false;
   Random random = new Random();
@@ -174,11 +173,7 @@ class _CreateRoomBody extends State<CreateRoomBody>{
                         img.Image compressedImage = img.copyResize(image, width: 800);
                         File compressedFile = File('${imageFile!.path}_compressed.jpg')
                           ..writeAsBytesSync(img.encodeJpg(compressedImage));
-                        final path = "room/photos/${_auth.currentUser!.uid}-${DateTime.now().toString()}.jpg";
-                        final ref = FirebaseStorage.instance.ref().child(path);
-                        final uploadTask = ref.putFile(compressedFile);
-                        final snapshot = await uploadTask.whenComplete(() {});
-                        final urlDownload = await snapshot.ref.getDownloadURL();
+                        final urlDownload = await SupabaseHelper.uploadImage(compressedFile);
                         print("Download Link : $urlDownload");
                         String docRoom="${DateTime.now().toString()} - ${_auth.currentUser!.uid}";
                         String myID="";

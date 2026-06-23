@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,18 +14,24 @@ class _WallpaperStore extends State<WallpaperStore> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   int coins=0;
+  StreamSubscription? _coinSub;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getCoins();
   }
-  void getCoins()async{
-    await for(var snap in _firestore.collection('user').doc(_auth.currentUser!.uid).snapshots()){
+  @override
+  void dispose() {
+    _coinSub?.cancel();
+    super.dispose();
+  }
+  void getCoins(){
+    _coinSub = _firestore.collection('user').doc(_auth.currentUser!.uid).snapshots().listen((snap){
+      if(!mounted) return;
       setState(() {
-        coins = int.parse(snap.get('coin'));
+        coins = int.tryParse(snap.data()?['coin']?.toString() ?? '0') ?? 0;
       });
-    }
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -165,8 +172,8 @@ class _WallpaperStore extends State<WallpaperStore> {
                             DateTime.now().toString(), pp);
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.blue.shade300,
-                        onPrimary: Colors.white,
+                        backgroundColor: Colors.blue.shade300,
+                        foregroundColor: Colors.white,
                         elevation: 5,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),

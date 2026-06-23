@@ -74,6 +74,8 @@ dependencies:
   import_sorter: ^4.6.0
   dart_code_metrics: ^5.7.6
   flutter_svg: ^2.0.9
+  http: ^0.13.6
+  supabase_flutter: ^2.3.0
 
 flutter_icons:
   android: true
@@ -103,7 +105,7 @@ flutter:
   fonts:
     - family: Hayah
       fonts:
-        - asset: lib/core/Utils/assets/fonts\Hayah.otf
+        - asset: lib/core/Utils/assets/fonts/Hayah.otf
 
     - family: Questv1
       fonts:
@@ -111,7 +113,7 @@ flutter:
 
     - family: aldhabi
       fonts:
-        - asset: lib\core\Utils\assets\fonts\aldhabi.ttf
+        - asset: lib/core/Utils/assets/fonts/aldhabi.ttf
   assets:
     - lib/core/Utils/assets/images/
     - lib/core/Utils/assets/lang/

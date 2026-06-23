@@ -238,4 +238,5 @@ abstract class AppImages {
       "lib/core/Utils/assets/images/Vip/vip4/Hide the country and the age .png";
   static const String Sneakingintorooms    =
       "lib/core/Utils/assets/images/Vip/vip4/Sneaking into rooms .png";
+  static const String sofa = 'lib/core/Utils/assets/images/sofa.png';
 }

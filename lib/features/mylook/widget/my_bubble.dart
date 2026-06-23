@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,20 +15,29 @@ class _MyBubble extends State<MyBubble>{
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String mybubble="";
+  StreamSubscription? _bubbleSub;
+  StreamSubscription? _deadSub;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     checkDead();
     getMybubble();
   }
-  void getMybubble()async{
-    await for(var snap in _firestore.collection('user').doc(_auth.currentUser!.uid).snapshots()){
-      mybubble=snap.get('mybubble');
-    }
+  @override
+  void dispose() {
+    _bubbleSub?.cancel();
+    _deadSub?.cancel();
+    super.dispose();
   }
-  void checkDead()async{
-    await for(var snap in _firestore.collection('user').doc(_auth.currentUser!.uid).collection('mylook').where('cat',isEqualTo: 'bubble').snapshots()){
+  void getMybubble(){
+    _bubbleSub = _firestore.collection('user').doc(_auth.currentUser!.uid).snapshots().listen((snap){
+      if(!mounted) return;
+      mybubble=snap.data()?['mybubble'] ?? '';
+    });
+  }
+  void checkDead(){
+    _deadSub = _firestore.collection('user').doc(_auth.currentUser!.uid).collection('mylook').where('cat',isEqualTo: 'bubble').snapshots().listen((snap){
+      if(snap.docs.isEmpty) return;
       DateTime BuyTime = DateTime.parse(snap.docs[0].get('time'));
       int day=int.parse(snap.docs[0].get('dead'));
       String id=snap.docs[0].get('id');
@@ -35,11 +45,9 @@ class _MyBubble extends State<MyBubble>{
       DateTime now=DateTime.now();
       BuyTime =DateTime(BuyTime.year,BuyTime.month,day,BuyTime.hour,BuyTime.minute,BuyTime.second,BuyTime.millisecond,BuyTime.microsecond);
       if(now.isAfter(BuyTime)){
-        _firestore.collection('user').doc(_auth.currentUser!.uid).collection('mylook').doc(id).delete().then((value){
-          print("Expire");
-        });
+        _firestore.collection('user').doc(_auth.currentUser!.uid).collection('mylook').doc(id).delete();
       }
-    }
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -177,8 +185,8 @@ class _MyBubble extends State<MyBubble>{
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      primary:mybubble==ss.docID?Colors.red: Colors.grey,
-                      onPrimary: Colors.white,
+                      backgroundColor:mybubble==ss.docID?Colors.red: Colors.grey,
+                      foregroundColor: Colors.white,
                       elevation: 5,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),

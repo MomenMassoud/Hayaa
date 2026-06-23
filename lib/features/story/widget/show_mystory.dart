@@ -3,11 +3,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:hayaa_main/models/user_model.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../core/Utils/supabase_helper.dart';
 import '../../../models/story_model.dart';
 import 'add_story.dart';
 
@@ -21,7 +21,6 @@ class ShowMyStory extends StatefulWidget{
 }
 
 class _ShowMyStory extends State<ShowMyStory>{
-  final FirebaseStorage firebaseStorage=FirebaseStorage.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final _auth =FirebaseAuth.instance;
   late User SignInUser;
@@ -200,12 +199,8 @@ class _ShowMyStory extends State<ShowMyStory>{
       _showspinner=true;
       image=img;
     });
-    final path="story/photos/${image!.name}";
     final file =File(image!.path);
-    final ref=FirebaseStorage.instance.ref().child(path);
-    final uploadTask=ref.putFile(file);
-    final snapshot=await uploadTask.whenComplete(() {});
-    final urlDownload = await snapshot.ref.getDownloadURL();
+    final urlDownload = await SupabaseHelper.uploadImage(file);
     print("Download Link : $urlDownload");
     final id =DateTime.now().toString();
     String idd="$id-${SignInUser.email}";
@@ -229,12 +224,8 @@ class _ShowMyStory extends State<ShowMyStory>{
       _showspinner=true;
       image=img;
     });
-    final path="story/vedios/${image!.name}";
     final file =File(image!.path);
-    final ref=FirebaseStorage.instance.ref().child(path);
-    final uploadTask=ref.putFile(file);
-    final snapshot=await uploadTask.whenComplete(() {});
-    final urlDownload = await snapshot.ref.getDownloadURL();
+    final urlDownload = await SupabaseHelper.uploadImage(file);
     print("Download Link : $urlDownload");
     final id =DateTime.now().toString();
     String idd="$id-${SignInUser.email}";
@@ -261,7 +252,7 @@ class _ShowMyStory extends State<ShowMyStory>{
     }
     else{
       print(story.media);
-      await firebaseStorage.refFromURL(story.media).delete();
+      await SupabaseHelper.deleteImage(story.media);
       await _firestore.collection("storys").doc(story.id).delete().then(
             (doc) => print("Document deleted"),
         onError: (e) => print("Error updating document $e"),

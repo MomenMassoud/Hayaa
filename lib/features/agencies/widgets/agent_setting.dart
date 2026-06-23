@@ -2,12 +2,12 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../../../core/Utils/app_colors.dart';
+import '../../../core/Utils/supabase_helper.dart';
 
 class AgentSetting extends StatefulWidget{
   String id;
@@ -18,7 +18,6 @@ class AgentSetting extends StatefulWidget{
 
 class _AgentSetting extends State<AgentSetting>{
   final FirebaseFirestore _firestore=FirebaseFirestore.instance;
-  final FirebaseStorage _storage=FirebaseStorage.instance;
   final FirebaseAuth _auth=FirebaseAuth.instance;
   TextEditingController _namefield = TextEditingController();
   TextEditingController _definefiled = TextEditingController();
@@ -117,16 +116,14 @@ class _AgentSetting extends State<AgentSetting>{
       imageFile = tempImage;
       _showspinner=true;
     });
-    await _storage.refFromURL(photo).delete();
+    if (photo.isNotEmpty) {
+      await SupabaseHelper.deleteImage(photo);
+    }
     img.Image image=img.decodeImage(imageFile!.readAsBytesSync())!;
     img.Image compressedImage = img.copyResize(image, width: 800);
     File compressedFile = File('${imageFile!.path}_compressed.jpg')
       ..writeAsBytesSync(img.encodeJpg(compressedImage));
-    final path = "agent/photos/${_auth.currentUser!.uid}-${DateTime.now().toString()}.jpg";
-    final ref = FirebaseStorage.instance.ref().child(path);
-    final uploadTask = ref.putFile(compressedFile);
-    final snapshot = await uploadTask.whenComplete(() {});
-    final urlDownload = await snapshot.ref.getDownloadURL();
+    final urlDownload = await SupabaseHelper.uploadImage(compressedFile);
     await _firestore.collection('agency').doc(widget.id).update({
       'photo':urlDownload
     }).then((value){
@@ -199,5 +196,4 @@ class _AgentSetting extends State<AgentSetting>{
           );
         });
   }
-
 }

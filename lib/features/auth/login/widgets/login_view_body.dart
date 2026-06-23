@@ -1,7 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-
-
 import '../../../../core/Utils/app_colors.dart';
 import '../../../../core/Utils/app_images.dart';
 import '../../../home/views/home_view.dart';
@@ -14,9 +13,7 @@ import '../views/password_recovery.dart';
 import 'custom_text_form_field.dart';
 
 class LoginViewBody extends StatefulWidget {
-  const LoginViewBody({
-    super.key,
-  });
+  const LoginViewBody({super.key});
 
   @override
   State<LoginViewBody> createState() => _LoginViewBodyState();
@@ -27,6 +24,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
   late String phoneNum;
   late String password;
+  bool _loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +44,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
             width: screenWidth,
             child: Opacity(
               opacity: 0.05,
-              child: Image.asset(
-                AppImages.waterMarkImage,
-                fit: BoxFit.cover,
-              ),
+              child: Image.asset(AppImages.waterMarkImage, fit: BoxFit.cover),
             ),
           ),
           Center(
@@ -61,10 +56,8 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                   width: screenWidth * 0.45,
                   child: Image.asset(AppImages.appPLogo),
                 ),
-                const SizedBox(
-                  height: 40,
-                ),
-                 Text(
+                const SizedBox(height: 40),
+                Text(
                   "أهلا ضيفنا",
                   style: TextStyle(
                     fontFamily: "Hayah",
@@ -82,96 +75,84 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                           CustomTextFormField(
                             screenWidth: screenWidth,
                             autovalidateMode: autovalidateMode,
-                            fieldIcon: const Icon(
-                              Icons.contact_phone_outlined,
-                            ),
+                            fieldIcon: const Icon(Icons.contact_phone_outlined),
                             fielldRatio: 0.8,
                             hintText: "رقم الهاتف".tr(args: ['رقم الهاتف']),
-                            onSaved: (value) {
-                              phoneNum = value!;
-                            },
+                            onSaved: (value) { phoneNum = value!; },
                           ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      const SizedBox(height: 10),
                       CustomTextFormField(
                         screenWidth: screenWidth,
                         autovalidateMode: autovalidateMode,
-                        fieldIcon: const Icon(
-                          Icons.verified_user_outlined,
-                        ),
+                        fieldIcon: const Icon(Icons.verified_user_outlined),
                         fielldRatio: 0.8,
                         hintText: "كلمة المرور".tr(args: ['كلمة المرور']),
-                        onSaved: (value) {
-                          password = value!;
-                        },
+                        onSaved: (value) { password = value!; },
                       ),
-                      const SizedBox(
-                        height: 30,
-                      ),
+                      const SizedBox(height: 30),
                       GradiantButton(
-                          screenWidth: screenWidth,
-                          buttonLabel: "تسجيل الدخول".tr(args: ["تسجيل الدخول"]),
-                          onPressed: () {
-                            Navigator.pushReplacementNamed(
-                                context, HomeView.id);
-                          },
-                          buttonRatio: 0.6),
-                      const SizedBox(
-                        height: 10,
+                        screenWidth: screenWidth,
+                        buttonLabel: _loading ? "جار التحميل..." : "تسجيل الدخول".tr(args: ["تسجيل الدخول"]),
+                        onPressed: () async {
+                          if (formkey.currentState!.validate()) {
+                            formkey.currentState!.save();
+                            setState(() { _loading = true; });
+                            try {
+                              await FirebaseAuth.instance.signInWithEmailAndPassword(
+                                email: phoneNum,
+                                password: password,
+                              );
+                              Navigator.pushReplacementNamed(context, HomeView.id);
+                            } catch (e) {
+                              setState(() { _loading = false; });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("خطأ: $e"),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          }
+                        },
+                        buttonRatio: 0.6,
                       ),
+                      const SizedBox(height: 10),
                       NavigatorText(
                         content: "لقد نسيت كلمة المرور ؟".tr(args: ['لقد نسيت كلمة المرور ؟']),
                         onTap: () {
                           Navigator.pushNamed(context, PasswordRecoveryView.id);
                         },
                       ),
-                      const SizedBox(
-                        height: 100,
-                      ),
+                      const SizedBox(height: 100),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           NavigatorText(
                             content: "إتفاقيه المستخدم".tr(args: ['إتفاقيه المستخدم']),
                             onTap: () {
-                              Navigator.pushNamed(
-                                  context, UserAgreementView.id);
+                              Navigator.pushNamed(context, UserAgreementView.id);
                             },
                           ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          const Text(
-                            "|",
-                            style: TextStyle(
-                              fontFamily: "Questv1",
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
+                          const SizedBox(width: 10),
+                          const Text("|", style: TextStyle(fontFamily: "Questv1", color: Colors.white, fontSize: 16)),
+                          const SizedBox(width: 10),
                           NavigatorText(
                             content: "شروط الخصوصية".tr(args: ['شروط الخصوصية']),
                             onTap: () {
                               Navigator.pushNamed(context, PrivacyTermsView.id);
                             },
-                          )
+                          ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      const SizedBox(height: 10),
                     ],
                   ),
-                )
+                ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

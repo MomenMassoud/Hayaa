@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,18 +16,22 @@ class _BadgesDone extends State<BadgesDone>{
   int currentIndex = 0;
   final FirebaseAuth _auth=FirebaseAuth.instance;
   final FirebaseFirestore _firestore=FirebaseFirestore.instance;
+  StreamSubscription? _badgeSub;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     CheckNewBadge();
   }
-  void CheckNewBadge()async{
-    await for(var snap in _firestore.collection('badges').snapshots()){
-      print("Start");
+  @override
+  void dispose() {
+    _badgeSub?.cancel();
+    super.dispose();
+  }
+  void CheckNewBadge(){
+    _badgeSub = _firestore.collection('badges').snapshots().listen((snap){
       for(int i=0;i<snap.docs.length;i++){
         String badgegiftphoto=snap.docs[i].get('giftphoto');
-        int count=int.parse(snap.docs[i].get('count'));
+        int count=int.tryParse(snap.docs[i].get('count').toString()) ?? 0;
         String badgegift=snap.docs[i].get('gift');
         String badgedoc=snap.docs[i].id;
         if(badgegift=="") {
@@ -41,54 +46,40 @@ class _BadgesDone extends State<BadgesDone>{
           getBadgeGift(badgedoc, count,badgegift);
         }
       }
-    }
+    });
+  }
+  void _awardBadge(String badgedoc){
+    _firestore.collection("user").doc(_auth.currentUser!.uid).collection("mybadges").doc(badgedoc).set({
+      'id':badgedoc,
+    });
   }
   void getBadgeDaiomond(String badgedoc ,int target)async{
     int c=0;
-    await for(var snap in _firestore.collection('user').doc(_auth.currentUser!.uid).collection('Mygifts').snapshots()){
-      for(int i=0;i<snap.docs.length;i++){
-        await for(var snap2 in _firestore.collection('gifts').doc(snap.docs[i].get('id')).snapshots()){
-          c+=int.parse(snap2.get('price'));
-          if(c>=target){
-            _firestore.collection("user").doc(_auth.currentUser!.uid).collection("mybadges").doc(badgedoc).set({
-              'id':badgedoc,
-            });
-          }
-        }
-      }
+    final mygifts = await _firestore.collection('user').doc(_auth.currentUser!.uid).collection('Mygifts').get();
+    for(final doc in mygifts.docs){
+      final giftSnap = await _firestore.collection('gifts').doc(doc.get('id')).get();
+      if(!giftSnap.exists) continue;
+      c+=int.tryParse(giftSnap.get('price').toString()) ?? 0;
     }
+    if(c>=target) _awardBadge(badgedoc);
   }
   void getBadgeCoin(String badgedoc,int target)async{
     int c=0;
-    await for(var snap in  _firestore.collection('user').doc(_auth.currentUser!.uid).collection('sendgift').snapshots()){
-      for(int i=0;i<snap.docs.length;i++){
-        String giftid=snap.docs[i].get('giftid');
-        await for(var snap2 in _firestore.collection('gifts').doc(giftid).snapshots()){
-          c+=int.parse(snap2.get('price'));
-          if(c>=target){
-            _firestore.collection("user").doc(_auth.currentUser!.uid).collection("mybadges").doc(badgedoc).set({
-              'id':badgedoc,
-            });
-          }
-        }
-      }
+    final sendgifts = await _firestore.collection('user').doc(_auth.currentUser!.uid).collection('sendgift').get();
+    for(final doc in sendgifts.docs){
+      final giftSnap = await _firestore.collection('gifts').doc(doc.get('giftid')).get();
+      if(!giftSnap.exists) continue;
+      c+=int.tryParse(giftSnap.get('price').toString()) ?? 0;
     }
+    if(c>=target) _awardBadge(badgedoc);
   }
   void getBadgeGift(String badgedoc,int target,String giftgoc)async{
     int c=0;
-    await for(var snap in  _firestore.collection('user').doc(_auth.currentUser!.uid).collection('sendgift').snapshots()){
-      for(int i=0;i<snap.docs.length;i++){
-        String giftid=snap.docs[i].get('giftid');
-        if(giftid==giftgoc){
-          c++;
-          if(c>=target){
-            _firestore.collection('user').doc(_auth.currentUser!.uid).collection('mybadges').doc(badgedoc).set({
-              'id':badgedoc
-            });
-          }
-        }
-      }
+    final sendgifts = await _firestore.collection('user').doc(_auth.currentUser!.uid).collection('sendgift').get();
+    for(final doc in sendgifts.docs){
+      if(doc.get('giftid')==giftgoc) c++;
     }
+    if(c>=target) _awardBadge(badgedoc);
   }
   @override
   Widget build(BuildContext context) {

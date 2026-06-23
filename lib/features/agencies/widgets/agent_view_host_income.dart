@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../../core/Utils/app_images.dart';
@@ -15,19 +16,24 @@ class _AgentViewHostIncome extends State<AgentViewHostIncome>{
   final FirebaseFirestore _firestore=FirebaseFirestore.instance;
   late DateTime joinDate;
   int myDaiomond=0;
+  StreamSubscription? _userSub;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    print(widget.HostID);
     GetUser();
   }
-  void GetUser()async{
-    await for(var snap in _firestore.collection('user').doc(widget.HostID).snapshots()){
+  @override
+  void dispose() {
+    _userSub?.cancel();
+    super.dispose();
+  }
+  void GetUser(){
+    _userSub = _firestore.collection('user').doc(widget.HostID).snapshots().listen((snap){
+      if(!mounted) return;
       setState(() {
-        myDaiomond=int.parse(snap.get('daimond'));
+        myDaiomond=int.tryParse(snap.data()?['daimond']?.toString() ?? '0') ?? 0;
       });
-    }
+    });
   }
   @override
   Widget build(BuildContext context) {

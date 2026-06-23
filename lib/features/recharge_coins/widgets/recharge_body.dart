@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,23 +20,28 @@ class _RechargeBody extends State<RechargeBody>with SingleTickerProviderStateMix
   final FirebaseFirestore _firestore=FirebaseFirestore.instance;
   int coin=0;
   int daimond=0;
+  StreamSubscription? _chargeSub;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _tabController = TabController(length: 1, vsync: this);
     getCharge();
   }
-  void getCharge()async{
-    await for(var snap in _firestore.collection('user').doc(_auth.currentUser!.uid).snapshots()){
-      coin=int.parse(snap.get('coin'));
-      daimond=int.parse(snap.get('daimond'));
+  @override
+  void dispose() {
+    _chargeSub?.cancel();
+    _tabController.dispose();
+    super.dispose();
+  }
+  void getCharge(){
+    _chargeSub = _firestore.collection('user').doc(_auth.currentUser!.uid).snapshots().listen((snap){
+      if(!mounted) return;
+      final data = snap.data() ?? {};
       setState(() {
-        coin;
-        daimond;
+        coin = int.tryParse(data['coin']?.toString() ?? '0') ?? 0;
+        daimond = int.tryParse(data['daimond']?.toString() ?? '0') ?? 0;
       });
-    }
-
+    });
   }
   @override
   Widget build(BuildContext context) {

@@ -1,26 +1,44 @@
 {
   "project_info": {
-    "project_number": "6809972591",
-    "project_id": "hayaa-161f5",
-    "storage_bucket": "hayaa-161f5.appspot.com"
+    "project_number": "400556879718",
+    "project_id": "moseba-162b4",
+    "storage_bucket": "moseba-162b4.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:6809972591:android:1724cdd2e24774b4af029a",
+        "mobilesdk_app_id": "1:400556879718:android:6f23893e79510d6fd422a7",
         "android_client_info": {
           "package_name": "com.egycode.hayaa"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "400556879718-lcljsneng8stvn8g6sevrmlph76jf4cr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.egycode.hayaa",
+            "certificate_hash": "2f37082f66c80a54924a7b68266767672f7c8a92"
+          }
+        },
+        {
+          "client_id": "400556879718-1v1en3aap3njmr4h4dkmdt7e7cv6rn00.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyDaFCCiLHrWc8ey5_X6_xxRP4WmtHttClo"
+          "current_key": "AIzaSyBtMxJAx48q9XO5Q4jr-JalVlALw_FM5WA"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "400556879718-1v1en3aap3njmr4h4dkmdt7e7cv6rn00.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

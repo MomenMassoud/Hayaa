@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,11 +18,17 @@ class _SaleryBody extends State<SaleryBody>{
   final TextEditingController _controller = TextEditingController();
   String coin="";
   String number="";
+  StreamSubscription? _coinSub;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getCoin();
+  }
+  @override
+  void dispose() {
+    _coinSub?.cancel();
+    _controller.dispose();
+    super.dispose();
   }
   @override
   Widget build(BuildContext context) {
@@ -142,12 +149,13 @@ class _SaleryBody extends State<SaleryBody>{
       )
     );
   }
-  void getCoin()async{
-    await for(var snap in  _firestore.collection('user').doc(_auth.currentUser!.uid).snapshots()){
+  void getCoin(){
+    _coinSub = _firestore.collection('user').doc(_auth.currentUser!.uid).snapshots().listen((snap){
+      if(!mounted) return;
       setState(() {
-        coin=snap.get('coin');
+        coin = snap.data()?['coin']?.toString() ?? '';
       });
-    }
+    });
   }
   double calculateDiscount(double originalValue, double discountPercentage) {
     if (originalValue <= 0 || discountPercentage < 0 || discountPercentage > 100) {
